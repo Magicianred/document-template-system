@@ -1,25 +1,34 @@
 # Document template system
 
-ASP.Net Core application for storing, creating and using document templates. 
-User interface is covered with Angular 7 CLI, which contacts C# server retrieving data from MySQL database.
+## General info
+Web application for storing and creating document templates. 
 
-Basic Users Functionalities
+## Technologies
+Project is created with:
+* ASP.NET Core 2.0,
+* Angular 7 CLI,
+* MS SQL.
 
+## Features
 As an Administrator you can:
-* Activate new users accounts,
-* Delete existing ones,
-* Change template state between active and inactive, 
-* Accept new template for usage,
-* Change template owner,
-* Edit user data and create user access levels.
+* Authorizatoin a new user account,
+* Delete existing user accounts,
+* Change template state between active, blocked and suspended, 
+* Accept a new document template for usage,
+* Transfer ownership of template to another Editor,
+* Edit the data of each user.
 
 As an Editor you can:
-* Create new templates, 
-* Edit ones that you are owner of, 
-* Cede ownership of template to another user.
+* Update your account data,
+* Create a new template, 
+* Edit only your own template, 
+* Cede ownership of template to another Editor.
 
-As an User you can:
-* Pick a template document from given list,
-* Fill template with your data,
-* Print/export prepared document to PDF file,
-* Edit you account data.
+As a User you can:
+* Update your account data,
+* Pick a template from given list,
+* Fill in the template,
+* Print/export prepared document to PDF file.
+
+## Setup
+To run this project:
