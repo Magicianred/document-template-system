@@ -30,5 +30,7 @@ As a User you can:
 * Fill in the template,
 * Print/export prepared document to PDF file.
 
+## [ERD](https://drive.google.com/file/d/1NHWDXeRJNL_sWFSTiQWzgRamhUHoRkK5/view?usp=sharing)
+
 ## Setup
 To run this project:
