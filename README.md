@@ -13,10 +13,12 @@ Project is created with:
 As an Administrator you can:
 * Authorize a new user account,
 * Delete existing user accounts,
-* Change template state between active, blocked and suspended, 
+* Change user state between active, blocked and suspended, 
 * Accept a new document template for usage,
 * Transfer ownership of template to another Editor,
-* Edit the data of each user.
+* Edit the data of each user,
+* Change template state between active/inactive,
+* Manage data base.
 
 As an Editor you can:
 * Update your account data,
