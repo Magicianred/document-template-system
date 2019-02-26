@@ -34,8 +34,13 @@ As a User you can:
 
 ## [ERD](https://drive.google.com/file/d/1NHWDXeRJNL_sWFSTiQWzgRamhUHoRkK5/view?usp=sharing)
 
-## Sample Input:
+## Sample Input
 SampleInput file contains sample template sent from Editor's panel. It is stored in data base as a html file. 
 Diamond signs <> represents data which should be filled in later. In <> signs @ markup sign represents data that 
 should be loaded from data base based on user opening the template, and # markup sign represents data that will
 be collected by form sent to user to fill in.
+
+## 1st Sprint 25.02 - 5.03 Planning, data base and basic structure creation:
+In this sprint we aim to plan and implement base for whole program, mainly focusing on back-end and data base.
+At the end of it we should have means to interpret and save incoming templates, and send them back in HTTP response.
+A nice-to-have feature would be sending form for data specified in a template.
