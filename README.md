@@ -11,7 +11,7 @@ Project is created with:
 
 ## Features
 As an Administrator you can:
-* Authorizatoin a new user account,
+* Authorize a new user account,
 * Delete existing user accounts,
 * Change template state between active, blocked and suspended, 
 * Accept a new document template for usage,
@@ -32,5 +32,8 @@ As a User you can:
 
 ## [ERD](https://drive.google.com/file/d/1NHWDXeRJNL_sWFSTiQWzgRamhUHoRkK5/view?usp=sharing)
 
-## Setup
-To run this project:
+## Sample Input:
+SampleInput file contains sample template sent from Editor's panel. It is stored in data base as a html file. 
+Diamond signs <> represents data which should be filled in later. In <> signs @ markup sign represents data that 
+should be loaded from data base based on user opening the template, and # markup sign represents data that will
+be collected by form sent to user to fill in.
