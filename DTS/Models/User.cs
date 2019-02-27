@@ -14,7 +14,7 @@ namespace DTS.Models
         public string Login { get; set; }
         public string Password { get; set; }
 
-        public Status Status { get; set; }
-        public Type Type { get; set; }
+        public UserStatus Status { get; set; }
+        public UserType Type { get; set; }
     }
 }
