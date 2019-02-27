@@ -9,5 +9,7 @@ namespace DTS.Models
     {
         public int ID { get; set; }
         public string Type { get; set; }
+
+        public ICollection<User> Users { get; set; }
     }
 }
