@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace DTS.Models
 {
-    public class Status
+    public class UserStatus
     {
         public int ID { get; set; }
-        public string StatusType { get; set; }
+        public string Status { get; set; }
     }
 }
