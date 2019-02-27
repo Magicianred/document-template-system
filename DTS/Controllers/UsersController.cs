@@ -23,9 +23,14 @@ namespace DTS.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return _context.Users;
+            var users = await _context.Users
+                .Include(user => user.Status)
+                .Include(user => user.Type)
+                .ToListAsync();
+            
+            return users;
         }
 
         // GET: api/Users/5
@@ -37,7 +42,10 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(userStatus => userStatus.Status)
+                .Include(userType => userType.Type)
+                .SingleOrDefaultAsync(userID => userID.ID == id);
 
             if (user == null)
             {
