@@ -1,0 +1,14 @@
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\bin\Debug\netcoreapp2.1\DTS.deps.json
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\bin\Debug\netcoreapp2.1\DTS.runtimeconfig.json
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\bin\Debug\netcoreapp2.1\DTS.runtimeconfig.dev.json
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\bin\Debug\netcoreapp2.1\DTS.dll
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.csprojAssemblyReference.cache
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.csproj.CoreCompileInputs.cache
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.RazorAssemblyInfo.cache
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.RazorAssemblyInfo.cs
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.AssemblyInfoInputs.cache
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.AssemblyInfo.cs
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.RazorTargetAssemblyInfo.cache
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\bin\Debug\netcoreapp2.1\DTS.pdb
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.dll
+C:\Users\Bartłomiej Żądło\source\repos\document-template-system\DTS\obj\Debug\netcoreapp2.1\DTS.pdb
