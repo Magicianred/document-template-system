@@ -5731,7 +5731,7 @@
       ]
     },
     "Microsoft.DotNet.PlatformAbstractions/2.1.0": {
-      "sha512": "wkCXkBS0q+5hsbeikjfsHCGP3nNe1L1MrDEBPCBKm+4UH8nXqHLxDZuBrTYaVY85CGIx2y1qW90nO6b+ORAfrA==",
+      "sha512": "9KPDwvb/hLEVXYruVHVZ8BkebC8j17DmPb56LnqRF74HqSPLjCkrlFUjOtFpQPA2DeADBRTI/e69aCfRBfrhxw==",
       "type": "package",
       "path": "microsoft.dotnet.platformabstractions/2.1.0",
       "files": [
@@ -6078,7 +6078,7 @@
       ]
     },
     "Microsoft.Extensions.DependencyModel/2.1.0": {
-      "sha512": "3KPT6CLH0VEGr2um9aG1rYTmqfMVlkRuueFpN6AxeIKpcMA4OVHf4aNpgYXZ6oF+x4uh9VhK/66FgPCd1mMlnQ==",
+      "sha512": "nS2XKqi+1A1umnYNLX2Fbm/XnzCxs5i+zXVJ3VC6r9t2z0NZr9FLnJN4VQpKigdcWH/iFTbMuX6M6WQJcTjVIg==",
       "type": "package",
       "path": "microsoft.extensions.dependencymodel/2.1.0",
       "files": [
@@ -11795,23 +11795,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Bartłomiej Żądło\\.nuget\\packages\\": {},
+    "C:\\Users\\piotr\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Bartłomiej Żądło\\Source\\Repos\\document-template-system\\DTS\\DTS.csproj",
+      "projectUniqueName": "C:\\Users\\piotr\\Source\\Repos\\document-template-system\\DTS\\DTS.csproj",
       "projectName": "DTS",
-      "projectPath": "C:\\Users\\Bartłomiej Żądło\\Source\\Repos\\document-template-system\\DTS\\DTS.csproj",
-      "packagesPath": "C:\\Users\\Bartłomiej Żądło\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Bartłomiej Żądło\\Source\\Repos\\document-template-system\\DTS\\obj\\",
+      "projectPath": "C:\\Users\\piotr\\Source\\Repos\\document-template-system\\DTS\\DTS.csproj",
+      "packagesPath": "C:\\Users\\piotr\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\piotr\\Source\\Repos\\document-template-system\\DTS\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Bartłomiej Żądło\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\piotr\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
