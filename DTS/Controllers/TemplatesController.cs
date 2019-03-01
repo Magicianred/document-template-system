@@ -50,35 +50,28 @@ namespace DTS.Controllers
 
         // PUT: api/Templates/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTemplate([FromRoute] int id, [FromBody] Template template)
+        public async Task<IActionResult> PutTemplate([FromRoute] int id, [FromBody] TemplateInput templateInput)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != template.ID)
+            var template = _context.Templates.SingleOrDefaultAsync(t => t.ID == id);
+
+            if (template == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(template).State = EntityState.Modified;
+            var templateVC = new TemplateVersionControl()
+            {
+                TemplateContent = templateInput.Template,
+            };
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TemplateExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.TemplateVersions.Add(templateVC);
+            
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -98,13 +91,10 @@ namespace DTS.Controllers
             };
             _context.Templates.Add(template);
 
-            _context.SaveChanges();
 
             var templateVC = new TemplateVersionControl()
             {
-                TemplateVersion = templateInput.Template,
-                TemplateID = template.ID,
-                UserID = templateInput.AuthorId,
+                TemplateContent = templateInput.Template,
             };
             _context.TemplateVersions.Add(templateVC);
 
