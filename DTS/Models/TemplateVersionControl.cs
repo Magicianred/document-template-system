@@ -10,7 +10,6 @@ namespace DTS.Models
         public int ID { get; set; }
         public DateTime CreationData {get; set;}
         public string TemplateVersion { get; set; }
-        public int TemplateStateID { get; set; }
         public int TemplateID { get; set; }
         public int UserID { get; set; }
 
