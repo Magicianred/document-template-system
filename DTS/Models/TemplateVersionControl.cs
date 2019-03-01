@@ -13,7 +13,7 @@ namespace DTS.Models
         public int TemplateID { get; set; }
         public int UserID { get; set; }
 
-        public Template Template { get; set; }
+        
         public TemplateState TemplateState { get; set; }
         public User User { get; set; }
     }
