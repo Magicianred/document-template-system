@@ -10,5 +10,7 @@ namespace DTS.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public TemplateState TemplateState { get; set; }
+
+        public virtual ICollection<TemplateVersionControl> TemplateVersions { get; set; }
     }
 }
