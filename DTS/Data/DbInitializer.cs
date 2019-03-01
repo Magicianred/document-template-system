@@ -47,9 +47,9 @@ namespace DTS.Data
 
             var users = new User[]
             {
-                new User{Name ="Bartek",Surname ="Zadlo",Email ="bZadlo@DTS.com", Login="BZadlo", Password = "test", UserTypeID = 1, UserStatusID = 1},
-                new User{Name ="Magda",Surname ="Kiebala",Email ="mKiebala@DTS.com", Login="MKiebala", Password = "test", UserTypeID = 2, UserStatusID = 2},
-                new User{Name ="Piotrek",Surname ="Kaminski",Email ="pKaminski@DTS.com", Login="PKaminski", Password = "test", UserTypeID = 3, UserStatusID = 3},
+                new User{Name ="Bartek",Surname ="Zadlo",Email ="bZadlo@DTS.com", Login="BZadlo", Password = "test"},
+                new User{Name ="Magda",Surname ="Kiebala",Email ="mKiebala@DTS.com", Login="MKiebala", Password = "test"},
+                new User{Name ="Piotrek",Surname ="Kaminski",Email ="pKaminski@DTS.com", Login="PKaminski", Password = "test"},
 
             };
             foreach (var user in users)
