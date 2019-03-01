@@ -24,9 +24,14 @@ namespace DTS.Controllers
 
         // GET: api/Templates
         [HttpGet]
-        public IEnumerable<Template> GetTemplates()
+        public  async Task<IEnumerable<Template>> GetTemplates()
         {
-            return _context.Templates;
+            var templates = await _context.Templates
+                .Include(template => template.TemplateVersions)
+                    .ThenInclude(version => version.User)
+                .ToListAsync();
+
+            return templates;
         }
 
         // GET: api/Templates/5
@@ -97,8 +102,6 @@ namespace DTS.Controllers
                 Name = templateInput.TemplateName
             };
             _context.Templates.Add(template);
-
-            _context.SaveChanges();
 
             var templateVC = new TemplateVersionControl()
             {
