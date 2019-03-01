@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DTS.Data;
 using DTS.Models;
+using AppContext = DTS.Data.AppContext;
 
 namespace DTS.Controllers
 {
@@ -84,17 +85,32 @@ namespace DTS.Controllers
 
         // POST: api/Templates
         [HttpPost]
-        public async Task<IActionResult> PostTemplate([FromBody] Template template)
+        public async Task<IActionResult> PostTemplate([FromBody] TemplateInput templateInput)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var template = new Template()
+            {
+                Name = templateInput.TemplateName
+            };
             _context.Templates.Add(template);
+
+            _context.SaveChanges();
+
+            var templateVC = new TemplateVersionControl()
+            {
+                TemplateVersion = templateInput.Template,
+                TemplateID = template.ID,
+                UserID = templateInput.AuthorId,
+            };
+            _context.TemplateVersions.Add(templateVC);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTemplate", new { id = template.ID }, template);
+            return CreatedAtAction("GetTemplate", new { id = templateVC.ID }, templateVC);
         }
 
         // DELETE: api/Templates/5
