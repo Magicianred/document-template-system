@@ -23,17 +23,12 @@ namespace DTS
             return await this.DTSContext.Set<T>().ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindByCondition(Expression<Func<T, bool>> expression)
+        public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression)
         {
             return await this.DTSContext.Set<T>().Where(expression).ToListAsync();
         }
 
-        public async Task<T> FindByID(int id)
-        {
-            return await this.DTSContext.Set<T>().FindAsync(id);
-        }
-
-        public async Task Save()
+        public async Task SaveAsync()
         {
             await this.DTSContext.SaveChangesAsync();
         }
