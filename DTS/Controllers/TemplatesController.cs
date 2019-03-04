@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DTS.Data;
 using DTS.Models;
-using AppContext = DTS.Data.AppContext;
+using DTSContext = DTS.Data.DTSContext;
 using System.Text.RegularExpressions;
 
 namespace DTS.Controllers
@@ -17,12 +17,11 @@ namespace DTS.Controllers
     public class TemplatesController : ControllerBase
     {
         private const int _activeStatusRowID = 1;
-        private readonly AppContext _context;
+        private readonly DTSContext _context;
         private const string _baseFieldPattern = "&lt;@([/sA-Za-z_-]*)&gt;";
         private const string _userFieldPattern = "&lt;#([/sA-Za-z_-]*)&gt;";
 
-
-        public TemplatesController(AppContext context)
+        public TemplatesController(DTSContext context)
         {
             _context = context;
         }

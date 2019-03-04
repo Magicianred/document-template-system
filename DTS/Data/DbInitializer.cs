@@ -8,7 +8,7 @@ namespace DTS.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(AppContext context)
+        public static void Initialize(DTSContext context)
         {
             context.Database.EnsureCreated();
 
