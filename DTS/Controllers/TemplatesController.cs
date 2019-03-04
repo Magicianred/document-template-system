@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DTS.Data;
 using DTS.Models;
-using AppContext = DTS.Data.AppContext;
+using DTSContext = DTS.Data.DTSContext;
 
 namespace DTS.Controllers
 {
@@ -17,9 +17,9 @@ namespace DTS.Controllers
     [ApiController]
     public class TemplatesController : ControllerBase
     {
-        private readonly AppContext _context;
+        private readonly DTSContext _context;
 
-        public TemplatesController(AppContext context)
+        public TemplatesController(DTSContext context)
         {
             _context = context;
         }
