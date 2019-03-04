@@ -39,6 +39,10 @@ namespace DTS.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTemplate([FromRoute] int id)
         {
+            if( id <= 0)
+            {
+                return BadRequest("Passed negative id value");
+            }
             var template = await _context.TemplateVersions
                 .Include(temp => temp.User)
                 .Include(temp => temp.TemplateState)
