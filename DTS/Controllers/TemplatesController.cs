@@ -9,6 +9,7 @@ using DTS.Data;
 using DTS.Models;
 using AppContext = DTS.Data.AppContext;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace DTS.Controllers
 {
@@ -18,8 +19,7 @@ namespace DTS.Controllers
     {
         private const int _activeStatusRowID = 1;
         private readonly AppContext _context;
-        private const string _baseFieldPattern = "&lt;@([/sA-Za-z_-]*)&gt;";
-        private const string _userFieldPattern = "&lt;#([/sA-Za-z_-]*)&gt;";
+        private const string TemplateFieldsPattern = "&lt;([#@])([/sA-Za-z_-]*)&gt;";
 
 
         public TemplatesController(AppContext context)
@@ -29,7 +29,7 @@ namespace DTS.Controllers
 
         // GET: api/Templates
         [HttpGet]
-        public  async Task<IEnumerable<Template>> GetTemplates()
+        public async Task<IEnumerable<Template>> GetTemplates()
         {
             var templates = await _context.Templates
                 .Include(template => template.TemplateVersions)
@@ -43,7 +43,7 @@ namespace DTS.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTemplate([FromRoute] int id)
         {
-            if( id <= 0)
+            if (id <= 0)
             {
                 return BadRequest("Passed negative id value");
             }
@@ -81,25 +81,25 @@ namespace DTS.Controllers
 
             var formBase = template.TemplateVersion;
 
-            MatchCollection matches = Regex.Matches(formBase, _userFieldPattern);
+            MatchCollection matches = Regex.Matches(formBase, TemplateFieldsPattern);
 
             var userMatchMap = new Dictionary<string, string>();
 
             foreach (var match in matches)
             {
-                var startPattern = "(&lt;#*)";
+                var startPattern = "(&lt;*)";
                 var endPattern = "(&gt;*)";
                 var replacement = "";
                 Regex beginningRegex = new Regex(startPattern);
                 Regex endingRegex = new Regex(endPattern);
 
                 var valueWithBeginningCleared = beginningRegex.Replace(match.ToString(), replacement);
-                
+
                 var finalValue = endingRegex.Replace(valueWithBeginningCleared, replacement);
                 userMatchMap.TryAdd(match.ToString(), finalValue);
             }
 
-           
+
 
             return Ok(userMatchMap);
         }
@@ -118,7 +118,7 @@ namespace DTS.Controllers
                 .Where(u => u.ID == id)
                 .SingleOrDefaultAsync();
 
-            if(user == null || user.Type.Type != "Editor")
+            if (user == null || user.Type.Type != "Editor")
             {
                 return BadRequest("User not found or not an editor");
             }
@@ -133,7 +133,7 @@ namespace DTS.Controllers
                 return NotFound();
             }
 
-            
+
 
             return Ok(templates);
         }
@@ -203,6 +203,25 @@ namespace DTS.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTemplate", new { id = templateVC.ID }, templateVC);
+        }
+
+        // POST: api/Templates/form/
+        [HttpPost("form/{id}")]
+        public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
+        {
+            var userInput = new Dictionary<string, string>();
+            JsonConvert.PopulateObject(JsonConvert.SerializeObject(data), userInput);
+
+            var template = await _context.TemplateVersions
+                .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
+                .SingleOrDefaultAsync();
+                
+            foreach (var input in userInput)
+            {
+                template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
+            }
+
+            return Ok(template.TemplateVersion);
         }
 
         // DELETE: api/Templates/5
