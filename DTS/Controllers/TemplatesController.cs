@@ -11,6 +11,8 @@ using AppContext = DTS.Data.AppContext;
 
 namespace DTS.Controllers
 {
+    // todo: use repository
+
     [Route("api/[controller]")]
     [ApiController]
     public class TemplatesController : ControllerBase
@@ -105,9 +107,10 @@ namespace DTS.Controllers
 
             var templateVC = new TemplateVersionControl()
             {
-                TemplateVersion = templateInput.Template,
-                TemplateID = template.ID,
-                UserID = templateInput.AuthorId,
+                TemplateContent = templateInput.Template,
+                ID = template.ID,
+                // todo: use repository
+                //User = templateInput.AuthorId,
             };
             _context.TemplateVersions.Add(templateVC);
 
