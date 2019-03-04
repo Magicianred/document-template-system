@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DTS.Data;
 using DTS.Models;
 using AppContext = DTS.Data.AppContext;
+using System.Text.RegularExpressions;
 
 namespace DTS.Controllers
 {
@@ -17,6 +18,9 @@ namespace DTS.Controllers
     {
         private const int _activeStatusRowID = 1;
         private readonly AppContext _context;
+        private const string _baseFieldPattern = "&lt;@([/sA-Za-z#@]*)&gt;";
+        private const string _userFieldPattern = "&lt;#([/sA-Za-z#@]*)&gt;";
+
 
         public TemplatesController(AppContext context)
         {
@@ -46,10 +50,58 @@ namespace DTS.Controllers
             var template = await _context.TemplateVersions
                 .Include(temp => temp.User)
                 .Include(temp => temp.TemplateState)
-                .Where(temp => temp.ID == id && temp.TemplateState.State == "Active")
+                .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
                 .SingleOrDefaultAsync();
 
+            if (template == null)
+            {
+                return NotFound();
+            }
+
             return Ok(template);
+        }
+
+        // GET: api/Templates/form/5
+        [HttpGet("form/{id}")]
+        public async Task<IActionResult> GetTemplateForm([FromRoute] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Passed negative id value");
+            }
+
+            var template = await _context.TemplateVersions
+                .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
+                .SingleOrDefaultAsync();
+
+            if (template == null)
+            {
+                return NotFound();
+            }
+
+            var formBase = template.TemplateVersion;
+
+            MatchCollection matches = Regex.Matches(formBase, _userFieldPattern);
+
+            var userMatchMap = new Dictionary<string, string>();
+
+            foreach (var match in matches)
+            {
+                var startPattern = "(&lt;#*)";
+                var endPattern = "(&gt;*)";
+                var replacement = "";
+                Regex beginningRegex = new Regex(startPattern);
+                Regex endingRegex = new Regex(endPattern);
+
+                var valueWithBeginningCleared = beginningRegex.Replace(match.ToString(), replacement);
+                
+                var finalValue = endingRegex.Replace(valueWithBeginningCleared, replacement);
+                userMatchMap.TryAdd(match.ToString(), finalValue);
+            }
+
+           
+
+            return Ok(userMatchMap);
         }
 
         // PUT: api/Templates/5
