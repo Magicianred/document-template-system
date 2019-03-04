@@ -10,7 +10,6 @@ namespace DTS.Repositories
     interface IUserRepository
     {
         Task<IEnumerable<User>> FindAllAsync();
-        Task<IEnumerable<User>> FindByConditionAsync(Expression<Func<User, bool>> expression);
         Task<User> FindByIDAsync(int id);
         Task CreateAsync(User user);
         Task UpdateAsync(User oldUser, User user);
