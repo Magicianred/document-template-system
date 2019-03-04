@@ -20,7 +20,7 @@ namespace DTS
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<Data.AppContext>();
+                    var context = services.GetRequiredService<Data.DTSContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

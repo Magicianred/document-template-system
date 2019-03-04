@@ -14,9 +14,9 @@ namespace DTS.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly Data.AppContext _context;
+        private readonly Data.DTSContext _context;
 
-        public UsersController(Data.AppContext context)
+        public UsersController(Data.DTSContext context)
         {
             _context = context;
         }

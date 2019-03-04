@@ -3,9 +3,9 @@ using DTS.Models;
 
 namespace DTS.Data
 {
-    public class AppContext : DbContext
+    public class DTSContext : DbContext
     {
-        public AppContext(DbContextOptions<AppContext> options) : base(options)
+        public DTSContext(DbContextOptions<DTSContext> options) : base(options)
         {
         }
 

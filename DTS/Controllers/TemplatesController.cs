@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DTS.Data;
 using DTS.Models;
-using AppContext = DTS.Data.AppContext;
+using DTSContext = DTS.Data.DTSContext;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
@@ -18,11 +18,11 @@ namespace DTS.Controllers
     public class TemplatesController : ControllerBase
     {
         private const int _activeStatusRowID = 1;
-        private readonly AppContext _context;
         private const string TemplateFieldsPattern = "&lt;([#@])([/sA-Za-z_-]*)&gt;";
+        private readonly DTSContext _context;
 
 
-        public TemplatesController(AppContext context)
+        public TemplatesController(DTSContext context)
         {
             _context = context;
         }
