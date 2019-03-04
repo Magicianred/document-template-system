@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace DTS.Models
 
         
         public TemplateState TemplateState { get; set; }
+        [NotMapped]
         public User User { get; set; }
     }
 }
