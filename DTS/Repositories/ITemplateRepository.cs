@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTS.Repositories
 {
-    interface ITemplateRepository : IRepositoryAsync<Template>
+    public interface ITemplateRepository
     {
         Task<Template> FindByIDAsync(int id);
         Task CreateAsync(Template template);

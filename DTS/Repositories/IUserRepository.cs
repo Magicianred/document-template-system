@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DTS.Repositories
 {
-    interface IUserRepository
+    public interface IUserRepository
     {
         Task<IEnumerable<User>> FindAllAsync();
         Task<User> FindByIDAsync(int id);

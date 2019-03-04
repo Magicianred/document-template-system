@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTS.Repositories
 {
-    interface ITemplateVersionControlRepository : IRepositoryAsync<TemplateVersionControl>
+    public interface ITemplateVersionControlRepository
     {
         Task<TemplateVersionControl> FindByIDAsync(int id);
         Task<IEnumerable<TemplateVersionControl>> FindByTemplateIdAsync(int id);
