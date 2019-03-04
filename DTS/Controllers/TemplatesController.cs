@@ -104,6 +104,40 @@ namespace DTS.Controllers
             return Ok(userMatchMap);
         }
 
+        // GET: api/Templates/5
+        [HttpGet("editor/{id}")]
+        public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Passed negative id value");
+            }
+
+            var user = await _context.Users
+                .Include(u => u.Type)
+                .Where(u => u.ID == id)
+                .SingleOrDefaultAsync();
+
+            if(user == null || user.Type.Type != "Editor")
+            {
+                return BadRequest("User not found or not an editor");
+            }
+
+            var templates = await _context.TemplateVersions
+                .Include(temp => temp.TemplateState)
+                .Where(temp => temp.UserID == id)
+                .ToListAsync();
+
+            if (templates == null)
+            {
+                return NotFound();
+            }
+
+            
+
+            return Ok(templates);
+        }
+
         // PUT: api/Templates/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTemplate([FromRoute] int id, [FromBody] Template template)
