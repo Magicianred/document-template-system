@@ -15,6 +15,7 @@ namespace DTS.Controllers
     [ApiController]
     public class TemplatesController : ControllerBase
     {
+        private const int _activeStatusRowID = 1;
         private readonly AppContext _context;
 
         public TemplatesController(AppContext context)
@@ -38,17 +39,15 @@ namespace DTS.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTemplate([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
+            if( id <= 0)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Passed negative id value");
             }
-
-            var template = await _context.Templates.FindAsync(id);
-
-            if (template == null)
-            {
-                return NotFound();
-            }
+            var template = await _context.TemplateVersions
+                .Include(temp => temp.User)
+                .Include(temp => temp.TemplateState)
+                .Where(temp => temp.ID == id && temp.TemplateState.State == "Active")
+                .SingleOrDefaultAsync();
 
             return Ok(template);
         }
@@ -99,8 +98,10 @@ namespace DTS.Controllers
 
             var template = new Template()
             {
-                Name = templateInput.TemplateName
+                Name = templateInput.TemplateName,
+                TemplateState = _context.TemplateStates.Find(_activeStatusRowID),
             };
+
             _context.Templates.Add(template);
 
             var templateVC = new TemplateVersionControl()
@@ -108,6 +109,8 @@ namespace DTS.Controllers
                 TemplateVersion = templateInput.Template,
                 TemplateID = template.ID,
                 UserID = templateInput.AuthorId,
+                TemplateState = _context.TemplateStates.Find(_activeStatusRowID),
+
             };
             _context.TemplateVersions.Add(templateVC);
 

@@ -18,6 +18,17 @@ namespace DTS.Data
                 return;   // DB has been seeded
             }
 
+            var templateStates = new TemplateState[]
+            {
+                new TemplateState{State = "Active"},
+                new TemplateState{State = "Inactive"}
+            };
+
+            foreach (var templateState in templateStates)
+            {
+                context.TemplateStates.Add(templateState);
+            }
+
             var types = new UserType[]
             {
                 new UserType{Type = "Admin"},
