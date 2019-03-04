@@ -16,7 +16,6 @@ namespace DTS.Models
 
         
         public TemplateState TemplateState { get; set; }
-        [NotMapped]
         public User User { get; set; }
     }
 }
