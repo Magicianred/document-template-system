@@ -13,5 +13,35 @@ namespace DTS.Repositories
             : base(DtsContext)
         {
         }
+
+        public async Task<TemplateVersionControl> FindByIDAsync(int id)
+        {
+            var template = await FindByConditionAsync(temp => temp.ID == id);
+            return template.DefaultIfEmpty(new TemplateVersionControl()).FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<TemplateVersionControl>> FindByTemplateIdAsync(int id)
+        {
+            var template = await FindByConditionAsync(temp => temp.TemplateID == id);
+            return template.DefaultIfEmpty(new TemplateVersionControl());
+        }
+
+        public async Task<IEnumerable<TemplateVersionControl>> FindByUserId(int id)
+        {
+            var template = await FindByConditionAsync(temp => temp.UserID == id);
+            return template.DefaultIfEmpty(new TemplateVersionControl());
+        }
+
+        public async Task CreateAsync(TemplateVersionControl template)
+        {
+            Create(template);
+            await SaveAsync();
+        }
+
+        public async Task UpdateAsync(TemplateVersionControl template)
+        {
+            Update(template);
+            await SaveAsync();
+        }
     }
 }

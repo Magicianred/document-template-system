@@ -9,7 +9,7 @@ namespace DTS.Repositories
     interface ITemplateRepository : IRepositoryAsync<Template>
     {
         Task<Template> FindByIDAsync(int id);
-        Task CreateAsync(Template user);
-        Task UpdateAsync(Template oldTemplate, Template user);
+        Task CreateAsync(Template template);
+        Task UpdateAsync(Template oldTemplate, Template template);
     }
 }
