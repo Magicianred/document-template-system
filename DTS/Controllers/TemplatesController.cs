@@ -18,8 +18,8 @@ namespace DTS.Controllers
     {
         private const int _activeStatusRowID = 1;
         private readonly AppContext _context;
-        private const string _baseFieldPattern = "&lt;@([/sA-Za-z#@]*)&gt;";
-        private const string _userFieldPattern = "&lt;#([/sA-Za-z#@]*)&gt;";
+        private const string _baseFieldPattern = "&lt;@([/sA-Za-z_-]*)&gt;";
+        private const string _userFieldPattern = "&lt;#([/sA-Za-z_-]*)&gt;";
 
 
         public TemplatesController(AppContext context)
