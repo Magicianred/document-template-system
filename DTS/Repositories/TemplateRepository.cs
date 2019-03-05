@@ -44,5 +44,10 @@ namespace DTS.Repositories
             Update(template);
             await SaveAsync();
         }
+
+        public async Task<bool> Exists(int id)
+        {
+            return await DTSContext.Templates.AnyAsync(e => e.ID == id);
+        }
     }
 }

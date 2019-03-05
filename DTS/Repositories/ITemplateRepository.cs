@@ -10,6 +10,7 @@ namespace DTS.Repositories
     {
         Task<IEnumerable<Template>> FindAllAsync();
         Task<Template> FindByIDAsync(int id);
+        Task<bool> Exists(int id);
         Task CreateAsync(Template template);
         Task UpdateAsync(Template template);
     }
