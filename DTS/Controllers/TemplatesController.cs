@@ -130,46 +130,43 @@ namespace DTS.Controllers
             return Ok(templates);
         }
 
-        //// PUT: api/Templates/2
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput template)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // PUT: api/Templates/2
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput template)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    var temp = _context.Templates.FindAsync(id).Result;
+            var temp = await repository.Templates.FindByIDAsync(id);
 
+            if (temp == null)
+            {
+                return BadRequest();
+            }
 
-        //    if (temp == null)
-        //    {
-        //        return BadRequest();
-        //    }
+            temp.TemplateState = await repository.TemplateState.FindStateByIdAsync(template.StateId);
+            temp.Name = template.Name;
 
+            try
+            {
+                await repository.Templates.UpdateAsync(temp);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await repository.Templates.Exists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-
-        //    temp.TemplateState = await _context.TemplateStates.FindAsync(template.StateId);
-        //    temp.Name = template.Name;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TemplateExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         //// PUT: api/Templates/2/1
         //[HttpPut("{tempId}/{verId}")]
@@ -314,11 +311,6 @@ namespace DTS.Controllers
         //await _context.SaveChangesAsync();
 
         //    return Ok(template);
-        //}
-
-        //private bool TemplateExists(int id)
-        //{
-        //    return _context.Templates.Any(e => e.ID == id);
         //}
 
         //[HttpDelete("version/{id}")]
