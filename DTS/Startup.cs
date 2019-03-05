@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DTS.Data;
+using DTS.Repositories;
 
 namespace DTS
 {
@@ -23,6 +24,7 @@ namespace DTS
         {
             services.AddDbContext<Data.DTSContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
