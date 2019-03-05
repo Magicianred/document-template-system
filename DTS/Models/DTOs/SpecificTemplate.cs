@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DTS.Models.DTOs
 {
-    public class SpecificTemplateDTO
+    public class SpecificTemplate
     {
         public int TemplateId { get; set; }
         public DateTime CreationTime { get; set; }

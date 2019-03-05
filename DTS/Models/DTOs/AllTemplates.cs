@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DTS.Models
 {
-    public class AllTemplatesDTO
+    public class AllTemplates
     {
         public int ID { get; set; }
         public string Name { get; set; }
