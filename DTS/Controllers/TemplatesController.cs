@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DTS.Data;
 using DTS.Models;
 using DTSContext = DTS.Data.DTSContext;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using DTS.Models.DTOs;
+using DTS.Helpers;
 
 namespace DTS.Controllers
 {
@@ -19,7 +15,7 @@ namespace DTS.Controllers
     public class TemplatesController : ControllerBase
     {
         private const int _activeStatusRowID = 1;
-        private const string TemplateFieldsPattern = "&lt;([#@])([/sA-Za-z_-]*)&gt;";
+        
         private readonly DTSContext _context;
 
 
@@ -30,7 +26,7 @@ namespace DTS.Controllers
 
         // GET: api/Templates
         [HttpGet]
-        public async Task<IEnumerable<AllTemplatesDTO>> GetTemplates()
+        public async Task<IEnumerable<AllTemplates>> GetTemplates()
         {
             
 
@@ -39,11 +35,11 @@ namespace DTS.Controllers
                 .Include(template => template.TemplateVersions)
                 .ToListAsync();
 
-            var templatesDTOs = new List<AllTemplatesDTO>();
+            var templatesDTOs = new List<AllTemplates>();
 
             foreach (var template in templates)
             {
-                templatesDTOs.Add(new AllTemplatesDTO
+                templatesDTOs.Add(new AllTemplates
                 {
                     ID = template.ID,
                     Name = template.Name,
@@ -72,7 +68,7 @@ namespace DTS.Controllers
                 return NotFound();
             }
 
-            return Ok(new SpecificTemplateDTO
+            return Ok(new SpecificTemplate
             {
                 TemplateId = id,
                 TemplateVersion = template.TemplateVersion,
@@ -102,30 +98,14 @@ namespace DTS.Controllers
 
             var formBase = template.TemplateVersion;
 
-            MatchCollection matches = Regex.Matches(formBase, TemplateFieldsPattern);
-
-            var userMatchMap = new Dictionary<string, string>();
-
-            foreach (var match in matches)
-            {
-                var startPattern = "(&lt;*)";
-                var endPattern = "(&gt;*)";
-                var replacement = "";
-                Regex beginningRegex = new Regex(startPattern);
-                Regex endingRegex = new Regex(endPattern);
-
-                var valueWithBeginningCleared = beginningRegex.Replace(match.ToString(), replacement);
-
-                var finalValue = endingRegex.Replace(valueWithBeginningCleared, replacement);
-                userMatchMap.TryAdd(match.ToString(), finalValue);
-            }
-
-
+            var userMatchMap = new TemplateParser().ParseFields(formBase);
 
             return Ok(userMatchMap);
         }
 
-        // GET: api/Templates/5
+        
+
+        // GET: api/editor/5
         [HttpGet("editor/{id}")]
         public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
@@ -144,9 +124,10 @@ namespace DTS.Controllers
                 return BadRequest("User not found or not an editor");
             }
 
-            var templates = await _context.TemplateVersions
-                .Include(temp => temp.TemplateState)
-                .Where(temp => temp.UserID == id)
+            // Need owner column in Template table
+            var templates = await _context.Templates
+                .Include(temp => temp.TemplateVersions)
+                .Where(temp => temp.ID == id)
                 .ToListAsync();
 
             if (templates == null)
@@ -230,20 +211,18 @@ namespace DTS.Controllers
         [HttpPost("form/{id}")]
         public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
         {
-            var userInput = new Dictionary<string, string>();
-            JsonConvert.PopulateObject(JsonConvert.SerializeObject(data), userInput);
+
 
             var template = await _context.TemplateVersions
                 .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
                 .SingleOrDefaultAsync();
-                
-            foreach (var input in userInput)
-            {
-                template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
-            }
+
+            template.TemplateVersion = new JsonInputParser().FillTemplateFromJson(data, template);
 
             return Ok(template.TemplateVersion);
         }
+
+        
 
         // DELETE: api/Templates/5
         [HttpDelete("{id}")]
