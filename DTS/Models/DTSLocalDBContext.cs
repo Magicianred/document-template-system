@@ -4,62 +4,36 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DTS.Models
 {
-    public partial class LocalDBContext : DbContext
+    public partial class DTSLocalDBContext : DbContext
     {
-        public LocalDBContext()
+        public DTSLocalDBContext()
         {
         }
 
-        public LocalDBContext(DbContextOptions<LocalDBContext> options)
+        public DTSLocalDBContext(DbContextOptions<DTSLocalDBContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<State> State { get; set; }
-        public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Template> Template { get; set; }
+        public virtual DbSet<TemplateState> TemplateState { get; set; }
         public virtual DbSet<TemplateVersionControll> TemplateVersionControll { get; set; }
-        public virtual DbSet<Type> Type { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserStatus> UserStatus { get; set; }
+        public virtual DbSet<UserType> UserType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LocalDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DTSLocalDB;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
-
-            modelBuilder.Entity<State>(entity =>
-            {
-                entity.ToTable("state");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Status>(entity =>
-            {
-                entity.ToTable("status");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-            });
 
             modelBuilder.Entity<Template>(entity =>
             {
@@ -72,13 +46,34 @@ namespace DTS.Models
                     .HasColumnName("name")
                     .HasMaxLength(50);
 
+                entity.Property(e => e.OwnerId).HasColumnName("owner_id");
+
                 entity.Property(e => e.StateId).HasColumnName("state_id");
+
+                entity.HasOne(d => d.Owner)
+                    .WithMany(p => p.Template)
+                    .HasForeignKey(d => d.OwnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_dbo.template_dbo.user_id");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.Template)
                     .HasForeignKey(d => d.StateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Template_dbo.state_id");
+                    .HasConstraintName("FK_dbo.template_dbo.template_state_id");
+            });
+
+            modelBuilder.Entity<TemplateState>(entity =>
+            {
+                entity.ToTable("template_state");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasColumnName("state")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<TemplateVersionControll>(entity =>
@@ -86,6 +81,8 @@ namespace DTS.Models
                 entity.ToTable("template_version_controll");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("created_by");
 
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
@@ -101,38 +98,23 @@ namespace DTS.Models
 
                 entity.Property(e => e.TemplateId).HasColumnName("template_id");
 
-                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.TemplateVersionControll)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_dbo.template_version_controll_dbo.user_id");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.TemplateVersionControll)
                     .HasForeignKey(d => d.StateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Template_version_controll_dbo.state_id");
+                    .HasConstraintName("FK_dbo.template_version_controll_dbo.template_state_id");
 
                 entity.HasOne(d => d.TemplateNavigation)
                     .WithMany(p => p.TemplateVersionControll)
                     .HasForeignKey(d => d.TemplateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Template_version_controll_dbo.template_id");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.TemplateVersionControll)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Template_version_controll_dbo.user_id");
-            });
-
-            modelBuilder.Entity<Type>(entity =>
-            {
-                entity.ToTable("type");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                    .HasConstraintName("FK_dbo.template_version_controll_dbo.template_id");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -171,13 +153,39 @@ namespace DTS.Models
                     .WithMany(p => p.User)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.user_dbo.status_id");
+                    .HasConstraintName("FK_dbo.user_dbo.user_status_id");
 
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.User)
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.user_dbo.type_id");
+                    .HasConstraintName("FK_dbo.user_dbo.user_type_id");
+            });
+
+            modelBuilder.Entity<UserStatus>(entity =>
+            {
+                entity.ToTable("user_status");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UserType>(entity =>
+            {
+                entity.ToTable("user_type");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
             });
         }
     }

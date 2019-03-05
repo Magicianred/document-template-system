@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace DTS.Models
 {
-    public partial class Status
+    public partial class UserType
     {
-        public Status()
+        public UserType()
         {
             User = new HashSet<User>();
         }
