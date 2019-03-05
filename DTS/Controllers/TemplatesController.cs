@@ -267,24 +267,28 @@ namespace DTS.Controllers
             return CreatedAtAction("GetTemplate", new { id = templateVC.ID }, templateVC);
         }
 
-        //// POST: api/Templates/form/
-        //[HttpPost("form/{id}")]
-        //public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
-        //{
-        //    var userInput = new Dictionary<string, string>();
-        //    JsonConvert.PopulateObject(JsonConvert.SerializeObject(data), userInput);
+        // POST: api/Templates/form/
+        [HttpPost("form/{id}")]
+        public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
+        {
+            var templates = await repository.TemplatesVersions
+                .FindVersionByConditionAsync(temp => temp.TemplateID == id && temp.TemplateState.State == "Active");
+            var template = templates.FirstOrDefault();
+            if (template == null)
+            {
+                return BadRequest("Template does not exist or is inactive");
+            }
 
-        //    var template = await _context.TemplateVersions
-        //        .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
-        //        .SingleOrDefaultAsync();
+            var userInput = new Dictionary<string, string>();
+            JsonConvert.PopulateObject(JsonConvert.SerializeObject(data), userInput);
 
-        //    foreach (var input in userInput)
-        //    {
-        //        template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
-        //    }
+            foreach (var input in userInput)
+            {
+                template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
+            }
 
-        //    return Ok(template.TemplateVersion);
-        //}
+            return Ok(template.TemplateVersion);
+        }
 
         //// DELETE: api/Templates/5
         //[HttpDelete("{id}")]
