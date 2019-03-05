@@ -29,14 +29,28 @@ namespace DTS.Controllers
 
         // GET: api/Templates
         [HttpGet]
-        public async Task<IEnumerable<Template>> GetTemplates()
+        public async Task<IEnumerable<AllTemplatesDTO>> GetTemplates()
         {
+            
+
             var templates = await _context.Templates
+                .Include(template => template.TemplateState)
                 .Include(template => template.TemplateVersions)
-                    .ThenInclude(version => version.User)
                 .ToListAsync();
 
-            return templates;
+            var templatesDTOs = new List<AllTemplatesDTO>();
+
+            foreach (var template in templates)
+            {
+                templatesDTOs.Add(new AllTemplatesDTO
+                {
+                    ID = template.ID,
+                    Name = template.Name,
+                    VersionCount = template.TemplateVersions.Count,
+                });
+            }
+
+            return templatesDTOs;
         }
 
         // GET: api/Templates/5
