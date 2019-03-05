@@ -15,7 +15,7 @@ namespace DTS.Repositories
         {
         }
 
-        public override async Task<IEnumerable<Template>> FindAllAsync()
+        public async Task<IEnumerable<Template>> FindAllTemplatesAsync()
         {
             return await DTSContext.Templates
                 .Include(temp => temp.TemplateState)
@@ -23,7 +23,7 @@ namespace DTS.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Template> FindByIDAsync(int id)
+        public async Task<Template> FindTemplateByIDAsync(int id)
         {
             var template = await DTSContext.Templates
                 .Include(temp => temp.TemplateVersions)

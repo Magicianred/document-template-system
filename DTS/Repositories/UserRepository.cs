@@ -16,7 +16,7 @@ namespace DTS.Repositories
         {
         }
 
-        public async Task<User> FindByIDAsync(int id)
+        public async Task<User> FindUserByIDAsync(int id)
         {
             var user = await DTSContext.Users
                 .Include(u => u.Status)
@@ -43,6 +43,11 @@ namespace DTS.Repositories
 
             Update(oldUser);
             await SaveAsync();
+        }
+
+        public async Task<IEnumerable<User>> FindAllUsersAsync()
+        {
+            return await FindAllAsync();
         }
     }
 }
