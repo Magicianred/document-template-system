@@ -18,7 +18,7 @@ namespace DTS
             this.DTSContext = DtsContext;
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync()
+        public virtual async Task<IEnumerable<T>> FindAllAsync()
         {
             return await this.DTSContext.Set<T>().ToListAsync();
         }
