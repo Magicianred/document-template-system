@@ -69,7 +69,7 @@ namespace DTS.Controllers
             }
 
             var templates = await repository.TemplatesVersions
-                .FindByConditionAsync(temp => temp.TemplateID == id && temp.TemplateState.State == "Active");
+                .FindVersionByConditionAsync(temp => temp.TemplateID == id && temp.TemplateState.State == "Active");
 
             var template = templates.FirstOrDefault();
             if (template == null)
@@ -102,177 +102,171 @@ namespace DTS.Controllers
             return Ok(userMatchMap);
         }
 
-        //// GET: api/Templates/5
-        //[HttpGet("editor/{id}")]
-        //public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
-        //{
-        //    if (id <= 0)
-        //    {
-        //        return BadRequest("Passed negative id value");
-        //    }
-
-        //    var user = await _context.Users
-        //        .Include(u => u.Type)
-        //        .Where(u => u.ID == id)
-        //        .SingleOrDefaultAsync();
-
-        //    if(user == null || user.Type.Type != "Editor")
-        //    {
-        //        return BadRequest("User not found or not an editor");
-        //    }
-
-        //    var templates = await _context.TemplateVersions
-        //        .Include(temp => temp.TemplateState)
-        //        .Where(temp => temp.UserID == id)
-        //        .ToListAsync();
-
-        //    if (templates == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-
-
-        //    return Ok(templates);
-        //}
-
-        // PUT: api/Templates/2
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput template)
+        // GET: api/Templates/5
+        [HttpGet("editor/{id}")]
+        public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
+            if (id <= 0)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Passed negative id value");
             }
 
-            var temp = _context.Templates.FindAsync(id).Result;
+            var user = await repository.Users.FindByIDAsync(id);
 
-
-            if (temp == null)
+            if (user?.Type == null || user.Type.Type != "Editor")
             {
-                return BadRequest();
+                return BadRequest($"User not found or not an editor {user?.Name}, {user?.Type.Type}.");
+            }
+
+            var templates = await repository.TemplatesVersions
+                .FindByUserIdAsync(id);
+            if (templates.FirstOrDefault() == null)
+            {
+                return NotFound();
             }
 
 
-            
-            temp.TemplateState = await _context.TemplateStates.FindAsync(template.StateId);
-            temp.Name = template.Name;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TemplateExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            return Ok(templates);
+        }
+
+        //// PUT: api/Templates/2
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput template)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var temp = _context.Templates.FindAsync(id).Result;
+
+
+        //    if (temp == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+
+
+        //    temp.TemplateState = await _context.TemplateStates.FindAsync(template.StateId);
+        //    temp.Name = template.Name;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!TemplateExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
         //    return NoContent();
         //}
 
-        // PUT: api/Templates/2/1
-        [HttpPut("{tempId}/{verId}")]
-        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] Template template)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //// PUT: api/Templates/2/1
+        //[HttpPut("{tempId}/{verId}")]
+        //public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] Template template)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            if (tempId != template.ID)
-            {
-                return BadRequest();
-            }
-
-
-            foreach (var templateVersion in _context.TemplateVersions)
-            {
-                if (templateVersion.TemplateID == tempId && templateVersion.ID != verId)
-                {
-                    templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
-                }
-                else if (templateVersion.TemplateID == tempId)
-                {
-                    templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_activeStatusRowID);
-                }
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TemplateExists(tempId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // PUT: api/Templates/versions/2/
-        [HttpPut("{id}/version")]
-        public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //    if (tempId != template.ID)
+        //    {
+        //        return BadRequest();
+        //    }
 
 
-            var templateVC = new TemplateVersionControl()
-            {
-                TemplateVersion = templateInput.Template,
-                TemplateID = id,
-                UserID = templateInput.AuthorId,
-                TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+        //    foreach (var templateVersion in _context.TemplateVersions)
+        //    {
+        //        if (templateVersion.TemplateID == tempId && templateVersion.ID != verId)
+        //        {
+        //            templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
+        //        }
+        //        else if (templateVersion.TemplateID == tempId)
+        //        {
+        //            templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_activeStatusRowID);
+        //        }
+        //    }
 
-            };
-            _context.TemplateVersions.Add(templateVC);
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!TemplateExists(tempId))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-           
-            await _context.SaveChangesAsync();
-            
+        //    return NoContent();
+        //}
 
-            return NoContent();
-        }
+        //// PUT: api/Templates/versions/2/
+        //[HttpPut("{id}/version")]
+        //public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-        // POST: api/Templates
-        [HttpPost]
-        public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            var template = new Template()
-            {
-                Name = templateInput.TemplateName,
-                TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
-            };
+        //    var templateVC = new TemplateVersionControl()
+        //    {
+        //        TemplateVersion = templateInput.Template,
+        //        TemplateID = id,
+        //        UserID = templateInput.AuthorId,
+        //        TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+
+        //    };
+        //    _context.TemplateVersions.Add(templateVC);
+
+
+        //    await _context.SaveChangesAsync();
+
+
+        //    return NoContent();
+        //}
+
+        //// POST: api/Templates
+        //[HttpPost]
+        //public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var template = new Template()
+        //    {
+        //        Name = templateInput.TemplateName,
+        //        TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+        //    };
 
         //    _context.Templates.Add(template);
 
-            var templateVC = new TemplateVersionControl()
-            {
-                TemplateVersion = templateInput.Template,
-                TemplateID = template.ID,
-                UserID = templateInput.AuthorId,
-                TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+        //var templateVC = new TemplateVersionControl()
+        //{
+        //    TemplateVersion = templateInput.Template,
+        //    TemplateID = template.ID,
+        //    UserID = templateInput.AuthorId,
+        //    TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
 
         //    };
         //    _context.TemplateVersions.Add(templateVC);
@@ -282,33 +276,33 @@ namespace DTS.Controllers
         //    return CreatedAtAction("GetTemplate", new { id = templateVC.ID }, templateVC);
         //}
 
-        // POST: api/Templates/form/
-        [HttpPost("form/{id}")]
-        public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
-        {
-            var userInput = new Dictionary<string, string>();
-            JsonConvert.PopulateObject(JsonConvert.SerializeObject(data), userInput);
+        //// POST: api/Templates/form/
+        //[HttpPost("form/{id}")]
+        //public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
+        //{
+        //    var userInput = new Dictionary<string, string>();
+        //    JsonConvert.PopulateObject(JsonConvert.SerializeObject(data), userInput);
 
-            var template = await _context.TemplateVersions
-                .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
-                .SingleOrDefaultAsync();
-                
-            foreach (var input in userInput)
-            {
-                template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
-            }
+        //    var template = await _context.TemplateVersions
+        //        .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
+        //        .SingleOrDefaultAsync();
 
-            return Ok(template.TemplateVersion);
-        }
+        //    foreach (var input in userInput)
+        //    {
+        //        template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
+        //    }
 
-        // DELETE: api/Templates/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //    return Ok(template.TemplateVersion);
+        //}
+
+        //// DELETE: api/Templates/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
         //    var template = await _context.Templates.FindAsync(id);
         //    if (template == null)
@@ -316,36 +310,36 @@ namespace DTS.Controllers
         //        return NotFound();
         //    }
 
-            template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
-            await _context.SaveChangesAsync();
+        //template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
+        //await _context.SaveChangesAsync();
 
         //    return Ok(template);
         //}
 
-        private bool TemplateExists(int id)
-        {
-            return _context.Templates.Any(e => e.ID == id);
-        }
+        //private bool TemplateExists(int id)
+        //{
+        //    return _context.Templates.Any(e => e.ID == id);
+        //}
 
-        [HttpDelete("version/{id}")]
-        public async Task<IActionResult> DeleteTemplateVersion([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpDelete("version/{id}")]
+        //public async Task<IActionResult> DeleteTemplateVersion([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var template = await _context.TemplateVersions.FindAsync(id);
-            if (template == null)
-            {
-                return NotFound();
-            }
+        //    var template = await _context.TemplateVersions.FindAsync(id);
+        //    if (template == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
-            await _context.SaveChangesAsync();
+        //    template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
+        //    await _context.SaveChangesAsync();
 
-            return Ok(template);
-        }
+        //    return Ok(template);
+        //}
 
     }
 }
