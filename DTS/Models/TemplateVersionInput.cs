@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DTS.Models
 {
-    public class TemplateInput
+    public class TemplateVersionInput
     {
         public int AuthorId { get; set; }
         public string TemplateName { get; set; }
