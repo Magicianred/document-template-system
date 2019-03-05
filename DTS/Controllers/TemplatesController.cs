@@ -319,7 +319,7 @@ namespace DTS.Controllers
                 return NotFound();
             }
 
-            _context.Templates.Remove(template);
+            template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
             await _context.SaveChangesAsync();
 
             return Ok(template);
@@ -329,5 +329,26 @@ namespace DTS.Controllers
         {
             return _context.Templates.Any(e => e.ID == id);
         }
+
+        [HttpDelete("version/{id}")]
+        public async Task<IActionResult> DeleteTemplateVersion([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var template = await _context.TemplateVersions.FindAsync(id);
+            if (template == null)
+            {
+                return NotFound();
+            }
+
+            template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
+            await _context.SaveChangesAsync();
+
+            return Ok(template);
+        }
+
     }
 }
