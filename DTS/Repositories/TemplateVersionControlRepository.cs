@@ -3,6 +3,7 @@ using DTS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DTS.Repositories
@@ -44,7 +45,7 @@ namespace DTS.Repositories
             await SaveAsync();
         }
 
-        public async Task<IEnumerable<TemplateVersionControl>> FindByConditionAsync(Func<TemplateVersionControl, bool> expression)
+        public async Task<IEnumerable<TemplateVersionControl>> FindVersionByConditionAsync(Expression<Func<TemplateVersionControl, bool>> expression)
         {
             return await FindByConditionAsync(expression);
         }
