@@ -18,8 +18,12 @@ namespace DTS.Repositories
 
         public async Task<User> FindByIDAsync(int id)
         {
-            var user = await FindByConditionAsync(u => u.ID == id);
-            return user.DefaultIfEmpty(new User()).FirstOrDefault();
+            var user = await DTSContext.Users
+                .Include(u => u.Status)
+                .Include(u => u.Type)
+                .Where(u => u.ID == id)
+                .SingleOrDefaultAsync();
+            return user ?? new User();
         }
 
         public async Task CreateAsync(User user)
