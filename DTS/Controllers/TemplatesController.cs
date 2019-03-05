@@ -237,37 +237,35 @@ namespace DTS.Controllers
             return NoContent();
         }
 
-        //// POST: api/Templates
-        //[HttpPost]
-        //public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // POST: api/Templates
+        [HttpPost]
+        public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    var template = new Template()
-        //    {
-        //        Name = templateInput.TemplateName,
-        //        TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
-        //    };
+            var template = new Template()
+            {
+                Name = templateInput.TemplateName,
+                TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
+            };
 
-        //    _context.Templates.Add(template);
+            await repository.Templates.CreateAsync(template);
 
-        //var templateVC = new TemplateVersionControl()
-        //{
-        //    TemplateVersion = templateInput.Template,
-        //    TemplateID = template.ID,
-        //    UserID = templateInput.AuthorId,
-        //    TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+            var templateVC = new TemplateVersionControl()
+            {
+                TemplateVersion = templateInput.Template,
+                TemplateID = template.ID,
+                UserID = templateInput.AuthorId,
+                TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
-        //    };
-        //    _context.TemplateVersions.Add(templateVC);
+            };
+            await repository.TemplatesVersions.CreateAsync(templateVC);
 
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetTemplate", new { id = templateVC.ID }, templateVC);
-        //}
+            return CreatedAtAction("GetTemplate", new { id = templateVC.ID }, templateVC);
+        }
 
         //// POST: api/Templates/form/
         //[HttpPost("form/{id}")]
