@@ -26,7 +26,7 @@ namespace DTS.Repositories
             return template.DefaultIfEmpty(new TemplateVersionControl());
         }
 
-        public async Task<IEnumerable<TemplateVersionControl>> FindByUserId(int id)
+        public async Task<IEnumerable<TemplateVersionControl>> FindByUserIdAsync(int id)
         {
             var template = await FindByConditionAsync(temp => temp.UserID == id);
             return template.DefaultIfEmpty(new TemplateVersionControl());
@@ -42,6 +42,11 @@ namespace DTS.Repositories
         {
             Update(template);
             await SaveAsync();
+        }
+
+        public async Task<IEnumerable<TemplateVersionControl>> FindByConditionAsync(Func<TemplateVersionControl, bool> expression)
+        {
+            return await FindByConditionAsync(expression);
         }
     }
 }
