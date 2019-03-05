@@ -290,26 +290,26 @@ namespace DTS.Controllers
             return Ok(template.TemplateVersion);
         }
 
-        //// DELETE: api/Templates/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // DELETE: api/Templates/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    var template = await _context.Templates.FindAsync(id);
-        //    if (template == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var template = await repository.Templates.FindTemplateByIDAsync(id);
+            if (template == null)
+            {
+                return NotFound();
+            }
 
-        //template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
-        //await _context.SaveChangesAsync();
+            template.TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
+            await repository.Templates.UpdateAsync(template);
 
-        //    return Ok(template);
-        //}
+            return Ok(template);
+        }
 
         //[HttpDelete("version/{id}")]
         //public async Task<IActionResult> DeleteTemplateVersion([FromRoute] int id)
