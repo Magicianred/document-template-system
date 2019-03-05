@@ -10,6 +10,7 @@ using DTS.Models;
 using DTSContext = DTS.Data.DTSContext;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using DTS.Models.DTOs;
 
 namespace DTS.Controllers
 {
@@ -63,7 +64,6 @@ namespace DTS.Controllers
             }
             var template = await _context.TemplateVersions
                 .Include(temp => temp.User)
-                .Include(temp => temp.TemplateState)
                 .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
                 .SingleOrDefaultAsync();
 
@@ -72,7 +72,14 @@ namespace DTS.Controllers
                 return NotFound();
             }
 
-            return Ok(template);
+            return Ok(new SpecificTemplateDTO
+            {
+                TemplateId = id,
+                TemplateVersion = template.TemplateVersion,
+                CreationTime = template.CreationData,
+                CreatorName = template.User.Name + "  " +template.User.Surname,
+                CreatorMail = template.User.Email
+            });
         }
 
         // GET: api/Templates/form/5
