@@ -32,16 +32,9 @@ namespace DTS.Repositories
             await SaveAsync();
         }
 
-        public async Task UpdateAsync(User oldUser, User user)
+        public async Task UpdateAsync(User user)
         {
-            oldUser.Login = user.Login;
-            oldUser.Password = user.Password;
-            oldUser.Name = user.Name;
-            oldUser.Surname = user.Surname;
-            oldUser.Type = user.Type;
-            oldUser.Status = user.Status;
-
-            Update(oldUser);
+            Update(user);
             await SaveAsync();
         }
 
