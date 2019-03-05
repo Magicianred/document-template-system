@@ -34,7 +34,7 @@ namespace DTS.Controllers
         {
             try
             {
-                var templates = await repository.Templates.FindAllAsync();
+                var templates = await repository.Templates.FindAllTemplatesAsync();
                 return Ok(templates);
             } catch (Exception)
             {
@@ -50,7 +50,7 @@ namespace DTS.Controllers
             {
                 return BadRequest("Passed negative id value");
             }
-            var template = await repository.Templates.FindByIDAsync(id);
+            var template = await repository.Templates.FindTemplateByIDAsync(id);
             if (template == null)
             {
                 return NotFound();
@@ -111,7 +111,7 @@ namespace DTS.Controllers
                 return BadRequest("Passed negative id value");
             }
 
-            var user = await repository.Users.FindByIDAsync(id);
+            var user = await repository.Users.FindUserByIDAsync(id);
 
             if (user?.Type == null || user.Type.Type != "Editor")
             {
@@ -139,7 +139,7 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            var temp = await repository.Templates.FindByIDAsync(id);
+            var temp = await repository.Templates.FindTemplateByIDAsync(id);
 
             if (temp == null)
             {
@@ -214,32 +214,28 @@ namespace DTS.Controllers
             return NoContent();
         }
 
-        //// PUT: api/Templates/versions/2/
-        //[HttpPut("{id}/version")]
-        //public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // PUT: api/Templates/versions/2/
+        [HttpPut("{id}/version")]
+        public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
 
-        //    var templateVC = new TemplateVersionControl()
-        //    {
-        //        TemplateVersion = templateInput.Template,
-        //        TemplateID = id,
-        //        UserID = templateInput.AuthorId,
-        //        TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+            var templateVC = new TemplateVersionControl()
+            {
+                TemplateVersion = templateInput.Template,
+                TemplateID = id,
+                UserID = templateInput.AuthorId,
+                TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
-        //    };
-        //    _context.TemplateVersions.Add(templateVC);
+            };
+            await repository.TemplatesVersions.CreateAsync(templateVC);
 
-
-        //    await _context.SaveChangesAsync();
-
-
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         //// POST: api/Templates
         //[HttpPost]
