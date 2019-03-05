@@ -1,5 +1,6 @@
 ﻿using DTS.Data;
 using DTS.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,21 @@ namespace DTS.Repositories
         {
         }
 
+        public override async Task<IEnumerable<Template>> FindAllAsync()
+        {
+            return await DTSContext.Templates
+                .Include(temp => temp.TemplateState)
+                .Include(temp => temp.TemplateVersions)
+                .ToListAsync();
+        }
+
         public async Task<Template> FindByIDAsync(int id)
         {
-            var template = await FindByConditionAsync(temp => temp.ID == id);
+            var template = await DTSContext.Templates
+                .Include(temp => temp.TemplateVersions)
+                .Include(temp => temp.TemplateState)
+                .Where(temp => temp.ID == id)
+                .ToListAsync();
             return template.DefaultIfEmpty(new Template()).FirstOrDefault();
         }
 
@@ -26,13 +39,9 @@ namespace DTS.Repositories
             await SaveAsync();
         }
 
-        public async Task UpdateAsync(Template oldTemplate, Template template)
+        public async Task UpdateAsync(Template template)
         {
-            oldTemplate.Name = template.Name;
-            oldTemplate.TemplateState = template.TemplateState;
-            oldTemplate.TemplateVersions = template.TemplateVersions;
-
-            Update(oldTemplate);
+            Update(template);
             await SaveAsync();
         }
     }
