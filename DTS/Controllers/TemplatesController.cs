@@ -155,7 +155,7 @@ namespace DTS.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (await repository.Templates.Exists(id))
+                if (!await repository.Templates.Exists(id))
                 {
                     return NotFound();
                 }
@@ -168,51 +168,51 @@ namespace DTS.Controllers
             return NoContent();
         }
 
-        //// PUT: api/Templates/2/1
-        //[HttpPut("{tempId}/{verId}")]
-        //public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] Template template)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // PUT: api/Templates/2/1
+        [HttpPut("{tempId}/{verId}")]
+        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] Template template)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    if (tempId != template.ID)
-        //    {
-        //        return BadRequest();
-        //    }
+            if (tempId != template.ID)
+            {
+                return BadRequest();
+            }
 
+            var templateVersions = await repository.TemplatesVersions.FindAllVersions();
+            foreach (var templateVersion in templateVersions)
+            {
+                if (templateVersion.TemplateID == tempId && templateVersion.ID != verId)
+                {
+                    templateVersion.TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
+                }
+                else if (templateVersion.TemplateID == tempId)
+                {
+                    templateVersion.TemplateState = await repository.TemplateState.FindStateByIdAsync(_activeStatusRowID);
+                }
+            }
 
-        //    foreach (var templateVersion in _context.TemplateVersions)
-        //    {
-        //        if (templateVersion.TemplateID == tempId && templateVersion.ID != verId)
-        //        {
-        //            templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
-        //        }
-        //        else if (templateVersion.TemplateID == tempId)
-        //        {
-        //            templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_activeStatusRowID);
-        //        }
-        //    }
+            try
+            {
+                await repository.TemplatesVersions.UpdateAsync(templateVersions);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await repository.Templates.Exists(tempId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!TemplateExists(tempId))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         //// PUT: api/Templates/versions/2/
         //[HttpPut("{id}/version")]

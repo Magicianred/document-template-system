@@ -15,7 +15,7 @@ namespace DTS.Repositories
         {
         }
 
-        public async Task<TemplateVersionControl> FindByIDAsync(int id)
+        public async Task<TemplateVersionControl> FindVersionByIDAsync(int id)
         {
             var template = await FindByConditionAsync(temp => temp.ID == id);
             return template.DefaultIfEmpty(new TemplateVersionControl()).FirstOrDefault();
@@ -48,6 +48,20 @@ namespace DTS.Repositories
         public async Task<IEnumerable<TemplateVersionControl>> FindVersionByConditionAsync(Expression<Func<TemplateVersionControl, bool>> expression)
         {
             return await FindByConditionAsync(expression);
+        }
+
+        public async Task<IEnumerable<TemplateVersionControl>> FindAllVersions()
+        {
+            return await FindAllAsync();
+        }
+
+        public async Task UpdateAsync(IEnumerable<TemplateVersionControl> templates)
+        {
+            foreach (var template in templates)
+            {
+                Update(template);
+            }
+            await SaveAsync();
         }
     }
 }
