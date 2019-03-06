@@ -10,5 +10,6 @@ namespace DTS.Models.DTOs
         public int ID { get; set; }
         public string Name { get; set; }
         public List<SpecificTemplateVersion> Versions { get; set; }
+        public UserDTO Owner { get; set; }
     }
 }

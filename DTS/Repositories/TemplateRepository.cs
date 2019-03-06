@@ -31,6 +31,14 @@ namespace DTS.Repositories
             return template.DefaultIfEmpty(new Template()).FirstOrDefault();
         }
 
+        public async Task<IEnumerable<Template>> FindByUserIdAsync(int id)
+        {
+             return await DTSContext.Template
+                .Where(temp => temp.OwnerId == id)
+                .ToListAsync();
+            
+        }
+
         public async Task CreateAsync(Template template)
         {
             Create(template);
