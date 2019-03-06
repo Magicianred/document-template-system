@@ -72,6 +72,7 @@ namespace DTS.Controllers
             {
                 ID = template.ID,
                 Name = template.Name,
+                Versions = new List<SpecificTemplateVersion>()
             };
 
             foreach(var tempVersion in template.TemplateVersions)
@@ -81,7 +82,7 @@ namespace DTS.Controllers
                     CreationTime = tempVersion.CreationData,
                     TemplateVersion = tempVersion.TemplateVersion,
                     CreatorMail = tempVersion.User.Email,
-                    CreatorName = tempVersion.User.Name + "  " + tempVersion.User.Surname
+                    CreatorName = tempVersion.User.Name + " " + tempVersion.User.Surname
                 });
             }
 
