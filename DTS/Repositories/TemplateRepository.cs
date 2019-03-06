@@ -27,6 +27,7 @@ namespace DTS.Repositories
         {
             var template = await DTSContext.Templates
                 .Include(temp => temp.TemplateVersions)
+                    .ThenInclude(tempVer => tempVer.User)
                 .Include(temp => temp.TemplateState)
                 .Where(temp => temp.ID == id)
                 .ToListAsync();
