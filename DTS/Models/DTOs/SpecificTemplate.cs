@@ -7,10 +7,8 @@ namespace DTS.Models.DTOs
 {
     public class SpecificTemplate
     {
-        public int TemplateId { get; set; }
-        public DateTime CreationTime { get; set; }
-        public string TemplateVersion { get; set; }
-        public string CreatorName { get; set; }
-        public string CreatorMail { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public List<SpecificTemplateVersion> Versions { get; set; }
     }
 }

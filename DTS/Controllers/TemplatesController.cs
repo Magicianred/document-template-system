@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DTS.Models;
-using DTSContext = DTS.Data.DTSContext;
+using DTS.Repositories;
 using DTS.Models.DTOs;
 using DTS.Helpers;
+using System;
 
 namespace DTS.Controllers
 {
@@ -16,38 +17,39 @@ namespace DTS.Controllers
     {
         private const int _activeStatusRowID = 1;
         private const int _inactiveStatusRowID = 2;
-        private readonly DTSContext _context;
+        private IRepositoryWrapper repository;
 
-
-        public TemplatesController(DTSContext context)
+        public TemplatesController(IRepositoryWrapper repository)
         {
-            _context = context;
+            this.repository = repository;
         }
 
         // GET: api/Templates
         [HttpGet]
-        public async Task<IEnumerable<AllTemplates>> GetTemplates()
+        public async Task<IActionResult> GetTemplates()
         {
-            
 
-            var templates = await _context.Templates
-                .Include(template => template.TemplateState)
-                .Include(template => template.TemplateVersions)
-                .ToListAsync();
-
-            var templatesDTOs = new List<AllTemplates>();
-
-            foreach (var template in templates)
+            try
             {
-                templatesDTOs.Add(new AllTemplates
-                {
-                    ID = template.ID,
-                    Name = template.Name,
-                    VersionCount = template.TemplateVersions.Count,
-                });
-            }
+                var templates = await repository.Templates.FindAllTemplatesAsync();
 
-            return templatesDTOs;
+                var templatesDTOs = new List<AllTemplates>();
+
+                foreach (var template in templates)
+                {
+                    templatesDTOs.Add(new AllTemplates
+                    {
+                        ID = template.ID,
+                        Name = template.Name,
+                        VersionCount = template.TemplateVersions.Count,
+                    });
+                }
+                return Ok(templatesDTOs);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Some Error in FindAll Templates");
+            }            
         }
 
         // GET: api/Templates/5
@@ -58,24 +60,33 @@ namespace DTS.Controllers
             {
                 return BadRequest("Passed negative id value");
             }
-            var template = await _context.TemplateVersions
-                .Include(temp => temp.User)
-                .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
-                .SingleOrDefaultAsync();
+
+            var template = await repository.Templates.FindTemplateByIDAsync(id);
 
             if (template == null)
             {
                 return NotFound();
             }
 
-            return Ok(new SpecificTemplate
+            var templateReturnData = new SpecificTemplate
             {
-                TemplateId = id,
-                TemplateVersion = template.TemplateVersion,
-                CreationTime = template.CreationData,
-                CreatorName = template.User.Name + "  " +template.User.Surname,
-                CreatorMail = template.User.Email
-            });
+                ID = template.ID,
+                Name = template.Name,
+                Versions = new List<SpecificTemplateVersion>()
+            };
+
+            foreach(var tempVersion in template.TemplateVersions)
+            {
+                templateReturnData.Versions.Add(new SpecificTemplateVersion
+                {
+                    CreationTime = tempVersion.CreationData,
+                    TemplateVersion = tempVersion.TemplateVersion,
+                    CreatorMail = tempVersion.User.Email,
+                    CreatorName = tempVersion.User.Name + " " + tempVersion.User.Surname
+                });
+            }
+
+            return Ok(templateReturnData);
         }
 
         // GET: api/Templates/form/5
@@ -87,10 +98,10 @@ namespace DTS.Controllers
                 return BadRequest("Passed negative id value");
             }
 
-            var template = await _context.TemplateVersions
-                .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
-                .SingleOrDefaultAsync();
+            var templates = await repository.TemplatesVersions
+                .FindVersionByConditionAsync(temp => temp.TemplateID == id && temp.TemplateState.State == "Active");
 
+            var template = templates.FirstOrDefault();
             if (template == null)
             {
                 return NotFound();
@@ -114,23 +125,16 @@ namespace DTS.Controllers
                 return BadRequest("Passed negative id value");
             }
 
-            var user = await _context.Users
-                .Include(u => u.Type)
-                .Where(u => u.ID == id)
-                .SingleOrDefaultAsync();
+            var user = await repository.Users.FindUserByIDAsync(id);
 
-            if (user == null || user.Type.Type != "Editor")
+            if (user?.Type == null || user.Type.Type != "Editor")
             {
-                return BadRequest("User not found or not an editor");
+                return BadRequest($"User not found or not an editor {user?.Name}, {user?.Type.Type}.");
             }
 
-            // Need owner column in Template table
-            var templates = await _context.Templates
-                .Include(temp => temp.TemplateVersions)
-                .Where(temp => temp.ID == id)
-                .ToListAsync();
-
-            if (templates == null)
+            var templates = await repository.TemplatesVersions
+                .FindByUserIdAsync(id);
+            if (templates.FirstOrDefault() == null)
             {
                 return NotFound();
             }
@@ -149,26 +153,23 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            var temp = _context.Templates.FindAsync(id).Result;
-
+            var temp = await repository.Templates.FindTemplateByIDAsync(id);
 
             if (temp == null)
             {
                 return BadRequest();
             }
 
-
-            
-            temp.TemplateState = await _context.TemplateStates.FindAsync(template.StateId);
+            temp.TemplateState = await repository.TemplateState.FindStateByIdAsync(template.StateId);
             temp.Name = template.Name;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await repository.Templates.UpdateAsync(temp);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TemplateExists(id))
+                if (!await repository.Templates.Exists(id))
                 {
                     return NotFound();
                 }
@@ -183,38 +184,35 @@ namespace DTS.Controllers
 
         // PUT: api/Templates/2/1
         [HttpPut("{tempId}/{verId}")]
-        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] Template template)
+        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] TemplateUpdateInput template)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (tempId != template.ID)
-            {
-                return BadRequest();
-            }
+            
 
-
-            foreach (var templateVersion in _context.TemplateVersions)
+            var templateVersions = await repository.TemplatesVersions.FindAllVersions();
+            foreach (var templateVersion in templateVersions)
             {
                 if (templateVersion.TemplateID == tempId && templateVersion.ID != verId)
                 {
-                    templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
+                    templateVersion.TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
                 }
                 else if (templateVersion.TemplateID == tempId)
                 {
-                    templateVersion.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
+                    templateVersion.TemplateState = await repository.TemplateState.FindStateByIdAsync(_activeStatusRowID);
                 }
             }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await repository.TemplatesVersions.UpdateAsync(templateVersions);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TemplateExists(tempId))
+                if (!await repository.Templates.Exists(tempId))
                 {
                     return NotFound();
                 }
@@ -242,14 +240,10 @@ namespace DTS.Controllers
                 TemplateVersion = templateInput.Template,
                 TemplateID = id,
                 UserID = templateInput.AuthorId,
-                TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+                TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
             };
-            _context.TemplateVersions.Add(templateVC);
-
-           
-            await _context.SaveChangesAsync();
-            
+            await repository.TemplatesVersions.CreateAsync(templateVC);
 
             return NoContent();
         }
@@ -266,22 +260,20 @@ namespace DTS.Controllers
             var template = new Template()
             {
                 Name = templateInput.TemplateName,
-                TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+                TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
             };
 
-            _context.Templates.Add(template);
+            await repository.Templates.CreateAsync(template);
 
             var templateVC = new TemplateVersionControl()
             {
                 TemplateVersion = templateInput.Template,
                 TemplateID = template.ID,
                 UserID = templateInput.AuthorId,
-                TemplateState = _context.TemplateStates.Find(_inactiveStatusRowID),
+                TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
             };
-            _context.TemplateVersions.Add(templateVC);
-
-            await _context.SaveChangesAsync();
+            await repository.TemplatesVersions.CreateAsync(templateVC);
 
             return CreatedAtAction("GetTemplate", new { id = templateVC.ID }, templateVC);
         }
@@ -290,11 +282,15 @@ namespace DTS.Controllers
         [HttpPost("form/{id}")]
         public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
         {
+            var templates = await repository.TemplatesVersions
+                .FindVersionByConditionAsync(temp => temp.TemplateID == id && temp.TemplateState.State == "Active");
+            var template = templates.FirstOrDefault();
+            if (template == null)
+            {
+                return BadRequest("Template does not exist or is inactive");
+            }
 
-
-            var template = await _context.TemplateVersions
-                .Where(temp => temp.TemplateID == id && temp.TemplateState.State == "Active")
-                .SingleOrDefaultAsync();
+            
 
             template.TemplateVersion = new JsonInputParser().FillTemplateFromJson(data, template);
 
@@ -312,21 +308,16 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            var template = await _context.Templates.FindAsync(id);
+            var template = await repository.Templates.FindTemplateByIDAsync(id);
             if (template == null)
             {
                 return NotFound();
             }
 
-            template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
-            await _context.SaveChangesAsync();
+            template.TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
+            await repository.Templates.UpdateAsync(template);
 
             return Ok(template);
-        }
-
-        private bool TemplateExists(int id)
-        {
-            return _context.Templates.Any(e => e.ID == id);
         }
 
         [HttpDelete("version/{id}")]
@@ -337,14 +328,14 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            var template = await _context.TemplateVersions.FindAsync(id);
+            var template = await repository.TemplatesVersions.FindVersionByIDAsync(id);
             if (template == null)
             {
                 return NotFound();
             }
 
-            template.TemplateState = await _context.TemplateStates.FindAsync(_inactiveStatusRowID);
-            await _context.SaveChangesAsync();
+            template.TemplateState = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
+            await repository.TemplatesVersions.UpdateAsync(template);
 
             return Ok(template);
         }

@@ -16,10 +16,14 @@ namespace DTS.Repositories
         {
         }
 
-        public async Task<User> FindByIDAsync(int id)
+        public async Task<User> FindUserByIDAsync(int id)
         {
-            var user = await FindByConditionAsync(u => u.ID == id);
-            return user.DefaultIfEmpty(new User()).FirstOrDefault();
+            var user = await DTSContext.Users
+                .Include(u => u.Status)
+                .Include(u => u.Type)
+                .Where(u => u.ID == id)
+                .SingleOrDefaultAsync();
+            return user ?? new User();
         }
 
         public async Task CreateAsync(User user)
@@ -28,17 +32,15 @@ namespace DTS.Repositories
             await SaveAsync();
         }
 
-        public async Task UpdateAsync(User oldUser, User user)
+        public async Task UpdateAsync(User user)
         {
-            oldUser.Login = user.Login;
-            oldUser.Password = user.Password;
-            oldUser.Name = user.Name;
-            oldUser.Surname = user.Surname;
-            oldUser.Type = user.Type;
-            oldUser.Status = user.Status;
-
-            Update(oldUser);
+            Update(user);
             await SaveAsync();
+        }
+
+        public async Task<IEnumerable<User>> FindAllUsersAsync()
+        {
+            return await FindAllAsync();
         }
     }
 }
