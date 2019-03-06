@@ -129,6 +129,12 @@ namespace DTS.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Login)
+                    .IsRequired()
+                    .HasColumnName("login")
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")

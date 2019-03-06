@@ -6,23 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\**" />
-    <Content Remove="Models\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <None Remove="Models\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Models\DTSLocalDBContext.cs" />
-    <Compile Include="Models\Template.cs" />
-    <Compile Include="Models\TemplateState.cs" />
-    <Compile Include="Models\TemplateVersionControll.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserStatus.cs" />
-    <Compile Include="Models\UserType.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
