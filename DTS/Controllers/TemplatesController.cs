@@ -170,17 +170,14 @@ namespace DTS.Controllers
 
         // PUT: api/Templates/2/1
         [HttpPut("{tempId}/{verId}")]
-        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] Template template)
+        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] TemplateUpdateInput template)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (tempId != template.ID)
-            {
-                return BadRequest();
-            }
+            
 
             var templateVersions = await repository.TemplatesVersions.FindAllVersions();
             foreach (var templateVersion in templateVersions)
