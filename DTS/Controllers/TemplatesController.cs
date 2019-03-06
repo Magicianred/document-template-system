@@ -187,7 +187,7 @@ namespace DTS.Controllers
 
         // PUT: api/Templates/2/1
         [HttpPut("{tempId}/{verId}")]
-        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId, [FromBody] TemplateUpdateInput template)
+        public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId)
         {
             if (!ModelState.IsValid)
             {
