@@ -13,8 +13,6 @@ namespace DTS.Models
         public string Email { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public int UserStatusID { get; set; }
-        public int UserTypeID { get; set; }
 
         public virtual UserStatus Status { get; set; }
         public virtual UserType Type { get; set; }
