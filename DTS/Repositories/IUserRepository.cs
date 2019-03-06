@@ -12,6 +12,6 @@ namespace DTS.Repositories
         Task<IEnumerable<User>> FindAllUsersAsync();
         Task<User> FindUserByIDAsync(int id);
         Task CreateAsync(User user);
-        Task UpdateAsync(User oldUser, User user);
+        Task UpdateAsync(User oldUser);
     }
 }
