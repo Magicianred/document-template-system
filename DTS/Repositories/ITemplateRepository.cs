@@ -13,5 +13,6 @@ namespace DTS.Repositories
         Task<bool> Exists(int id);
         Task CreateAsync(Template template);
         Task UpdateAsync(Template template);
+        Task<IEnumerable<Template>> FindByUserIdAsync(int id);
     }
 }
