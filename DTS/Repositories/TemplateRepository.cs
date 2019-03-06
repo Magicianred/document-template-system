@@ -19,6 +19,7 @@ namespace DTS.Repositories
         {
             return await DTSContext.Template
                 .Include(temp => temp.State)
+                .Include(temp => temp.Owner)
                 .ToListAsync();
         }
 
@@ -26,6 +27,7 @@ namespace DTS.Repositories
         {
             var template = await DTSContext.Template
                 .Include(temp => temp.State)
+                .Include(temp => temp.Owner)
                 .Where(temp => temp.Id == id)
                 .ToListAsync();
             return template.DefaultIfEmpty(new Template()).FirstOrDefault();
