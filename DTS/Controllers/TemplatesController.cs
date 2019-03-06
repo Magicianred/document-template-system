@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DTS.Data;
 using DTS.Models;
 using DTSContext = DTS.Data.DTSContext;
-using System.Text.RegularExpressions;
 using DTS.Repositories;
-using Newtonsoft.Json;
+using DTS.Models.DTOs;
+using DTS.Helpers;
 
 namespace DTS.Controllers
 {
@@ -20,7 +17,6 @@ namespace DTS.Controllers
     {
         private const int _activeStatusRowID = 1;
         private const int _inactiveStatusRowID = 2;
-        private const string TemplateFieldsPattern = "&lt;([#@])([/sA-Za-z_-]*)&gt;";
         private IRepositoryWrapper repository;
 
         public TemplatesController(IRepositoryWrapper repository)
@@ -30,16 +26,35 @@ namespace DTS.Controllers
 
         // GET: api/Templates
         [HttpGet]
-        public  async Task<IActionResult> GetTemplates()
+        public async Task<IEnumerable<AllTemplates>> GetTemplates()
         {
+
+
             try
             {
                 var templates = await repository.Templates.FindAllTemplatesAsync();
                 return Ok(templates);
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return StatusCode(500, "Some Error in FindAll Templates");
             }
+
+            var templatesDTOs = new List<AllTemplates>();
+
+            foreach (var template in templates)
+            {
+                templatesDTOs.Add(new AllTemplates
+                {
+                    ID = template.ID,
+                    Name = template.Name,
+                    VersionCount = template.TemplateVersions.Count,
+                });
+            }
+            
+        }
+
+            return templatesDTOs;
         }
 
         // GET: api/Templates/5
@@ -56,7 +71,14 @@ namespace DTS.Controllers
                 return NotFound();
             }
 
-            return Ok(template);
+            return Ok(new SpecificTemplate
+            {
+                TemplateId = id,
+                TemplateVersion = template.TemplateVersion,
+                CreationTime = template.CreationData,
+                CreatorName = template.User.Name + "  " +template.User.Surname,
+                CreatorMail = template.User.Email
+            });
         }
 
         // GET: api/Templates/form/5
@@ -79,30 +101,14 @@ namespace DTS.Controllers
 
             var formBase = template.TemplateVersion;
 
-            MatchCollection matches = Regex.Matches(formBase, TemplateFieldsPattern);
-
-            var userMatchMap = new Dictionary<string, string>();
-
-            foreach (var match in matches)
-            {
-                var startPattern = "(&lt;*)";
-                var endPattern = "(&gt;*)";
-                var replacement = "";
-                Regex beginningRegex = new Regex(startPattern);
-                Regex endingRegex = new Regex(endPattern);
-
-                var valueWithBeginningCleared = beginningRegex.Replace(match.ToString(), replacement);
-
-                var finalValue = endingRegex.Replace(valueWithBeginningCleared, replacement);
-                userMatchMap.TryAdd(match.ToString(), finalValue);
-            }
-
-
+            var userMatchMap = new TemplateParser().ParseFields(formBase);
 
             return Ok(userMatchMap);
         }
 
-        // GET: api/Templates/5
+        
+
+        // GET: api/editor/5
         [HttpGet("editor/{id}")]
         public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
@@ -276,16 +282,14 @@ namespace DTS.Controllers
                 return BadRequest("Template does not exist or is inactive");
             }
 
-            var userInput = new Dictionary<string, string>();
-            JsonConvert.PopulateObject(JsonConvert.SerializeObject(data), userInput);
+            
 
-            foreach (var input in userInput)
-            {
-                template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
-            }
+            template.TemplateVersion = new JsonInputParser().FillTemplateFromJson(data, template);
 
             return Ok(template.TemplateVersion);
         }
+
+        
 
         // DELETE: api/Templates/5
         [HttpDelete("{id}")]
