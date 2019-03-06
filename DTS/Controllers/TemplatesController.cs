@@ -229,7 +229,7 @@ namespace DTS.Controllers
         }
 
         // PUT: api/Templates/versions/2/
-        [HttpPut("{id}/version")]
+        [HttpPut("/version/{id}")]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
         {
             if (!ModelState.IsValid)
@@ -282,7 +282,7 @@ namespace DTS.Controllers
             return CreatedAtAction("GetTemplate", new { id = templateVC.Id }, templateVC);
         }
 
-        // POST: api/Templates/form/
+        // POST: api/Templates/form/1
         [HttpPost("form/{id}")]
         public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
         {
