@@ -10,5 +10,6 @@ namespace DTS.Repositories
         IUserRepository Users { get; }
         ITemplateRepository Templates { get; }
         ITemplateVersionControlRepository TemplatesVersions { get; }
+        ITemplateStateRepository TemplateState { get; }
     }
 }

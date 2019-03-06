@@ -8,8 +8,10 @@ namespace DTS.Repositories
 {
     public interface ITemplateRepository
     {
-        Task<Template> FindByIDAsync(int id);
+        Task<IEnumerable<Template>> FindAllTemplatesAsync();
+        Task<Template> FindTemplateByIDAsync(int id);
+        Task<bool> Exists(int id);
         Task CreateAsync(Template template);
-        Task UpdateAsync(Template oldTemplate, Template template);
+        Task UpdateAsync(Template template);
     }
 }

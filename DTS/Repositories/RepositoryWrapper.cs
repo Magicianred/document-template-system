@@ -12,6 +12,9 @@ namespace DTS.Repositories
         private IUserRepository _users;
         private ITemplateRepository _templates;
         private ITemplateVersionControlRepository _templatesVersions;
+        private IUserStatusRepository _userStatus;
+        private IUserTypeRepository _userType;
+        private ITemplateStateRepository _templateState;
         
         public IUserRepository Users
         {
@@ -46,6 +49,42 @@ namespace DTS.Repositories
                     _templatesVersions = new TemplateVersionControlRepository(_context);
                 }
                 return _templatesVersions;
+            }
+        }
+
+        public IUserStatusRepository UserStatus
+        {
+            get
+            {
+                if (_userStatus == null)
+                {
+                    _userStatus = new UserStatusRepository(_context);
+                }
+                return _userStatus;
+            }
+        }
+
+        public IUserTypeRepository UserType
+        {
+            get
+            {
+                if (_userType == null)
+                {
+                    _userType = new UserTypeRepository(_context);
+                }
+                return _userType;
+            }
+        }
+
+        public ITemplateStateRepository TemplateState
+        {
+            get
+            {
+                if (_templateState == null)
+                {
+                    _templateState = new TemplateStateRepository(_context);
+                }
+                return _templateState;
             }
         }
 
