@@ -7,7 +7,7 @@ namespace DTS.Models
     {
         public Template()
         {
-            TemplateVersionControll = new HashSet<TemplateVersionControl>();
+            TemplateVersion = new HashSet<TemplateVersion>();
         }
 
         public int Id { get; set; }
@@ -17,6 +17,6 @@ namespace DTS.Models
 
         public virtual User Owner { get; set; }
         public virtual TemplateState State { get; set; }
-        public virtual ICollection<TemplateVersionControl> TemplateVersionControll { get; set; }
+        public virtual ICollection<TemplateVersion> TemplateVersion { get; set; }
     }
 }

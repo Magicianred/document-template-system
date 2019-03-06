@@ -79,11 +79,11 @@ namespace DTS.Controllers
             var templates = await repository.TemplatesVersions.FindByTemplateIdAsync(template.Id);
             foreach (var tempVersion in templates)
             {
-                var creator = await repository.Users.FindUserByIDAsync(tempVersion.CreatedBy);
+                var creator = await repository.Users.FindUserByIDAsync(tempVersion.CreatorId);
                 templateReturnData.Versions.Add(new SpecificTemplateVersion
                 {
                     CreationTime = tempVersion.Date,
-                    TemplateVersion = tempVersion.Template,
+                    TemplateVersion = tempVersion.Content,
                     CreatorMail = creator.Email,
                     CreatorName = creator.Name + " " + creator.Surname
                 });
@@ -110,7 +110,7 @@ namespace DTS.Controllers
                 return NotFound();
             }
 
-            var formBase = template.Template;
+            var formBase = template.Content;
 
             var userMatchMap = new TemplateParser().ParseFields(formBase);
 
@@ -238,11 +238,11 @@ namespace DTS.Controllers
             }
 
 
-            var templateVC = new TemplateVersionControl()
+            var templateVC = new TemplateVersion()
             {
-                Template = templateInput.Template,
+                Content = templateInput.Template,
                 TemplateId = id,
-                CreatedBy = templateInput.AuthorId,
+                CreatorId = templateInput.AuthorId,
                 State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
             };
@@ -269,11 +269,11 @@ namespace DTS.Controllers
 
             await repository.Templates.CreateAsync(template);
 
-            var templateVC = new TemplateVersionControl()
+            var templateVC = new TemplateVersion()
             {
-                Template = templateInput.Template,
+                Content = templateInput.Template,
                 TemplateId = template.Id,
-                CreatedBy = templateInput.AuthorId,
+                CreatorId = templateInput.AuthorId,
                 State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
             };
@@ -296,9 +296,9 @@ namespace DTS.Controllers
 
             
 
-            template.Template = new JsonInputParser().FillTemplateFromJson(data, template);
+            template.Content = new JsonInputParser().FillTemplateFromJson(data, template);
 
-            return Ok(template.Template);
+            return Ok(template.Content);
         }
 
         

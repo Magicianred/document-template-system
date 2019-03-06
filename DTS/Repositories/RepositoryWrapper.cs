@@ -12,7 +12,7 @@ namespace DTS.Repositories
         private DTSLocalDBContext _context;
         private IUserRepository _users;
         private ITemplateRepository _templates;
-        private ITemplateVersionControlRepository _templatesVersions;
+        private ITemplateVersionRepository _templatesVersions;
         private IUserStatusRepository _userStatus;
         private IUserTypeRepository _userType;
         private ITemplateStateRepository _templateState;
@@ -41,13 +41,13 @@ namespace DTS.Repositories
             }
         }
 
-        public ITemplateVersionControlRepository TemplatesVersions
+        public ITemplateVersionRepository TemplatesVersions
         {
             get
             {
                 if (_templatesVersions == null)
                 {
-                    _templatesVersions = new TemplateVersionControlRepository(_context);
+                    _templatesVersions = new TemplateVersionRepository(_context);
                 }
                 return _templatesVersions;
             }

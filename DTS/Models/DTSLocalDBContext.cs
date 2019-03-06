@@ -17,7 +17,7 @@ namespace DTS.Models
 
         public virtual DbSet<Template> Template { get; set; }
         public virtual DbSet<TemplateState> TemplateState { get; set; }
-        public virtual DbSet<TemplateVersionControl> TemplateVersionControll { get; set; }
+        public virtual DbSet<TemplateVersion> TemplateVersion { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserStatus> UserStatus { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
@@ -38,6 +38,10 @@ namespace DTS.Models
             modelBuilder.Entity<Template>(entity =>
             {
                 entity.ToTable("template");
+
+                entity.HasIndex(e => e.OwnerId);
+
+                entity.HasIndex(e => e.StateId);
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -76,13 +80,27 @@ namespace DTS.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TemplateVersionControl>(entity =>
+            modelBuilder.Entity<TemplateVersion>(entity =>
             {
-                entity.ToTable("template_version_controll");
+                entity.ToTable("template_version");
+
+                entity.HasIndex(e => e.CreatorId)
+                    .HasName("IX_template_version_controll_created_by");
+
+                entity.HasIndex(e => e.StateId)
+                    .HasName("IX_template_version_controll_state_id");
+
+                entity.HasIndex(e => e.TemplateId)
+                    .HasName("IX_template_version_controll_template_id");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+                entity.Property(e => e.Content)
+                    .IsRequired()
+                    .HasColumnName("content")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.CreatorId).HasColumnName("creator_id");
 
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
@@ -91,27 +109,22 @@ namespace DTS.Models
 
                 entity.Property(e => e.StateId).HasColumnName("state_id");
 
-                entity.Property(e => e.Template)
-                    .IsRequired()
-                    .HasColumnName("template")
-                    .HasColumnType("ntext");
-
                 entity.Property(e => e.TemplateId).HasColumnName("template_id");
 
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.TemplateVersionControll)
-                    .HasForeignKey(d => d.CreatedBy)
+                entity.HasOne(d => d.Creator)
+                    .WithMany(p => p.TemplateVersion)
+                    .HasForeignKey(d => d.CreatorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.template_version_controll_dbo.user_id");
 
                 entity.HasOne(d => d.State)
-                    .WithMany(p => p.TemplateVersionControll)
+                    .WithMany(p => p.TemplateVersion)
                     .HasForeignKey(d => d.StateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.template_version_controll_dbo.template_state_id");
 
-                entity.HasOne(d => d.TemplateNavigation)
-                    .WithMany(p => p.TemplateVersionControll)
+                entity.HasOne(d => d.Template)
+                    .WithMany(p => p.TemplateVersion)
                     .HasForeignKey(d => d.TemplateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.template_version_controll_dbo.template_id");
@@ -120,6 +133,10 @@ namespace DTS.Models
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("user");
+
+                entity.HasIndex(e => e.StatusId);
+
+                entity.HasIndex(e => e.TypeId);
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
