@@ -41,8 +41,7 @@ namespace DTS.Controllers
                     {
                         ID = template.Id,
                         Name = template.Name,
-                        VersionCount = (await repository.TemplatesVersions.FindByTemplateIdAsync(template.Id))
-                            .Count(),
+                        VersionCount = templates.Count(),
                         Owner = new UserDTO
                         {
                             Name = template.Owner.Name,
@@ -55,7 +54,7 @@ namespace DTS.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Some Error in FindAll Templates");
+                return StatusCode(500, "Error while retrieving templates");
             }            
         }
 
@@ -70,7 +69,7 @@ namespace DTS.Controllers
 
             var template = await repository.Templates.FindTemplateByIDAsync(id);
 
-            if (template == null)
+            if (template.Name == null)
             {
                 return NotFound();
             }
