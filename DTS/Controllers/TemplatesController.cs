@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DTS.Models;
-using DTSContext = DTS.Data.DTSContext;
 using DTS.Repositories;
 using DTS.Models.DTOs;
 using DTS.Helpers;
+using System;
 
 namespace DTS.Controllers
 {
@@ -26,35 +26,30 @@ namespace DTS.Controllers
 
         // GET: api/Templates
         [HttpGet]
-        public async Task<IEnumerable<AllTemplates>> GetTemplates()
+        public async Task<IActionResult> GetTemplates()
         {
-
 
             try
             {
                 var templates = await repository.Templates.FindAllTemplatesAsync();
-                return Ok(templates);
+
+                var templatesDTOs = new List<AllTemplates>();
+
+                foreach (var template in templates)
+                {
+                    templatesDTOs.Add(new AllTemplates
+                    {
+                        ID = template.ID,
+                        Name = template.Name,
+                        VersionCount = template.TemplateVersions.Count,
+                    });
+                }
+                return Ok(templatesDTOs);
             }
             catch (Exception)
             {
                 return StatusCode(500, "Some Error in FindAll Templates");
-            }
-
-            var templatesDTOs = new List<AllTemplates>();
-
-            foreach (var template in templates)
-            {
-                templatesDTOs.Add(new AllTemplates
-                {
-                    ID = template.ID,
-                    Name = template.Name,
-                    VersionCount = template.TemplateVersions.Count,
-                });
-            }
-            
-        }
-
-            return templatesDTOs;
+            }            
         }
 
         // GET: api/Templates/5
@@ -65,20 +60,32 @@ namespace DTS.Controllers
             {
                 return BadRequest("Passed negative id value");
             }
+
             var template = await repository.Templates.FindTemplateByIDAsync(id);
+
             if (template == null)
             {
                 return NotFound();
             }
 
-            return Ok(new SpecificTemplate
+            var templateReturnData = new SpecificTemplate
             {
-                TemplateId = id,
-                TemplateVersion = template.TemplateVersion,
-                CreationTime = template.CreationData,
-                CreatorName = template.User.Name + "  " +template.User.Surname,
-                CreatorMail = template.User.Email
-            });
+                ID = template.ID,
+                Name = template.Name,
+            };
+
+            foreach(var tempVersion in template.TemplateVersions)
+            {
+                templateReturnData.Versions.Add(new SpecificTemplateVersion
+                {
+                    CreationTime = tempVersion.CreationData,
+                    TemplateVersion = tempVersion.TemplateVersion,
+                    CreatorMail = tempVersion.User.Email,
+                    CreatorName = tempVersion.User.Name + "  " + tempVersion.User.Surname
+                });
+            }
+
+            return Ok(templateReturnData);
         }
 
         // GET: api/Templates/form/5
