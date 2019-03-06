@@ -10,26 +10,23 @@ namespace DTS.Repositories
 {
     public class TemplateRepository : RepositoryAsync<Template>, ITemplateRepository
     {
-        public TemplateRepository(DTSContext DtsContext)
+        public TemplateRepository(DTSLocalDBContext DtsContext)
             : base(DtsContext)
         {
         }
 
         public async Task<IEnumerable<Template>> FindAllTemplatesAsync()
         {
-            return await DTSContext.Templates
-                .Include(temp => temp.TemplateState)
-                .Include(temp => temp.TemplateVersions)
+            return await DTSContext.Template
+                .Include(temp => temp.State)
                 .ToListAsync();
         }
 
         public async Task<Template> FindTemplateByIDAsync(int id)
         {
-            var template = await DTSContext.Templates
-                .Include(temp => temp.TemplateVersions)
-                    .ThenInclude(tempVer => tempVer.User)
-                .Include(temp => temp.TemplateState)
-                .Where(temp => temp.ID == id)
+            var template = await DTSContext.Template
+                .Include(temp => temp.State)
+                .Where(temp => temp.Id == id)
                 .ToListAsync();
             return template.DefaultIfEmpty(new Template()).FirstOrDefault();
         }
@@ -48,7 +45,7 @@ namespace DTS.Repositories
 
         public async Task<bool> Exists(int id)
         {
-            return await DTSContext.Templates.AnyAsync(e => e.ID == id);
+            return await DTSContext.Template.AnyAsync(e => e.Id == id);
         }
     }
 }

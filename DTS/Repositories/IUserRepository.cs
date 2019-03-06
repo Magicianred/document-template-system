@@ -13,5 +13,6 @@ namespace DTS.Repositories
         Task<User> FindUserByIDAsync(int id);
         Task CreateAsync(User user);
         Task UpdateAsync(User oldUser);
+        Task<bool> Exists(int id);
     }
 }

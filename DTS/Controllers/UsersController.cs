@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DTS.Data;
 using DTS.Models;
+using DTS.Repositories;
 
 namespace DTS.Controllers
 {
@@ -14,23 +15,19 @@ namespace DTS.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly Data.DTSContext _context;
+        private readonly IRepositoryWrapper repository;
 
-        public UsersController(Data.DTSContext context)
+        public UsersController(IRepositoryWrapper repository)
         {
-            _context = context;
+            this.repository = repository;
         }
 
         // GET: api/Users
         [HttpGet]
         public async Task<IEnumerable<User>> GetUsers()
         {
-            var users = await _context.Users
-                .Include(user => user.Status)
-                .Include(user => user.Type)
-                .ToListAsync();
             
-            return users;
+            return await repository.Users.FindAllUsersAsync();
         }
 
         // GET: api/Users/5
@@ -42,10 +39,7 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users
-                .Include(userStatus => userStatus.Status)
-                .Include(userType => userType.Type)
-                .SingleOrDefaultAsync(userID => userID.ID == id);
+            var user = await repository.Users.FindUserByIDAsync(id);
 
             if (user == null)
             {
@@ -64,20 +58,20 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != user.ID)
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            
 
             try
             {
-                await _context.SaveChangesAsync();
+                await repository.Users.UpdateAsync(user);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!await repository.Users.Exists(id))
                 {
                     return NotFound();
                 }
@@ -99,10 +93,10 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+           
+            await repository.Users.CreateAsync(user);
 
-            return CreatedAtAction("GetUser", new { id = user.ID }, user);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
@@ -114,21 +108,17 @@ namespace DTS.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await repository.Users.FindUserByIDAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
+            user.Status = await repository.UserStatus.FindStatusById(3); //3 - BLOCKED
+            await repository.Users.UpdateAsync(user);
             return Ok(user);
         }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.ID == id);
-        }
+       
     }
 }

@@ -12,6 +12,7 @@ using DTS.Data;
 using DTS.Repositories;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace DTS
 {
@@ -29,7 +30,7 @@ namespace DTS
         {
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-
+            services.AddDbContext<Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

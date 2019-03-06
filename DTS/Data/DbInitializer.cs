@@ -8,12 +8,12 @@ namespace DTS.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(DTSContext context)
+        public static void Initialize(DTSLocalDBContext context)
         {
             context.Database.EnsureCreated();
 
             // Look for any students.
-            if (context.Users.Any())
+            if (context.User.Any())
             {
                 return;   // DB has been seeded
             }
@@ -26,46 +26,48 @@ namespace DTS.Data
 
             foreach (var templateState in templateStates)
             {
-                context.TemplateStates.Add(templateState);
+                context.TemplateState.Add(templateState);
             }
 
             var types = new UserType[]
             {
-                new UserType{Type = "Admin"},
-                new UserType{Type = "Editor"},
-                new UserType{Type = "User"}
+                new UserType{Name = "Admin"},
+                new UserType{Name = "Editor"},
+                new UserType{Name = "User"}
             };
 
             foreach (var type in types)
             {
-                context.Types.Add(type);
+                context.UserType.Add(type);
             }
 
             context.SaveChanges();
 
             var statuses = new UserStatus[]
             {
-                new UserStatus{Status = "Active"},
-                new UserStatus{Status = "Blocked"},
-                new UserStatus{Status = "Suspended"}
+                new UserStatus{Name = "Active"},
+                new UserStatus{Name = "Suspended"},
+                new UserStatus{Name = "Blocked"}
+
+                
             };
 
             foreach (var status in statuses)
             {
-                context.Statuses.Add(status);
+                context.UserStatus.Add(status);
             }
 
 
             var users = new User[]
             {
-                new User{Name ="Bartek",Surname ="Zadlo",Email ="bZadlo@DTS.com", Login="BZadlo", Password = "test", Type = context.Types.Find(1), Status = context.Statuses.Find(1)},
-                new User{Name ="Magda",Surname ="Kiebala",Email ="mKiebala@DTS.com", Login="MKiebala", Password = "test", Type = context.Types.Find(2), Status = context.Statuses.Find(1)},
-                new User{Name ="Piotrek",Surname ="Kaminski",Email ="pKaminski@DTS.com", Login="PKaminski", Password = "test", Type = context.Types.Find(3), Status = context.Statuses.Find(1)},
+                new User{Name ="Bartłomiej",Surname ="Żądło",Email ="bZadlo@DTS.com", Login="BZadlo", Password = "test", Type = types[1], Status = statuses[0]},
+                new User{Name ="Magda",Surname ="Kiebała",Email ="mKiebala@DTS.com", Login="MKiebala", Password = "test", Type = types[2], Status = statuses[0]},
+                new User{Name ="Piotrek",Surname ="Kamiński",Email ="pKaminski@DTS.com", Login="PKaminski", Password = "test", Type = types[0], Status = statuses[0]},
 
             };
             foreach (var user in users)
             {
-                context.Users.Add(user);
+                context.User.Add(user);
             }
             context.SaveChanges();
         }

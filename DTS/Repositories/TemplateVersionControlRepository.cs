@@ -10,26 +10,26 @@ namespace DTS.Repositories
 {
     public class TemplateVersionControlRepository : RepositoryAsync<TemplateVersionControl>, ITemplateVersionControlRepository
     {
-        public TemplateVersionControlRepository(DTSContext DtsContext)
+        public TemplateVersionControlRepository(DTSLocalDBContext DtsContext)
             : base(DtsContext)
         {
         }
 
         public async Task<TemplateVersionControl> FindVersionByIDAsync(int id)
         {
-            var template = await FindByConditionAsync(temp => temp.ID == id);
+            var template = await FindByConditionAsync(temp => temp.Id == id);
             return template.DefaultIfEmpty(new TemplateVersionControl()).FirstOrDefault();
         }
 
         public async Task<IEnumerable<TemplateVersionControl>> FindByTemplateIdAsync(int id)
         {
-            var template = await FindByConditionAsync(temp => temp.TemplateID == id);
+            var template = await FindByConditionAsync(temp => temp.TemplateId == id);
             return template.DefaultIfEmpty(new TemplateVersionControl());
         }
 
         public async Task<IEnumerable<TemplateVersionControl>> FindByUserIdAsync(int id)
         {
-            var template = await FindByConditionAsync(temp => temp.UserID == id);
+            var template = await FindByConditionAsync(temp => temp.CreatedBy == id);
             return template.DefaultIfEmpty(new TemplateVersionControl());
         }
 

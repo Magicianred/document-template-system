@@ -8,6 +8,8 @@ namespace DTS.Repositories
     public interface IRepositoryWrapper
     {
         IUserRepository Users { get; }
+        IUserStatusRepository UserStatus { get; }
+        IUserTypeRepository UserType { get; }
         ITemplateRepository Templates { get; }
         ITemplateVersionControlRepository TemplatesVersions { get; }
         ITemplateStateRepository TemplateState { get; }

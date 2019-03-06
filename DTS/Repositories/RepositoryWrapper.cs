@@ -1,4 +1,5 @@
 ﻿using DTS.Data;
+using DTS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace DTS.Repositories
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
-        private DTSContext _context;
+        private DTSLocalDBContext _context;
         private IUserRepository _users;
         private ITemplateRepository _templates;
         private ITemplateVersionControlRepository _templatesVersions;
@@ -88,7 +89,7 @@ namespace DTS.Repositories
             }
         }
 
-        public RepositoryWrapper(DTSContext DtsContext)
+        public RepositoryWrapper(DTSLocalDBContext DtsContext)
         {
             this._context = DtsContext;
         }

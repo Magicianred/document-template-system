@@ -9,14 +9,14 @@ namespace DTS.Repositories
 {
     public class UserStatusRepository : RepositoryAsync<UserStatus>, IUserStatusRepository 
     {
-        public UserStatusRepository(DTSContext DtsContext)
+        public UserStatusRepository(DTSLocalDBContext DtsContext)
             : base(DtsContext)
         {
         }
 
         public async Task<UserStatus> FindStatusById(int id)
         {
-            var status = await FindByConditionAsync(u => u.ID == id);
+            var status = await FindByConditionAsync(u => u.Id == id);
             return status.FirstOrDefault() ?? new UserStatus();
         }
     }

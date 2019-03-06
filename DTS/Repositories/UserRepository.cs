@@ -11,17 +11,17 @@ namespace DTS.Repositories
 {
     public class UserRepository : RepositoryAsync<User>, IUserRepository
     {
-        public UserRepository(DTSContext DtsContext)
+        public UserRepository(DTSLocalDBContext DtsContext)
             :base(DtsContext)
         {
         }
 
         public async Task<User> FindUserByIDAsync(int id)
         {
-            var user = await DTSContext.Users
+            var user = await DTSContext.User
                 .Include(u => u.Status)
                 .Include(u => u.Type)
-                .Where(u => u.ID == id)
+                .Where(u => u.Id == id)
                 .SingleOrDefaultAsync();
             return user ?? new User();
         }
@@ -42,5 +42,11 @@ namespace DTS.Repositories
         {
             return await FindAllAsync();
         }
+
+        public async Task<bool> Exists(int id)
+        {
+            return await DTSContext.User.AnyAsync(e => e.Id == id);
+        }
+
     }
 }

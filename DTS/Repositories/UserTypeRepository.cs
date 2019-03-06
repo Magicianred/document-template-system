@@ -9,14 +9,14 @@ namespace DTS.Repositories
 {
     public class UserTypeRepository : RepositoryAsync<UserType>, IUserTypeRepository
     {
-        public UserTypeRepository(DTSContext DtsContext)
+        public UserTypeRepository(DTSLocalDBContext DtsContext)
             : base(DtsContext)
         {
         }
 
         public async Task<UserType> FindTypeById(int id)
         {
-            var type = await FindByConditionAsync(t => t.ID == id);
+            var type = await FindByConditionAsync(t => t.Id == id);
             return type.FirstOrDefault() ?? new UserType();
         }
     }

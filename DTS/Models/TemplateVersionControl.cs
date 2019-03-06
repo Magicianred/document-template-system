@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DTS.Models
 {
-    public class TemplateVersionControl
+    public partial class TemplateVersionControl
     {
-        public int ID { get; set; }
-        public DateTime CreationData {get; set;}
-        public string TemplateVersion { get; set; }
-        public int TemplateID { get; set; }
-        public int UserID { get; set; }
+        public int Id { get; set; }
+        public string Template { get; set; }
+        public DateTime Date { get; set; }
+        public int CreatedBy { get; set; }
+        public int TemplateId { get; set; }
+        public int StateId { get; set; }
 
-        
-        public TemplateState TemplateState { get; set; }
-        public User User { get; set; }
+        public virtual User CreatedByNavigation { get; set; }
+        public virtual TemplateState State { get; set; }
+        public virtual Template TemplateNavigation { get; set; }
     }
 }

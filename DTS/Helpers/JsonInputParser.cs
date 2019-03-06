@@ -16,10 +16,10 @@ namespace DTS.Helpers
 
             foreach (var input in userInput)
             {
-                template.TemplateVersion = template.TemplateVersion.Replace(input.Key, input.Value);
+                template.Template = template.Template.Replace(input.Key, input.Value);
             }
 
-            return template.TemplateVersion;
+            return template.Template;
         }
     }
 }

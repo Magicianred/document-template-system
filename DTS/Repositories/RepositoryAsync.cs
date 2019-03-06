@@ -6,14 +6,15 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DTS.Data;
 using Microsoft.EntityFrameworkCore;
+using DTS.Models;
 
 namespace DTS
 {
     public abstract class RepositoryAsync<T> : IRepositoryAsync<T> where T : class
     {
-        protected DTSContext DTSContext { get; set; }
+        protected DTSLocalDBContext DTSContext { get; set; }
 
-        public RepositoryAsync(DTSContext DtsContext)
+        public RepositoryAsync(DTSLocalDBContext DtsContext)
         {
             this.DTSContext = DtsContext;
         }

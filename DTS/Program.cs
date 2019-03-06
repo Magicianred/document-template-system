@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using DTS.Data;
+using DTS.Models;
 
 namespace DTS
 {
@@ -20,7 +21,7 @@ namespace DTS
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<Data.DTSContext>();
+                    var context = services.GetRequiredService<DTSLocalDBContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

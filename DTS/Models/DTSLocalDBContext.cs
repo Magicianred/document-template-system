@@ -17,7 +17,7 @@ namespace DTS.Models
 
         public virtual DbSet<Template> Template { get; set; }
         public virtual DbSet<TemplateState> TemplateState { get; set; }
-        public virtual DbSet<TemplateVersionControll> TemplateVersionControll { get; set; }
+        public virtual DbSet<TemplateVersionControl> TemplateVersionControll { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserStatus> UserStatus { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
@@ -76,7 +76,7 @@ namespace DTS.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<TemplateVersionControll>(entity =>
+            modelBuilder.Entity<TemplateVersionControl>(entity =>
             {
                 entity.ToTable("template_version_controll");
 
