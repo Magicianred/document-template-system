@@ -42,7 +42,13 @@ namespace DTS.Controllers
                         ID = template.Id,
                         Name = template.Name,
                         VersionCount = (await repository.TemplatesVersions.FindByTemplateIdAsync(template.Id))
-                            .Count()
+                            .Count(),
+                        Owner = new UserDTO
+                        {
+                            Name = template.Owner.Name,
+                            Surname = template.Owner.Surname,
+                            Email = template.Owner.Email
+                        }
                     });
                 }
                 return Ok(templatesDTOs);
@@ -73,19 +79,29 @@ namespace DTS.Controllers
             {
                 ID = template.Id,
                 Name = template.Name,
-                Versions = new List<SpecificTemplateVersion>()
+                Versions = new List<SpecificTemplateVersion>(),
+                Owner = new UserDTO
+                {
+                    Name = template.Owner.Name,
+                    Surname = template.Owner.Surname,
+                    Email = template.Owner.Email
+                }
             };
 
-            var templates = await repository.TemplatesVersions.FindByTemplateIdAsync(template.Id);
-            foreach (var tempVersion in templates)
+            var templateVersions = await repository.TemplatesVersions.FindByTemplateIdAsync(template.Id);
+            foreach (var tempVersion in templateVersions)
             {
                 var creator = await repository.Users.FindUserByIDAsync(tempVersion.CreatedBy);
                 templateReturnData.Versions.Add(new SpecificTemplateVersion
                 {
                     CreationTime = tempVersion.Date,
                     TemplateVersion = tempVersion.Template,
-                    CreatorMail = creator.Email,
-                    CreatorName = creator.Name + " " + creator.Surname
+                    Creator = new UserDTO
+                    {
+                        Name = template.Owner.Name,
+                        Surname = template.Owner.Surname,
+                        Email = template.Owner.Email
+                    }
                 });
             }
 
@@ -119,7 +135,7 @@ namespace DTS.Controllers
 
         
 
-        // GET: api/editor/5
+        // GET: api/templates/editor/5
         [HttpGet("editor/{id}")]
         public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
@@ -129,22 +145,39 @@ namespace DTS.Controllers
             }
 
             var user = await repository.Users.FindUserByIDAsync(id);
-
-            if (user?.Type == null || user.Type.Name != "Editor")
+            
+            if (user?.Type == null)
             {
                 return BadRequest($"User not found or not an editor.");
             }
-
-            var templates = await repository.TemplatesVersions
+             
+            var templates = await repository.Templates
                 .FindByUserIdAsync(id);
+
             if (templates.FirstOrDefault() == null)
             {
                 return NotFound();
             }
 
+            var templatesDTOs = new List<AllTemplates>();
 
-
-            return Ok(templates);
+            foreach (var template in templates)
+            {
+                templatesDTOs.Add(new AllTemplates
+                {
+                    ID = template.Id,
+                    Name = template.Name,
+                    VersionCount = (await repository.TemplatesVersions.FindByTemplateIdAsync(template.Id))
+                        .Count(),
+                    Owner = new UserDTO
+                    {
+                        Name = template.Owner.Name,
+                        Surname = template.Owner.Surname,
+                        Email = template.Owner.Email
+                    }
+                });
+            }
+            return Ok(templatesDTOs);
         }
 
         // PUT: api/Templates/2
@@ -229,7 +262,7 @@ namespace DTS.Controllers
         }
 
         // PUT: api/Templates/versions/2/
-        [HttpPut("/version/{id}")]
+        [HttpPut("/template/{id}/version")]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
         {
             if (!ModelState.IsValid)
