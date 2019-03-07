@@ -17,7 +17,7 @@ namespace DTS.Repositories
         public async Task<UserType> FindTypeById(int id)
         {
             var type = await FindByConditionAsync(t => t.Id == id);
-            return type.FirstOrDefault() ?? new UserType();
+            return type.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
     }
 }
