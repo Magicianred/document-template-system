@@ -11,7 +11,7 @@ namespace DTS.Models.DTOs
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
-        public UserStatus Status { get; set; }
-        public UserType Type { get; set; }
+        public string Status { get; set; }
+        public string Type { get; set; }
     }
 }

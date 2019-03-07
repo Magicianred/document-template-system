@@ -41,6 +41,7 @@ namespace DTS.Controllers
                     {
                         ID = template.Id,
                         Name = template.Name,
+                        TemplateState = template.State.State,
                         VersionCount = template.TemplateVersion.Count(),
                         Owner = new UserDTO
                         {
@@ -178,6 +179,7 @@ namespace DTS.Controllers
                     {
                         ID = template.Id,
                         Name = template.Name,
+                        TemplateState = template.State.State,
                         VersionCount = template.TemplateVersion.Count(),
                         Owner = new UserDTO
                         {
@@ -393,16 +395,24 @@ namespace DTS.Controllers
             try
             {
                 var template = await repository.Templates.FindTemplateByIDAsync(id);
-                if (template == null)
-                {
-                    return NotFound();
-                }
 
                 template.State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
                 await repository.Templates.UpdateAsync(template);
-
-                return Ok(template);
-            } catch (Exception)
+                var templateDto = new AllTemplates()
+                {
+                    ID = template.Id,
+                    Name = template.Name,
+                    TemplateState = template.State.State,
+                    VersionCount = template.TemplateVersion.Count,
+                    Owner = new UserDTO
+                    {
+                        Name = template.Owner.Name,
+                        Surname = template.Owner.Surname,
+                        Email = template.Owner.Email
+                    }
+                };
+                return Ok(templateDto);
+            } catch (KeyNotFoundException)
             {
                 return NotFound();
             }
@@ -418,16 +428,28 @@ namespace DTS.Controllers
             try
             {
                 var template = await repository.TemplatesVersions.FindVersionByIDAsync(id);
-                if (template == null)
-                {
-                    return NotFound();
-                }
+                //if (template == null)
+                //{
+                //    return NotFound();
+                //}
 
                 template.State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
                 await repository.TemplatesVersions.UpdateAsync(template);
 
-                return Ok(template);
-            } catch (Exception)
+                var templateDto = new SpecificTemplateVersion()
+                {
+                    CreationTime = template.Date,
+                    TemplateVersion = template.Content,
+                    Creator = new UserDTO
+                    {
+                        Name = template.Creator.Name,
+                        Surname = template.Creator.Surname,
+                        Email = template.Creator.Email
+                    }
+                };
+
+                return Ok(templateDto);
+            } catch (KeyNotFoundException)
             {
                 return NotFound();
             }

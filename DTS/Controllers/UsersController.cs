@@ -39,8 +39,8 @@ namespace DTS.Controllers
                         Name = user.Name,
                         Surname = user.Surname,
                         Email = user.Email,
-                        Status = user.Status,
-                        Type = user.Type
+                        Status = user.Status.Name,
+                        Type = user.Type.Name
                     });
                 }
                 return Ok(usersDto);
@@ -67,8 +67,8 @@ namespace DTS.Controllers
                     Name = user.Name,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Status = user.Status,
-                    Type = user.Type
+                    Status = user.Status.Name,
+                    Type = user.Type.Name
                 };
                 return Ok(userDto);
             } catch (Exception)
@@ -150,8 +150,8 @@ namespace DTS.Controllers
                     Name = user.Name,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Status = user.Status,
-                    Type = user.Type
+                    Status = user.Status.Name,
+                    Type = user.Type.Name
                 };
 
                 await repository.Users.UpdateAsync(user);

@@ -29,19 +29,25 @@ namespace DTS.Repositories
 
         public async Task<TemplateVersion> FindVersionByIDAsync(int id)
         {
-            var template = await FindByConditionAsync(temp => temp.Id == id);
+            var templates = await FindAllVersions();
+            var template = templates
+                .Where(temp => temp.Id == id);
             return template.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
 
         public async Task<IEnumerable<TemplateVersion>> FindByTemplateIdAsync(int id)
         {
-            var template = await FindByConditionAsync(temp => temp.TemplateId == id);
+            var templates = await FindAllVersions();
+            var template = templates
+                .Where(temp => temp.TemplateId == id);
             return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
         public async Task<IEnumerable<TemplateVersion>> FindByUserIdAsync(int id)
         {
-            var template = await FindByConditionAsync(temp => temp.CreatorId == id);
+            var templates = await FindAllVersions();
+            var template = templates
+                .Where(temp => temp.CreatorId == id);
             return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
