@@ -17,27 +17,37 @@ namespace DTS.Repositories
 
         public async Task<IEnumerable<Template>> FindAllTemplatesAsync()
         {
-            return await DTSContext.Template
+            var templates = await DTSContext.Template
                 .Include(temp => temp.TemplateVersion)
                 .Include(temp => temp.State)
                 .Include(temp => temp.Owner)
                 .ToListAsync();
+
+            if (templates.FirstOrDefault() == null)
+            {
+                throw new InvalidOperationException("Templates not Found");
+            }
+            return templates;
         }
 
         public async Task<Template> FindTemplateByIDAsync(int id)
         {
             var templates = await FindAllTemplatesAsync();
-            return templates
+            var template = templates
                 .Where(temp => temp.Id == id)
                 .DefaultIfEmpty(new Template())
                 .FirstOrDefault();
+
+            return template ?? throw new KeyNotFoundException();
         }
 
         public async Task<IEnumerable<Template>> FindByUserIdAsync(int id)
         {
             var templates = await FindAllTemplatesAsync();
-            return templates
+            var template = templates
                 .Where(temp => temp.OwnerId == id);
+
+            return template ?? throw new KeyNotFoundException();
         }
 
         public async Task CreateAsync(Template template)
