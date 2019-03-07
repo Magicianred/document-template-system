@@ -182,26 +182,27 @@ namespace DTS.Controllers
 
         // PUT: api/Templates/2
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput template)
+        public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput newTemplateData)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var temp = await repository.Templates.FindTemplateByIDAsync(id);
+            var template = await repository.Templates.FindTemplateByIDAsync(id);
 
-            if (temp == null)
+            if (template == null)
             {
                 return BadRequest();
             }
 
-            temp.State = await repository.TemplateState.FindStateByIdAsync(template.StateId);
-            temp.Name = template.Name;
+            template.State = await repository.TemplateState.FindStateByIdAsync(newTemplateData.StateId);
+            template.Name = newTemplateData.Name;
+            template.Owner = await repository.Users.FindUserByIDAsync(newTemplateData.OwnerID);
 
             try
             {
-                await repository.Templates.UpdateAsync(temp);
+                await repository.Templates.UpdateAsync(template);
             }
             catch (DbUpdateConcurrencyException)
             {
