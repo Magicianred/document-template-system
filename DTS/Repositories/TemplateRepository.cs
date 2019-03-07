@@ -18,6 +18,7 @@ namespace DTS.Repositories
         public async Task<IEnumerable<Template>> FindAllTemplatesAsync()
         {
             return await DTSContext.Template
+                .Include(temp => temp.TemplateVersion)
                 .Include(temp => temp.State)
                 .Include(temp => temp.Owner)
                 .ToListAsync();
@@ -25,20 +26,18 @@ namespace DTS.Repositories
 
         public async Task<Template> FindTemplateByIDAsync(int id)
         {
-            var template = await DTSContext.Template
-                .Include(temp => temp.State)
-                .Include(temp => temp.Owner)
+            var templates = await FindAllTemplatesAsync();
+            return templates
                 .Where(temp => temp.Id == id)
-                .ToListAsync();
-            return template.DefaultIfEmpty(new Template()).FirstOrDefault();
+                .DefaultIfEmpty(new Template())
+                .FirstOrDefault();
         }
 
         public async Task<IEnumerable<Template>> FindByUserIdAsync(int id)
         {
-             return await DTSContext.Template
-                .Where(temp => temp.OwnerId == id)
-                .ToListAsync();
-            
+            var templates = await FindAllTemplatesAsync();
+            return templates
+                .Where(temp => temp.OwnerId == id);
         }
 
         public async Task CreateAsync(Template template)

@@ -41,7 +41,7 @@ namespace DTS.Controllers
                     {
                         ID = template.Id,
                         Name = template.Name,
-                        VersionCount = templates.Count(),
+                        VersionCount = template.TemplateVersion.Count(),
                         Owner = new UserDTO
                         {
                             Name = template.Owner.Name,
