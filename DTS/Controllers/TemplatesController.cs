@@ -88,10 +88,8 @@ namespace DTS.Controllers
                 }
             };
 
-            //var templateVersions = await repository.TemplatesVersions.FindByTemplateIdAsync(template.Id);
             foreach (var tempVersion in template.TemplateVersion)
             {
-                //var creator = await repository.Users.FindUserByIDAsync(tempVersion.CreatorId);
                 templateReturnData.Versions.Add(new SpecificTemplateVersion
                 {
                     CreationTime = tempVersion.Date,
@@ -124,11 +122,7 @@ namespace DTS.Controllers
                     .FindVersionByConditionAsync(temp => temp.TemplateId == id && temp.State.State == "Active");
 
                 var template = templates.First();
-            //if (template == null)
-            //{
-            //    return NotFound();
-            //}
-
+            
                 var formBase = template.Content;
 
                 var userMatchMap = new TemplateParser().ParseFields(formBase);
@@ -155,8 +149,6 @@ namespace DTS.Controllers
             {
                 var user = await repository.Users.FindUserByIDAsync(id);
 
-                //if (user?.Type == null)
-                //{
             } catch (Exception)
             { 
                     return BadRequest($"User not found or not an editor.");
@@ -166,10 +158,6 @@ namespace DTS.Controllers
             {
                 var templates = await repository.Templates
                     .FindByUserIdAsync(id);
-            //if (templates.FirstOrDefault() == null)
-            //{
-            //    return NotFound();
-            //}
 
                 var templatesDTOs = new List<AllTemplates>();
 
@@ -210,10 +198,6 @@ namespace DTS.Controllers
             try
             {
                 var template = await repository.Templates.FindTemplateByIDAsync(id);
-            //if (template == null)
-            //{
-            //    return BadRequest();
-            //}
 
                 template.State = await repository.TemplateState.FindStateByIdAsync(newTemplateData.StateId);
                 template.Name = newTemplateData.Name;
@@ -366,12 +350,6 @@ namespace DTS.Controllers
                 var templates = await repository.TemplatesVersions
                     .FindVersionByConditionAsync(temp => temp.TemplateId == id && temp.State.State == "Active");
                 var template = templates.FirstOrDefault();
-                //if (template == null)
-                //{
-                //    return BadRequest("Template does not exist or is inactive");
-                //}
-
-
 
                 template.Content = new JsonInputParser().FillTemplateFromJson(data, template);
 
@@ -428,11 +406,7 @@ namespace DTS.Controllers
             try
             {
                 var template = await repository.TemplatesVersions.FindVersionByIDAsync(id);
-                //if (template == null)
-                //{
-                //    return NotFound();
-                //}
-
+                
                 template.State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
                 await repository.TemplatesVersions.UpdateAsync(template);
 

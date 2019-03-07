@@ -138,11 +138,7 @@ namespace DTS.Controllers
             try
             {
                 var user = await repository.Users.FindUserByIDAsync(id);
-                //if (user == null)
-                //{
-                //    return NotFound();
-                //}
-
+                
                 user.Status = await repository.UserStatus.FindStatusById(3); //3 - BLOCKED
                 var userDto = new ExtendedUserDTO()
                 {
