@@ -23,11 +23,7 @@ namespace DTS.Repositories
                 .Include(temp => temp.Owner)
                 .ToListAsync();
 
-            if (templates.FirstOrDefault() == null)
-            {
-                throw new InvalidOperationException("Templates not Found");
-            }
-            return templates;
+            return templates.DefaultIfEmpty() ?? throw new InvalidOperationException();
         }
 
         public async Task<Template> FindTemplateByIDAsync(int id)
@@ -35,7 +31,6 @@ namespace DTS.Repositories
             var templates = await FindAllTemplatesAsync();
             var template = templates
                 .Where(temp => temp.Id == id)
-                .DefaultIfEmpty(new Template())
                 .FirstOrDefault();
 
             return template ?? throw new KeyNotFoundException();
@@ -47,7 +42,7 @@ namespace DTS.Repositories
             var template = templates
                 .Where(temp => temp.OwnerId == id);
 
-            return template ?? throw new KeyNotFoundException();
+            return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
         public async Task CreateAsync(Template template)
