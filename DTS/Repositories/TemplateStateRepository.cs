@@ -17,7 +17,7 @@ namespace DTS.Repositories
         public async Task<TemplateState> FindStateByIdAsync(int id)
         {
             var states = await FindByConditionAsync(s => s.Id == id);
-            return states.FirstOrDefault() ?? new TemplateState();
+            return states.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DTS.Data;
 using DTS.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,22 +16,33 @@ namespace DTS.Repositories
         {
         }
 
+        public async Task<IEnumerable<TemplateVersion>> FindAllVersions()
+        {
+            var templates = await DTSContext.TemplateVersion
+                .Include(temp => temp.State)
+                .Include(temp => temp.Template)
+                .Include(temp => temp.Creator)
+                .ToListAsync();
+
+            return templates.DefaultIfEmpty() ?? throw new InvalidOperationException();
+        }
+
         public async Task<TemplateVersion> FindVersionByIDAsync(int id)
         {
             var template = await FindByConditionAsync(temp => temp.Id == id);
-            return template.DefaultIfEmpty(new TemplateVersion()).FirstOrDefault();
+            return template.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
 
         public async Task<IEnumerable<TemplateVersion>> FindByTemplateIdAsync(int id)
         {
             var template = await FindByConditionAsync(temp => temp.TemplateId == id);
-            return template.DefaultIfEmpty(new TemplateVersion());
+            return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
         public async Task<IEnumerable<TemplateVersion>> FindByUserIdAsync(int id)
         {
             var template = await FindByConditionAsync(temp => temp.CreatorId == id);
-            return template.DefaultIfEmpty(new TemplateVersion());
+            return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
         public async Task CreateAsync(TemplateVersion template)
@@ -47,12 +59,8 @@ namespace DTS.Repositories
 
         public async Task<IEnumerable<TemplateVersion>> FindVersionByConditionAsync(Expression<Func<TemplateVersion, bool>> expression)
         {
-            return await FindByConditionAsync(expression);
-        }
-
-        public async Task<IEnumerable<TemplateVersion>> FindAllVersions()
-        {
-            return await FindAllAsync();
+            var templates = await FindByConditionAsync(expression);
+            return templates.DefaultIfEmpty() ?? throw new InvalidOperationException();
         }
 
         public async Task UpdateAsync(IEnumerable<TemplateVersion> templates)
