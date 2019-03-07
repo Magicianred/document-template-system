@@ -313,7 +313,19 @@ namespace DTS.Controllers
             };
             await repository.TemplatesVersions.CreateAsync(templateVC);
 
-            return CreatedAtAction("GetTemplate", new { id = templateVC.Id }, templateVC);
+            var templateSpecific = new SpecificTemplateVersion()
+            {
+                CreationTime = templateVC.Date,
+                TemplateVersion = templateVC.Content,
+                Creator = new UserDTO
+                {
+                    Name = template.Owner.Name,
+                    Surname = template.Owner.Surname,
+                    Email = template.Owner.Email
+                }
+            };
+
+            return CreatedAtAction("GetTemplate", new { id = templateVC.Id }, templateSpecific);
         }
 
         // POST: api/Templates/form/1
