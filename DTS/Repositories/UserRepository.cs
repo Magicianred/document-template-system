@@ -16,14 +16,22 @@ namespace DTS.Repositories
         {
         }
 
-        public async Task<User> FindUserByIDAsync(int id)
+        public async Task<IEnumerable<User>> FindAllUsersAsync()
         {
-            var user = await DTSContext.User
+            var users = await DTSContext.User
                 .Include(u => u.Status)
                 .Include(u => u.Type)
-                .Where(u => u.Id == id)
-                .SingleOrDefaultAsync();
-            return user ?? new User();
+                .ToListAsync();
+
+            return users.DefaultIfEmpty() ?? throw new InvalidOperationException();
+        }
+
+        public async Task<User> FindUserByIDAsync(int id)
+        {
+            var users = await FindAllUsersAsync();
+            var user = users
+                .Where(u => u.Id == id);
+            return user.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
 
         public async Task CreateAsync(User user)
@@ -36,11 +44,6 @@ namespace DTS.Repositories
         {
             Update(user);
             await SaveAsync();
-        }
-
-        public async Task<IEnumerable<User>> FindAllUsersAsync()
-        {
-            return await FindAllAsync();
         }
 
         public async Task<bool> Exists(int id)
