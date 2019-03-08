@@ -97,9 +97,9 @@ namespace DTS.Controllers
 
                     Creator = new UserDTO
                     {
-                        Name = template.Owner.Name,
-                        Surname = template.Owner.Surname,
-                        Email = template.Owner.Email
+                        Name = tempVersion.Creator.Name,
+                        Surname = tempVersion.Creator.Surname,
+                        Email = tempVersion.Creator.Email
                     }
                 });
             }
