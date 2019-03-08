@@ -1,0 +1,51 @@
+<div class="detail-view" *ngIf="!specificProcess">
+  <p class="pt-5">Click the specified process in the table to view its details.</p>
+</div>
+<div class="detail-view" *ngIf="specificProcess">
+  <h3> Details of process: </h3>
+
+  <table class="table table-sm">
+    <tbody>
+      <tr>
+        <th scope="row">Name </th>
+        <td>{{ specificProcess.name }}</td>
+        <td (click)="sendIdBack()" class="btn btn-info">KILL IT!</td>
+      </tr>
+      <tr>
+        <th scope="row">Id </th>
+        <td>{{ specificProcess.id }}</td>
+      </tr>
+      <tr>
+        <th scope="row">CPU usage </th>
+        <td>{{ specificProcess.cpuUsage }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Memory usage </th>
+        <td>{{ specificProcess.memoryUsage }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Start time </th>
+        <td>{{ specificProcess.startTime }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Runtime </th>
+        <td>{{ specificProcess.runTime }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Number of threads </th>
+        <td>{{ specificProcess.numberOfThreads }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="mb-5" *ngIf="specificProcess">
+  <h3>Stored Comment:</h3>
+  <form>
+    <div class="form-group" id="comment-holder">
+      <textarea class="form-control" rows="3" name="comment" placeholder="" disabled>{{activeComment}}</textarea>
+      <input class="inputContainer" #name type="text" id="inputField">
+      <input class="btn btn-info" (click)="sendCommentBack(name.value)" value="Submit">
+    </div>
+    
+  </form>
+</div>
