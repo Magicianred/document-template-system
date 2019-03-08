@@ -17,7 +17,7 @@ namespace DTS.Repositories
         public async Task<UserStatus> FindStatusById(int id)
         {
             var status = await FindByConditionAsync(u => u.Id == id);
-            return status.FirstOrDefault() ?? new UserStatus();
+            return status.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
     }
 }

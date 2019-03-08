@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DTS.Data;
 using DTS.Models;
 using DTS.Repositories;
+using DTS.Models.DTOs;
 
 namespace DTS.Controllers
 {
@@ -24,10 +25,29 @@ namespace DTS.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            
-            return await repository.Users.FindAllUsersAsync();
+            try
+            {
+                var users = await repository.Users.FindAllUsersAsync();
+                var usersDto = new List<ExtendedUserDTO>();
+                foreach (var user in users)
+                {
+                    usersDto.Add(new ExtendedUserDTO
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        Surname = user.Surname,
+                        Email = user.Email,
+                        Status = user.Status.Name,
+                        Type = user.Type.Name
+                    });
+                }
+                return Ok(usersDto);
+            } catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         // GET: api/Users/5
@@ -38,15 +58,23 @@ namespace DTS.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var user = await repository.Users.FindUserByIDAsync(id);
-
-            if (user == null)
+            try
+            {
+                var user = await repository.Users.FindUserByIDAsync(id);
+                var userDto = new ExtendedUserDTO()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Email = user.Email,
+                    Status = user.Status.Name,
+                    Type = user.Type.Name
+                };
+                return Ok(userDto);
+            } catch (Exception)
             {
                 return NotFound();
             }
-
-            return Ok(user);
         }
 
         // PUT: api/Users/5
@@ -107,18 +135,27 @@ namespace DTS.Controllers
             {
                 return BadRequest(ModelState);
             }
+            try
+            {
+                var user = await repository.Users.FindUserByIDAsync(id);
+                
+                user.Status = await repository.UserStatus.FindStatusById(3); //3 - BLOCKED
+                var userDto = new ExtendedUserDTO()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Email = user.Email,
+                    Status = user.Status.Name,
+                    Type = user.Type.Name
+                };
 
-            var user = await repository.Users.FindUserByIDAsync(id);
-            if (user == null)
+                await repository.Users.UpdateAsync(user);
+                return Ok(userDto);
+            } catch (Exception)
             {
                 return NotFound();
             }
-
-            user.Status = await repository.UserStatus.FindStatusById(3); //3 - BLOCKED
-            await repository.Users.UpdateAsync(user);
-            return Ok(user);
         }
-
-       
     }
 }
