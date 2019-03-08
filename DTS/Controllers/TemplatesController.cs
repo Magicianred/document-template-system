@@ -3,11 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DTS.Models;
-using DTS.Repositories;
+using DAL.Models;
+using DAL.Repositories;
 using DTS.Models.DTOs;
 using DTS.Helpers;
 using System;
+using DTS.Models;
 
 namespace DTS.Controllers
 {

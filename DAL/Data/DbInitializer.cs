@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DTS.Models;
+using DAL.Models;
 
-namespace DTS.Data
+namespace DAL.Data
 {
     public static class DbInitializer
     {

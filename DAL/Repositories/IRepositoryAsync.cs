@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace DTS.Repositories
+namespace DAL.Repositories
 {
     interface IRepositoryAsync<T>
     {

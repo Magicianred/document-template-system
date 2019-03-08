@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DTS.Data;
-using DTS.Models;
-using DTS.Repositories;
+using DAL.Data;
+using DAL.Models;
+using DAL.Repositories;
 using DTS.Models.DTOs;
 
 namespace DTS.Controllers

@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System;
 
-namespace DTS.Models
+namespace DAL.Models
 {
     public partial class DTSLocalDBContext : DbContext
     {
