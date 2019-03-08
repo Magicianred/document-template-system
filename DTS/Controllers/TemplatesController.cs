@@ -270,7 +270,7 @@ namespace DTS.Controllers
         }
 
         // PUT: api/Templates/versions/2/
-        [HttpPut("/template/{id}/version")]
+        [HttpPut("template/{id}/version")]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
         {
             if (!ModelState.IsValid)
