@@ -279,7 +279,7 @@ namespace DTS.Controllers
             }
 
 
-            var templateVC = new TemplateVersion()
+            var templateVC = new TemplateVersion
             {
                 Content = templateInput.Template,
                 TemplateId = id,
