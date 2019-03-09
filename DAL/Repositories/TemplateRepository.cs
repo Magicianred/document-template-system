@@ -1,12 +1,12 @@
-﻿using DTS.Data;
-using DTS.Models;
+﻿using DAL.Data;
+using DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DTS.Repositories
+namespace DAL.Repositories
 {
     public class TemplateRepository : RepositoryAsync<Template>, ITemplateRepository
     {

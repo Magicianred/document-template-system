@@ -3,8 +3,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using DTS.Data;
-using DTS.Models;
+using DAL.Data;
+using DAL.Models;
 
 namespace DTS
 {

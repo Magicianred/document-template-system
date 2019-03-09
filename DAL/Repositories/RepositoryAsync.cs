@@ -1,14 +1,13 @@
-﻿using DTS.Repositories;
+﻿using DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using DTS.Data;
 using Microsoft.EntityFrameworkCore;
-using DTS.Models;
+using DAL.Models;
 
-namespace DTS
+namespace DAL
 {
     public abstract class RepositoryAsync<T> : IRepositoryAsync<T> where T : class
     {

@@ -1,11 +1,10 @@
-﻿using DTS.Data;
-using DTS.Models;
+﻿using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DTS.Repositories
+namespace DAL.Repositories
 {
     public class UserTypeRepository : RepositoryAsync<UserType>, IUserTypeRepository
     {

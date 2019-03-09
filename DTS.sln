@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTS", "DTS\DTS.csproj", "{36E2B631-3D25-4C5C-94AA-937674C9E667}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DtsWebClient", "DtsWebClient\DtsWebClient.csproj", "{62A9F0BE-C3B5-4B2D-B756-6DD1D78AD7D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DtsWebClient", "DtsWebClient\DtsWebClient.csproj", "{62A9F0BE-C3B5-4B2D-B756-6DD1D78AD7D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{DF31CA0C-C9D0-444D-9F66-F0FB8A4ECF93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTS.Tests", "DTS.Tests\DTS.Tests.csproj", "{7E50E277-C183-4C74-BC57-0B03ED4C6381}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{62A9F0BE-C3B5-4B2D-B756-6DD1D78AD7D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62A9F0BE-C3B5-4B2D-B756-6DD1D78AD7D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62A9F0BE-C3B5-4B2D-B756-6DD1D78AD7D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF31CA0C-C9D0-444D-9F66-F0FB8A4ECF93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF31CA0C-C9D0-444D-9F66-F0FB8A4ECF93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF31CA0C-C9D0-444D-9F66-F0FB8A4ECF93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF31CA0C-C9D0-444D-9F66-F0FB8A4ECF93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E50E277-C183-4C74-BC57-0B03ED4C6381}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E50E277-C183-4C74-BC57-0B03ED4C6381}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E50E277-C183-4C74-BC57-0B03ED4C6381}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E50E277-C183-4C74-BC57-0B03ED4C6381}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
