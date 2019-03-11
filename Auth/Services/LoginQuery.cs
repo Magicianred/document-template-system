@@ -1,4 +1,5 @@
-﻿using DTS.Services;
+﻿using DAL.Repositories;
+using DTS.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,6 +22,13 @@ namespace Auth.Services
 
     public class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, JwtSecurityToken>
     {
+        private RepositoryWrapper repository;
+
+        public LoginQueryHandler(RepositoryWrapper repository)
+        {
+            this.repository = repository;
+        }
+
         public async Task<JwtSecurityToken> HandleAsync(LoginQuery query)
         {
             throw new NotImplementedException();

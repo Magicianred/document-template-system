@@ -1,4 +1,5 @@
-﻿using DTS.Services;
+﻿using DAL.Repositories;
+using DTS.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,13 @@ namespace Auth.Services
 
     public class SignInCommandHandler : ICommandHandlerAsync<SignInCommand>
     {
+        private RepositoryWrapper repository;
+
+        public SignInCommandHandler(RepositoryWrapper repository)
+        {
+            this.repository = repository;
+        }
+
         public async Task HandleAsync(SignInCommand command)
         {
             throw new NotImplementedException();
