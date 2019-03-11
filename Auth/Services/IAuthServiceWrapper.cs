@@ -10,7 +10,6 @@ namespace Auth.Services
     public interface IAuthServiceWrapper
     {
         IQueryHandlerAsync<LoginQuery, JwtSecurityToken> Login { get; }
-        ICommandHandlerAsync<LogOutCommand> LogOut { get; }
         ICommandHandlerAsync<SignInCommand> SignIn { get; }
     }
 }

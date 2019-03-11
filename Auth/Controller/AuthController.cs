@@ -23,8 +23,5 @@ namespace Auth.Controller
 
         [HttpPost("login")]
         public async Task<IActionResult> LogIn() { return StatusCode(501); }
-
-        [HttpPost("logout")]
-        public async Task<IActionResult> LogOut() { return StatusCode(501); }
     }
 }

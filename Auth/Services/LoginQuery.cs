@@ -23,10 +23,12 @@ namespace Auth.Services
     public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, JwtSecurityToken>
     {
         private readonly RepositoryWrapper repository;
+        private readonly string secret;
 
-        public LoginQueryHandler(RepositoryWrapper repository)
+        public LoginQueryHandler(RepositoryWrapper repository, string secret)
         {
             this.repository = repository;
+            this.secret = secret;
         }
 
         public async Task<JwtSecurityToken> HandleAsync(LoginQuery query)
