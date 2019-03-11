@@ -8,8 +8,8 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ProcessesComponent } from './home/processes/processes.component';
-import { ProcessDetailsComponent } from './home/processdetails/processdetails.component';
+import { LoginComponent } from './login-form/login-form.component'
+import { SignInFormComponent } from './sign-in-form/sign-in-form.component'
 
 
 @NgModule({
@@ -19,8 +19,8 @@ import { ProcessDetailsComponent } from './home/processdetails/processdetails.co
     AboutComponent,
     ContactComponent,
     HomeComponent,
-    ProcessesComponent,
-    ProcessDetailsComponent,
+    LoginComponent,
+    SignInFormComponent
   ],
   imports: [
     BrowserModule,

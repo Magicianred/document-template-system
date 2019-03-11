@@ -1,15 +1,12 @@
 <div class="row">
   <div class="col-sm-6 mt-2">
     <div class="row justify-space mb-2 mx-0">
-      <h3> All processes: </h3>
-      <button (click)="getProcessess()" class="btn btn-info float-right">Refresh list</button>
-      <button (click)="startProcess()" class="btn btn-info float-center">Start New Process</button>
     </div>
-    <app-processes [processes]='processes' (send)="sendData($event)"></app-processes>
+    <app-login-form></app-login-form>
   </div>
 
   <div class="col-sm-6 mt-2">
-    <app-processdetails [specificProcess]="specificProcess" [activeComment] = "activeComment" (sendComment)="saveComment($event)" (sendId)="kill($event)"></app-processdetails>
+    <app-sign-in-form></app-sign-in-form>
   </div>
 </div>
 
