@@ -50,5 +50,10 @@ namespace DAL.Repositories
             return await DTSContext.User.AnyAsync(e => e.Id == id);
         }
 
+        public async Task<IEnumerable<User>> FindUserByCondition(Expression<Func<User, bool>> expression)
+        {
+            var users = await FindByConditionAsync(expression);
+            return users.DefaultIfEmpty() ?? throw new InvalidOperationException();
+        }
     }
 }

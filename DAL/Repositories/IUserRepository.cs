@@ -11,6 +11,7 @@ namespace DAL.Repositories
     {
         Task<IEnumerable<User>> FindAllUsersAsync();
         Task<User> FindUserByIDAsync(int id);
+        Task<IEnumerable<User>> FindUserByCondition(Expression<Func<User, bool>> expression);
         Task CreateAsync(User user);
         Task UpdateAsync(User oldUser);
         Task<bool> Exists(int id);
