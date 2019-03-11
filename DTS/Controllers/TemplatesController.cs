@@ -95,7 +95,8 @@ namespace DTS.Controllers
                 {
                     CreationTime = tempVersion.Date,
                     TemplateVersion = tempVersion.Content,
-
+                    Id = tempVersion.Id,
+                    VersionState = tempVersion.State.State,
                     Creator = new UserDTO
                     {
                         Name = tempVersion.Creator.Name,
