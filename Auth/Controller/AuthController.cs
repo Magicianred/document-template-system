@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Auth.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,13 @@ namespace Auth.Controller
     [ApiController]
     class AuthController : ControllerBase
     {
+        private readonly IAuthServiceWrapper services;
+
+        public AuthController(IAuthServiceWrapper services)
+        {
+            this.services = services;
+        }
+
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn() { return StatusCode(501); }
 

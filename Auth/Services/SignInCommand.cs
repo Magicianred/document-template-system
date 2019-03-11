@@ -27,7 +27,7 @@ namespace Auth.Services
 
     public sealed class SignInCommandHandler : ICommandHandlerAsync<SignInCommand>
     {
-        private RepositoryWrapper repository;
+        private readonly RepositoryWrapper repository;
 
         public SignInCommandHandler(RepositoryWrapper repository)
         {

@@ -20,7 +20,7 @@ namespace Auth.Services
 
     public sealed class LogOutCommandHandler : ICommandHandlerAsync<LogOutCommand>
     {
-        private RepositoryWrapper repository;
+        private readonly RepositoryWrapper repository;
 
         public LogOutCommandHandler(RepositoryWrapper repository)
         {

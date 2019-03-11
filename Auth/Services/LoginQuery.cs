@@ -22,7 +22,7 @@ namespace Auth.Services
 
     public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, JwtSecurityToken>
     {
-        private RepositoryWrapper repository;
+        private readonly RepositoryWrapper repository;
 
         public LoginQueryHandler(RepositoryWrapper repository)
         {
