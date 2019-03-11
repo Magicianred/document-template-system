@@ -355,7 +355,12 @@ namespace DTS.Controllers
 
                 template.Content = new JsonInputParser().FillTemplateFromJson(data, template);
 
-                return Ok(template.Content);
+                var contentDTO = new TemplateContent
+                {
+                    Content = template.Content
+                };
+
+                return Ok(contentDTO);
             } catch (Exception)
             {
                 return BadRequest("Template does not exist or is inactive");

@@ -18,7 +18,7 @@
     </tbody>
   </table>
 </div>
-<form id="userInput"  *ngIf ="formBase" #templateForm="ngForm" (ngSubmit)="postData(templateForm)">
+<form id="userInput"  *ngIf ="formBase" #templateForm="ngForm" (ngSubmit)="postData(templateForm.value)">
   <h3>Required Input</h3>
   <fieldset>
     <div *ngFor="let item of formBase | keyvalue" class="form-group">
@@ -27,6 +27,9 @@
   </fieldset>
   <button type="submit" class="btn btn-primary"  >Submit</button>
 </form>
+<div id="filledTempHolder">
+
+</div>
   
  
   
