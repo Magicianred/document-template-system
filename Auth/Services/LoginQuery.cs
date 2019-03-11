@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Auth.Services
 {
-    public class LoginQuery : IQuery
+    public sealed class LoginQuery : IQuery
     {
         public string Login { get; }
         public string Password { get; }
@@ -20,7 +20,7 @@ namespace Auth.Services
         }
     }
 
-    public class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, JwtSecurityToken>
+    public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, JwtSecurityToken>
     {
         private RepositoryWrapper repository;
 

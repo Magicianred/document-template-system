@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Auth.Services
 {
-    public class SignInCommand : ICommand
+    public sealed class SignInCommand : ICommand
     {
         public string Login { get; }
         public string Password { get; }
@@ -25,7 +25,7 @@ namespace Auth.Services
         }
     }
 
-    public class SignInCommandHandler : ICommandHandlerAsync<SignInCommand>
+    public sealed class SignInCommandHandler : ICommandHandlerAsync<SignInCommand>
     {
         private RepositoryWrapper repository;
 

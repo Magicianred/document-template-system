@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Auth.Services
 {
-    public class LogOutCommand : ICommand
+    public sealed class LogOutCommand : ICommand
     {
         public JwtSecurityToken Token { get; }
 
@@ -18,7 +18,7 @@ namespace Auth.Services
         }
     }
 
-    public class LogOutCommandHandler : ICommandHandlerAsync<LogOutCommand>
+    public sealed class LogOutCommandHandler : ICommandHandlerAsync<LogOutCommand>
     {
         private RepositoryWrapper repository;
 

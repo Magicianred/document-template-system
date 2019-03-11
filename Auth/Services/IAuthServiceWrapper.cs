@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Auth.Services
 {
-    interface IAuthServiceWrapper
+    public interface IAuthServiceWrapper
     {
         IQueryHandlerAsync<LoginQuery, JwtSecurityToken> Login { get; }
         ICommandHandlerAsync<LogOutCommand> LogOut { get; }
