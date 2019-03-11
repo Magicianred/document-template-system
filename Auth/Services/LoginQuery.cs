@@ -1,5 +1,8 @@
-﻿using DAL.Repositories;
+﻿using Auth.Helpers;
+using DAL.Models;
+using DAL.Repositories;
 using DTS.Services;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,7 +23,7 @@ namespace Auth.Services
         }
     }
 
-    public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, JwtSecurityToken>
+    public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, SecurityToken>
     {
         private readonly RepositoryWrapper repository;
         private readonly string secret;
@@ -31,9 +34,27 @@ namespace Auth.Services
             this.secret = secret;
         }
 
-        public async Task<JwtSecurityToken> HandleAsync(LoginQuery query)
+        public async Task<SecurityToken> HandleAsync(LoginQuery query)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Authorization auth = await repository.Authorizations.FindByUserLogin(query.Login);
+                if (validatePassword(auth, query.Password))
+                {
+                    ITokenHelper tokenHandler = new TokenHelper(secret);
+                    return tokenHandler.GetNewToken(auth.user.Id, auth.user.Type.Name);
+                }
+                throw new KeyNotFoundException("Password incorrect");
+            } catch (InvalidOperationException)
+            {
+                throw new KeyNotFoundException("Incorrect Login");
+            }
+        }
+
+        private bool validatePassword(Authorization auth, string password)
+        {
+            IHashPassword hashHandler = new BCryptHash();
+            return hashHandler.Verify(password, auth.Pasword);
         }
     }
 }

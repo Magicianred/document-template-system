@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Auth.Helpers
 {
-    interface ITokenHandler
+    interface ITokenHelper
     {
         SecurityToken GetNewToken(int userId, string userRole);
         SecurityToken parseToken(string tokenString);

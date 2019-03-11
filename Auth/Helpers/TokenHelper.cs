@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Auth.Helpers
 {
-    public class TokenHandler : ITokenHandler
+    public class TokenHelper : ITokenHelper
     {
         private string secret;
         private double _tokenLiveLenght;
 
-        public TokenHandler(string secret)
+        public TokenHelper(string secret)
         {
             this.secret = secret;
         }
