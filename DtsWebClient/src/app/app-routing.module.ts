@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { ContactComponent } from './contact/contact.component';
+import { EditorPanelComponent } from './editor-panel/editor-panel.component'
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch:'full' },
-  { path: 'contact', component: ContactComponent },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'editorPanel', component: EditorPanelComponent },
 ];
 
 @NgModule({
