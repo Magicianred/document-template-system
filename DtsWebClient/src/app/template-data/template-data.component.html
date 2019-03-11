@@ -11,12 +11,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let version of template.versions">
-        <td id="{{version.id}}">{{ version.id }}</td>
-        <td>{{ version.creationTime }}</td>
+      <tr *ngFor="let version of template.versions" (click)="showVersion(0)">
+        <td  id="{{version.id}}">{{ version.id }}</td>
+        <td  id="{{version.id}}">{{ version.creationTime }}</td>
         <td>{{ version.creator.name}} {{ version.creator.surname }}</td>
         <td>{{ version.versionState }}</td>
       </tr>
     </tbody>
   </table>
+</div>
+<div id="tempHolder" style="border:solid">
+
 </div>

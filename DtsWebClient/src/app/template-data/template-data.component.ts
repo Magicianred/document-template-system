@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TemplateVersions } from '../_models/templateVersion'
+import { document } from 'ngx-bootstrap';
 
 
 @Component({
@@ -12,6 +13,8 @@ export class TemplateDataComponent implements OnInit {
   baseUrl: string;
   apiClient: HttpClient;
   template: TemplateVersions;
+  templateChosen: boolean;
+  version: string;
 
 
 
@@ -22,6 +25,18 @@ export class TemplateDataComponent implements OnInit {
 
   ngOnInit() {
     this.getTemplate();
+  }
+
+  showVersion(id: number) {
+    let tempHolder = document.getElementById("tempHolder");
+
+    if (tempHolder.firstChild) {
+      tempHolder.removeChild(tempHolder.firstChild)
+    }
+    const tempCont = document.createElement("DIV");
+    tempCont.innerHTML = this.template.versions[id].templateVersion;
+
+    tempHolder.appendChild(tempCont);
   }
 
   getTemplate() {
