@@ -21,6 +21,7 @@ namespace DAL.Models
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserStatus> UserStatus { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
+        public virtual DbSet<Authorization> Authorizations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
