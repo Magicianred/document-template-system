@@ -1,4 +1,6 @@
-﻿using DAL.Repositories;
+﻿using Auth.Helpers;
+using DAL.Models;
+using DAL.Repositories;
 using DTS.Services;
 using System;
 using System.Collections.Generic;
@@ -36,7 +38,32 @@ namespace Auth.Services
 
         public async Task HandleAsync(SignInCommand command)
         {
-            throw new NotImplementedException();
+            int suspendedStatusId = 2;
+            int defoultUserTypeId = 3;
+
+            if (await repository.Authorizations.IsExistByLogin(command.Login))
+            {
+                throw new InvalidOperationException("Login already exist");
+            }
+            UserStatus status = await repository.UserStatus.FindStatusById(suspendedStatusId);
+            UserType type = await repository.UserType.FindTypeById(defoultUserTypeId); 
+            User user = createUser(command, status, type);
+            await repository.Users.CreateAsync(user);
+        }
+
+        private User createUser(SignInCommand command, UserStatus userStatus, UserType userType)
+        {
+            IHashPassword hashHendler = new BCryptHash();
+            return new User()
+            {
+                Name = command.Name,
+                Surname = command.Surname,
+                Email = command.Email,
+                Login = command.Login,
+                Password = hashHendler.Hash(command.Password),
+                Status = userStatus,
+                Type = userType
+            };
         }
     }
 }

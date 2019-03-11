@@ -34,5 +34,11 @@ namespace DAL.Repositories
 
             return authoriazation ?? throw new KeyNotFoundException();
         }
+
+        public async Task<bool> IsExistByLogin(string login)
+        {
+            return await DTSContext.Authorizations
+                .AnyAsync(a => a.Login.Equals(login));
+        }
     }
 }

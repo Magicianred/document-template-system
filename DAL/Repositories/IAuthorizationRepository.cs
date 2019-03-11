@@ -10,5 +10,6 @@ namespace DAL.Repositories
     {
         Task<IEnumerable<Authorization>> FindAllAuthorizations();
         Task<Authorization> FindByUserLogin(string login);
+        Task<bool> IsExistByLogin(string login);
     }
 }
