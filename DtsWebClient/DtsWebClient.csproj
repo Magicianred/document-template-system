@@ -26,10 +26,14 @@
 
   <ItemGroup>
     <None Remove="src\app\_models\template.ts" />
+    <None Remove="src\app\_models\templateVersion.ts" />
+    <None Remove="src\app\_models\Version.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="src\app\_models\template.ts" />
+    <TypeScriptCompile Include="src\app\_models\templateVersion.ts" />
+    <TypeScriptCompile Include="src\app\_models\Version.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -11,6 +11,7 @@ import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
 import { EditorPanelComponent } from './editor-panel/editor-panel.component';
 import { FormsModule } from '@angular/forms';
 import { EditorsTemplatesComponent } from './editors-templates/editors-templates.component';
+import { TemplateDataComponent } from './template-data/template-data.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { EditorsTemplatesComponent } from './editors-templates/editors-templates
     LoginComponent,
     SignInFormComponent,
     EditorPanelComponent,
-    EditorsTemplatesComponent
+    EditorsTemplatesComponent,
+    TemplateDataComponent
   ],
   imports: [
     BrowserModule,

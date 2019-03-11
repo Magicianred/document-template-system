@@ -4,12 +4,16 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
+        <th>Template State</th>
+        <th>Version Count</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let template of templates">
-        <td  id="{{template.id}}">{{ template.id }}</td>
-        <td  id="{{template.id}}">{{ template.name }}</td>
+        <td (click)="loadTemplate(template.id)" id="{{template.id}}">{{ template.id }}</td>
+        <td (click)="loadTemplete(template.id)" id="{{template.id}}">{{ template.name }}</td>
+        <td>{{ template.templateState }}</td>
+        <td>{{ template.versionCount }}</td>
       </tr>
     </tbody>
   </table>

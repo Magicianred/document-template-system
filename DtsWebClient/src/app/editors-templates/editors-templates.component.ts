@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Template } from '../_models/template'
 
@@ -12,6 +12,7 @@ export class EditorsTemplatesComponent implements OnInit {
   apiClient: HttpClient;
   templates: Template[];
 
+  @Output() getTemplate: EventEmitter<string> = new EventEmitter<string>()
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.apiClient = http;
@@ -26,6 +27,10 @@ export class EditorsTemplatesComponent implements OnInit {
       console.log(result);
       this.templates = result;
     }, error => console.error(error));
+  }
+
+  loadTemplate(id: string) {
+    this.getTemplate.emit(id)
   }
 
 
