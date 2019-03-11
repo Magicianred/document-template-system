@@ -10,6 +10,7 @@ import { LoginComponent } from './login-form/login-form.component'
 import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
 import { EditorPanelComponent } from './editor-panel/editor-panel.component';
 import { FormsModule } from '@angular/forms';
+import { EditorsTemplatesComponent } from './editors-templates/editors-templates.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { FormsModule } from '@angular/forms';
     HomeComponent,
     LoginComponent,
     SignInFormComponent,
-    EditorPanelComponent
+    EditorPanelComponent,
+    EditorsTemplatesComponent
   ],
   imports: [
     BrowserModule,

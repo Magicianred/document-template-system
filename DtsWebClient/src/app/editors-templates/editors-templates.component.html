@@ -1,0 +1,16 @@
+<div class="table-wrapper-scroll-y">
+  <table class="table table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let template of templates">
+        <td  id="{{template.id}}">{{ template.id }}</td>
+        <td  id="{{template.id}}">{{ template.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
