@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Auth.Helpers
 {
     interface ITokenHandler
     {
-        JwtSecurityToken GetNewToken(int userId, string userRole);
-        void DisposeToken(JwtSecurityToken token);
+        SecurityToken GetNewToken(int userId, string userRole);
+        SecurityToken parseToken(string tokenString);
     }
 }
