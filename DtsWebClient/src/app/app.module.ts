@@ -8,7 +8,8 @@ import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login-form/login-form.component'
-import { SignInFormComponent } from './sign-in-form/sign-in-form.component'
+import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
+import { EditorPanelComponent } from './editor-panel/editor-panel.component'
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { SignInFormComponent } from './sign-in-form/sign-in-form.component'
     ContactComponent,
     HomeComponent,
     LoginComponent,
-    SignInFormComponent
+    SignInFormComponent,
+    EditorPanelComponent
   ],
   imports: [
     BrowserModule,
