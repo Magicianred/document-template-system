@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Auth.Helpers
 {
-    interface IHashAble
+    interface IHashPassword
     {
         string Hash(string s);
         bool Verify(string submited, string hashed);
