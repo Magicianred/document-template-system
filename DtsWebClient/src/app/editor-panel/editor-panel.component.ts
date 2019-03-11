@@ -19,7 +19,7 @@ export class EditorPanelComponent implements OnInit {
   ngOnInit() {
   }
 
-  showTemplate() {
+  saveNewTemplate() {
     let authorId = 2;
     let templateName = "test50500";
     let templateData = {
