@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { ContactComponent } from './contact/contact.component';
+import { EditorPanelComponent } from './editor-panel/editor-panel.component'
+import { FormPickerComponent } from './form-picker/form-picker.component';
+import { AdminTemplatePanelComponent } from './admin-template-panel/admin-template-panel.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch:'full' },
-  { path: 'about', component: AboutComponent },
-  { path: 'contact', component: ContactComponent },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'editorPanel', component: EditorPanelComponent },
+  { path: 'formPicker', component: FormPickerComponent },
+  { path: 'adminTemplatePanel', component: AdminTemplatePanelComponent }
 ];
 
 @NgModule({

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
-  appTitle: string = 'Process Explorer';
+  appTitle: string = 'Document Template System';
 
   constructor() { }
 

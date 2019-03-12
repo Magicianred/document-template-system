@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DTS\DTS.csproj" />
+    <ProjectReference Include="..\DTS\DTS.API.csproj" />
   </ItemGroup>
 
 </Project>
