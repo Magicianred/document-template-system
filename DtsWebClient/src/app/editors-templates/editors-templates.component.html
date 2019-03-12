@@ -11,7 +11,7 @@
     <tbody>
       <tr *ngFor="let template of templates">
         <td (click)="loadTemplate(template.id)" id="{{template.id}}">{{ template.id }}</td>
-        <td (click)="loadTemplete(template.id)" id="{{template.id}}">{{ template.name }}</td>
+        <td (click)="loadTemplate(template.id)" id="{{template.id}}">{{ template.name }}</td>
         <td>{{ template.templateState }}</td>
         <td>{{ template.versionCount }}</td>
       </tr>

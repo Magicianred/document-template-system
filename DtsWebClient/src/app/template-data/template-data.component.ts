@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TemplateVersions } from '../_models/templateVersion'
 import { document } from 'ngx-bootstrap';
@@ -11,23 +11,28 @@ import { template } from '@angular/core/src/render3';
   styleUrls: ['./template-data.component.css']
 })
 export class TemplateDataComponent implements OnInit {
-  baseUrl: string;
+
   apiClient: HttpClient;
   template: TemplateVersions;
   templateChosen: boolean;
   version: string;
   htmlContent: string;
+
+
+  @Input()
   tempId: string;
 
+  @Output() back: EventEmitter<string> = new EventEmitter<string>()
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(http: HttpClient, ) {
     this.apiClient = http;
-    this.baseUrl = baseUrl;
   }
 
   ngOnInit() {
     this.getTemplate();
   }
+
+  
 
   showVersion(event: any) {
     this.templateChosen = true;
@@ -36,9 +41,8 @@ export class TemplateDataComponent implements OnInit {
     let editorArea = document.getElementsByClassName("ngx-editor-textarea")[0];
     editorArea.innerHTML = templateContent;
   }
-
+  
   getTemplate() {
-    this.tempId = prompt("Provide id");
     this.templateChosen = false;
     let query = `https://localhost:44346/api/templates/${this.tempId}`
     this.apiClient.get<TemplateVersions>(query).subscribe(result => {
@@ -66,6 +70,10 @@ export class TemplateDataComponent implements OnInit {
     }, error => console.error(error));
     this.templateChosen = false;
     this.getTemplate();
+  }
+
+  goBackToTemplates() {
+    this.back.emit("test")
   }
 
 }
