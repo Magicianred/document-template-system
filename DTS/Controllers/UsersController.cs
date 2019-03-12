@@ -9,10 +9,12 @@ using DAL.Data;
 using DAL.Models;
 using DAL.Repositories;
 using DTS.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DTS.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {

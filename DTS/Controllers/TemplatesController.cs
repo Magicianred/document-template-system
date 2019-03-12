@@ -9,10 +9,12 @@ using DTS.Models.DTOs;
 using DTS.Helpers;
 using System;
 using DTS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DTS.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class TemplatesController : ControllerBase
     {

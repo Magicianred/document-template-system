@@ -44,6 +44,8 @@ namespace DTS
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
                         IssuerSigningKey = key,
                         RequireSignedTokens = true,
                         RequireExpirationTime = true,
