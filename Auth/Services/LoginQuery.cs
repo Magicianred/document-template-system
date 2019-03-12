@@ -1,4 +1,4 @@
-﻿using Auth.Helpers;
+﻿using DTS.Helpers;
 using DAL.Models;
 using DAL.Repositories;
 using DTS.Services;
@@ -9,29 +9,29 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Auth.Services
+namespace DTS.Services
 {
     public sealed class LoginQuery : IQuery
     {
         public string Login { get; }
         public string Password { get; }
+        internal ITokenHelper TokenHelper { get; }
 
-        public LoginQuery(string login, string password)
+        public LoginQuery(string login, string password, ITokenHelper tokenHelper)
         {
             Login = login;
             Password = password;
+            TokenHelper = tokenHelper;
         }
     }
 
     public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, SecurityToken>
     {
-        private readonly RepositoryWrapper repository;
-        private readonly string secret;
+        private readonly IRepositoryWrapper repository;
 
-        public LoginQueryHandler(RepositoryWrapper repository, string secret)
+        public LoginQueryHandler(IRepositoryWrapper repository)
         {
             this.repository = repository;
-            this.secret = secret;
         }
 
         public async Task<SecurityToken> HandleAsync(LoginQuery query)
@@ -46,8 +46,7 @@ namespace Auth.Services
                         return null;
                     }
 
-                    ITokenHelper tokenHandler = new TokenHelper(secret);
-                    return tokenHandler.GetNewToken(user.Id, user.Type.Name);
+                    return query.TokenHelper.GetNewToken(user.Id, user.Type.Name);
                 }
                 throw new KeyNotFoundException("Password incorrect");
             } catch (InvalidOperationException)

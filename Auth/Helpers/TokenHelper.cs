@@ -7,23 +7,24 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auth.Helpers
+namespace DTS.Helpers
 {
     public class TokenHelper : ITokenHelper
     {
         private string secret;
-        private double _tokenLiveLenght;
+        private double _tokenExpirationTime;
 
-        public TokenHelper(string secret)
+        public TokenHelper(string secret, double expirationTime)
         {
             this.secret = secret;
+            this._tokenExpirationTime = expirationTime;
         }
 
         public SecurityToken GetNewToken(int userId, string userRole)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secret);
-            var tokenDescriptor = GetSecurityTokenDescriptor(userId, userRole, key, _tokenLiveLenght);
+            var tokenDescriptor = GetSecurityTokenDescriptor(userId, userRole, key, _tokenExpirationTime);
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return token;
         }
@@ -38,14 +39,20 @@ namespace Auth.Helpers
                     new Claim(ClaimTypes.Role, userRole)
                 }),
 
-                Expires = DateTime.Now.AddHours(_tokenLiveLenght),
+                Expires = DateTime.Now.AddHours(_tokenExpirationTime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
         }
 
-        public SecurityToken parseToken(string token)
+        public SecurityToken ParseToken(string token)
         {
             return new JwtSecurityTokenHandler().ReadJwtToken(token);
+        }
+
+        public string WriteToken(SecurityToken token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
         }
     }
 }

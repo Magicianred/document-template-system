@@ -13,6 +13,7 @@ using DAL.Repositories;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using DTS;
 
 namespace DTS
 {
@@ -31,6 +32,11 @@ namespace DTS
 
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var tokenSettingsSection = Configuration.GetSection("TokenConfig");
+            var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
+            services.Configure<TokenConfig>(tokenSettingsSection);
+            services.AddSingleton<IConfiguration>(tokenSettingsSection);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

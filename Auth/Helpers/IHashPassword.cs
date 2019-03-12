@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Auth.Helpers
+namespace DTS.Helpers
 {
     interface IHashPassword
     {

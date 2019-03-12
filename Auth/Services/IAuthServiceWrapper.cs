@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Auth.Services
+namespace DTS.Services
 {
     public interface IAuthServiceWrapper
     {

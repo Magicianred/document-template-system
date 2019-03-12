@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Auth.Helpers
+namespace DTS.Helpers
 {
-    interface ITokenHelper
+    public interface ITokenHelper
     {
         SecurityToken GetNewToken(int userId, string userRole);
-        SecurityToken parseToken(string tokenString);
+        SecurityToken ParseToken(string tokenString);
+        string WriteToken(SecurityToken token);
     }
 }

@@ -1,6 +1,8 @@
-﻿using Auth.Models.DTO;
-using Auth.Services;
+﻿using DTS.Helpers;
+using DTS.Models.DTO;
+using DTS.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -8,17 +10,20 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auth.Controller
+namespace DTS.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     class AuthController : ControllerBase
     {
         private readonly IAuthServiceWrapper services;
+        private readonly ITokenHelper tokenHelper;
 
-        public AuthController(IAuthServiceWrapper services)
+        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection)
         {
             this.services = services;
+            var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
+            this.tokenHelper = new TokenHelper(tokenSettings.Secret, tokenSettings.ExpirationTime);
         }
 
         [HttpPost("signin")]
@@ -57,14 +62,14 @@ namespace Auth.Controller
             {
                 var token = await services.Login.HandleAsync(new LoginQuery(
                     credentials.Login,
-                    credentials.Password
+                    credentials.Password,
+                    tokenHelper
                     ));
                 if (token == null)
                 {
                     return Unauthorized($"{credentials.Login} is not Active");
                 }
-                var tokenHandler = new JwtSecurityTokenHandler();
-                return Ok(tokenHandler.WriteToken(token));
+                return Ok(tokenHelper.WriteToken(token));
 
             } catch (Exception e)
             {

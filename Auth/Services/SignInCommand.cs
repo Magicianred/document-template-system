@@ -1,4 +1,4 @@
-﻿using Auth.Helpers;
+﻿using DTS.Helpers;
 using DAL.Models;
 using DAL.Repositories;
 using DTS.Services;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Auth.Services
+namespace DTS.Services
 {
     public sealed class SignInCommand : ICommand
     {
@@ -29,9 +29,9 @@ namespace Auth.Services
 
     public sealed class SignInCommandHandler : ICommandHandlerAsync<SignInCommand>
     {
-        private readonly RepositoryWrapper repository;
+        private readonly IRepositoryWrapper repository;
 
-        public SignInCommandHandler(RepositoryWrapper repository)
+        public SignInCommandHandler(IRepositoryWrapper repository)
         {
             this.repository = repository;
         }
