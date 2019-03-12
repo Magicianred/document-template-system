@@ -18,5 +18,11 @@ namespace DAL.Repositories
             var type = await FindByConditionAsync(t => t.Id == id);
             return type.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
+
+        public async Task<UserType> FindTypeByName(string name)
+        {
+            var type = await FindByConditionAsync(t => t.Name.Equals(name));
+            return type.FirstOrDefault() ?? throw new KeyNotFoundException();
+        }
     }
 }

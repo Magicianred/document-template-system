@@ -1,4 +1,5 @@
-﻿using DAL.Repositories;
+﻿using DAL.Models;
+using DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,12 @@ namespace DTS.API.Services
     public sealed class ChangeUserTypeCommand : ICommand
     {
         public int Id { get; }
-        public string role { get; }
+        public string Type { get; }
 
-        public ChangeUserTypeCommand(int id, string role)
+        public ChangeUserTypeCommand(int id, string type)
         {
             Id = id;
-            this.role = role;
+            this.Type = type;
         }
     }
 
@@ -28,11 +29,14 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
-        public Task HandleAsync(ChangeUserTypeCommand command)
+        public async Task HandleAsync(ChangeUserTypeCommand command)
         {
-            
-        }
+            UserType userType = await repository.UserType.FindTypeByName(command.Type);
+            User user = await repository.Users.FindUserByIDAsync(command.Id);
 
-        private async Task<UserType>
+            user.Type = userType;
+
+            await repository.Users.UpdateAsync(user);
+        }
     }
 }
