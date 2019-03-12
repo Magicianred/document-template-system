@@ -31,14 +31,14 @@ export class AdminTemplatePanelComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  switchState(id: string) {
-    let query = `https://localhost:44346/api/templates/${id + 1}`;
+  switchState(id: string, state: string, name:string) {
+    
+    let query = `https://localhost:44346/api/templates/${id}`;
 
-    if (this.templates[id].templateState == "Inactive") {
-      let template = this.templates[id];
+    if (state == "Inactive") {
       let updateData = new TemplateDataUpdate();
       updateData.id = +id;
-      updateData.name = template.name;
+      updateData.name = name;
       updateData.ownerId = 2;
       updateData.stateId = 1;
       this.apiClient.put(query, updateData).subscribe(result => {
@@ -52,15 +52,16 @@ export class AdminTemplatePanelComponent implements OnInit {
     }
   }
 
-  changeOwner(id: string) {
-    let template = this.templates[id];
+  changeOwner(event: any) {
+    let templateIndex = event.path[1].rowIndex - 1;
+    let template = this.templates[templateIndex];
     let updateData = new TemplateDataUpdate();
-    let query = `https://localhost:44346/api/templates/${id + 1}`;
-    updateData.id = +id;
+    let query = `https://localhost:44346/api/templates/${template.id}`;
+    updateData.id = template.id;
     updateData.name = template.name;
     updateData.ownerId = +prompt("New owner id?");
 
-    if (this.templates[id].templateState == "Active") {
+    if (template.templateState == "Active") {
       updateData.stateId = 1;
       this.apiClient.put(query, updateData).subscribe(result => {
         this.getTemplates();
@@ -83,17 +84,16 @@ export class AdminTemplatePanelComponent implements OnInit {
   }
 
   switchVersionState(id: string, versionState: string) {
-    console.log(versionState)
     if (versionState == "Active") {
       let query = `https://localhost:44346/api/templates/version/${id}`
       this.apiClient.delete(query).subscribe(result => {
-        this.loadTemplateVersions(id);
+        this.loadTemplateVersions(this.pickedTemplate.id.toString());
       }, error => console.error(error));
     }
     else {
       let query = `https://localhost:44346/api/templates/${this.pickedTemplate.id}/${id}`
       this.apiClient.put(query, "Empty Body").subscribe(result => {
-        this.loadTemplateVersions(id);
+        this.loadTemplateVersions(this.pickedTemplate.id.toString());
       }, error => console.error(error));
     }
   }

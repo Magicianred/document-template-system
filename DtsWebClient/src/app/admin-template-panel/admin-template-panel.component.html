@@ -16,9 +16,9 @@
           <td> {{ template.id }} </td>
           <td (click)="loadTemplateVersions(template.id)" class="clickable" id="{{template.id}}"> {{ template.name }} </td>
           <td>{{ template.versionCount }}</td>
-          <td (click)="changeOwner(template.id - 1)" class="clickable"> {{ template.owner.name }} {{ template.owner.surname }} {{ template.owner.email }}</td>
+          <td (click)="changeOwner($event)" class="clickable"> {{ template.owner.name }} {{ template.owner.surname }} {{ template.owner.email }}</td>
           <td>{{ template.templateState }}</td>
-          <td><button type="submit" class="btn btn-primary" (click)="switchState(template.id - 1)">Switch State</button></td>
+          <td><button type="submit" class="btn btn-primary" (click)="switchState(template.id, template.templateState, template.name)">Switch State</button></td>
 
         </tr>
       </tbody>
