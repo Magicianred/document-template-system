@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.Models;
 using DAL.Repositories;
-using DTS.Services;
+using DTS.API.Services;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DTS.Services
+namespace DTS.Auth.Services
 {
     public class AuthServiceWrapper : IAuthServiceWrapper
     {

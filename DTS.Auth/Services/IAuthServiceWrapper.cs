@@ -1,4 +1,4 @@
-﻿using DTS.Services;
+﻿using DTS.API.Services;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DTS.Services
+namespace DTS.Auth.Services
 {
     public interface IAuthServiceWrapper
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DTS.Services
+namespace DTS.API.Services
 {
     public interface IQueryHandlerAsync<T, R> where T : IQuery
     {

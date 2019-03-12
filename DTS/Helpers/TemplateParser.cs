@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DTS.Helpers
+namespace DTS.API.Helpers
 {
     public class TemplateParser
     {
