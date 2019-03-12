@@ -23,7 +23,6 @@ export class FormPickerComponent implements OnInit {
   }
   ngOnInit() {
     this.getTemplates();
-    this.gotOutput = false;
     this.gotForm = false;
   }
 
