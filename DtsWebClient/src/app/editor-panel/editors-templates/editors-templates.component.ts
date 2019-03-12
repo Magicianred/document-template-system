@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Template } from '../_models/template'
+import { Template } from '../../_models/template'
 
 @Component({
   selector: 'app-editors-templates',
@@ -13,7 +13,7 @@ export class EditorsTemplatesComponent implements OnInit {
   templates: Template[];
 
   @Input()
-  editorsId: string;
+  editorId: string;
 
   @Output() sendChosenId: EventEmitter<string> = new EventEmitter<string>()
 
@@ -26,7 +26,7 @@ export class EditorsTemplatesComponent implements OnInit {
   }
   
   getTemplates() {
-    let query = `https://localhost:44346/api/templates/editor/${this.editorsId}`
+    let query = `https://localhost:44346/api/templates/editor/${this.editorId}`
     this.apiClient.get<Template[]>(query).subscribe(result => {
       this.templates = result;
     }, error => console.error(error));
