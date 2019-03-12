@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL\DAL.csproj" />
-    <ProjectReference Include="..\DTS\DTS.csproj" />
+    <ProjectReference Include="..\DAL\DTS.DAL.csproj" />
+    <ProjectReference Include="..\DTS\DTS.API.csproj" />
   </ItemGroup>
 
 </Project>

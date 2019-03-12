@@ -97,7 +97,8 @@ namespace DTS.Controllers
                 {
                     CreationTime = tempVersion.Date,
                     TemplateVersion = tempVersion.Content,
-
+                    Id = tempVersion.Id,
+                    VersionState = tempVersion.State.State,
                     Creator = new UserDTO
                     {
                         Name = tempVersion.Creator.Name,
@@ -356,7 +357,12 @@ namespace DTS.Controllers
 
                 template.Content = new JsonInputParser().FillTemplateFromJson(data, template);
 
-                return Ok(template.Content);
+                var contentDTO = new TemplateContent
+                {
+                    Content = template.Content
+                };
+
+                return Ok(contentDTO);
             } catch (Exception)
             {
                 return BadRequest("Template does not exist or is inactive");
