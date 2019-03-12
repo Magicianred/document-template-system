@@ -15,6 +15,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using DTS;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace DTS
 {
@@ -33,6 +36,20 @@ namespace DTS
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            var tokenSettingsSection = Configuration.GetSection("TokenConfig");
+            var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings.Secret));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => 
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = key,
+                        RequireSignedTokens = true,
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true
+                        };
+                });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -49,6 +66,7 @@ namespace DTS
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
