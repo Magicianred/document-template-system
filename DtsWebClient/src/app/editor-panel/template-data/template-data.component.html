@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let version of template.versions">
+        <tr *ngFor="let version of template.versions" class="clickable">
           <td (click)="showVersion($event)">{{ version.id }}</td>
           <td (click)="showVersion($event)">{{ version.creationTime }}</td>
           <td (click)="showVersion($event)">{{ version.creator.name}} {{ version.creator.surname }}</td>
