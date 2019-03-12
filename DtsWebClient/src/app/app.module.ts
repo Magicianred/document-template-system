@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { EditorsTemplatesComponent } from './editors-templates/editors-templates.component';
 import { TemplateDataComponent } from './template-data/template-data.component';
 import { FormPickerComponent } from './form-picker/form-picker.component';
+import { AdminTemplatePanelComponent } from './admin-template-panel/admin-template-panel.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { FormPickerComponent } from './form-picker/form-picker.component';
     EditorPanelComponent,
     EditorsTemplatesComponent,
     TemplateDataComponent,
-    FormPickerComponent
+    FormPickerComponent,
+    AdminTemplatePanelComponent
   ],
   imports: [
     BrowserModule,

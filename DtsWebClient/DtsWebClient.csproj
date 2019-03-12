@@ -27,6 +27,7 @@
   <ItemGroup>
     <None Remove="src\app\templateContent.ts" />
     <None Remove="src\app\_models\template.ts" />
+    <None Remove="src\app\_models\templateDataUpdate.ts" />
     <None Remove="src\app\_models\templateVersion.ts" />
     <None Remove="src\app\_models\Version.ts" />
   </ItemGroup>
@@ -34,6 +35,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\app\_models\templateContent.ts" />
     <TypeScriptCompile Include="src\app\_models\template.ts" />
+    <TypeScriptCompile Include="src\app\_models\templateDataUpdate.ts" />
     <TypeScriptCompile Include="src\app\_models\templateVersion.ts" />
     <TypeScriptCompile Include="src\app\_models\Version.ts" />
   </ItemGroup>

@@ -30,7 +30,7 @@ export class EditorsTemplatesComponent implements OnInit {
   }
 
   loadTemplate(id: string) {
-    this.getTemplate.emit(id)
+    //this.getTemplate.emit(id)
   }
 
 
