@@ -74,7 +74,7 @@ namespace DTS
             services.AddSwaggerGen(setupAction =>
             {
                 setupAction.SwaggerDoc(
-                    "DTSSpecification",
+                    "DTSAPISpecification",
                 new Microsoft.OpenApi.Models.OpenApiInfo()
                 {
                     Title = "DTSAPI",
@@ -103,7 +103,7 @@ namespace DTS
             app.UseSwaggerUI(setupAction =>
             {
                 setupAction.SwaggerEndpoint(
-                    "/swagger/DTSSpecification/swagger.json",
+                    "/swagger/DTSAPISpecification/swagger.json",
                     "Document Template System API");
                 setupAction.RoutePrefix = "";
             });
