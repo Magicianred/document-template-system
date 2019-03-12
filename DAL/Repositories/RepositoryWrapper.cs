@@ -16,7 +16,6 @@ namespace DAL.Repositories
         private IUserStatusRepository _userStatus;
         private IUserTypeRepository _userType;
         private ITemplateStateRepository _templateState;
-        private IAuthorizationRepository _authorizations;
 
         public IUserRepository Users
         {
@@ -87,18 +86,6 @@ namespace DAL.Repositories
                     _templateState = new TemplateStateRepository(_context);
                 }
                 return _templateState;
-            }
-        }
-
-        public IAuthorizationRepository Authorizations
-        {
-            get
-            {
-                if (_authorizations == null)
-                {
-                    _authorizations = new AuthorizationRepository(_context);
-                }
-                return _authorizations;
             }
         }
 

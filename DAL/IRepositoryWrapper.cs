@@ -13,6 +13,5 @@ namespace DAL.Repositories
         ITemplateRepository Templates { get; }
         ITemplateVersionRepository TemplatesVersions { get; }
         ITemplateStateRepository TemplateState { get; }
-        IAuthorizationRepository Authorizations { get; }
     }
 }
