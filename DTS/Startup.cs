@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DTS
 {
     public class Startup
@@ -32,6 +33,17 @@ namespace DTS
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc(
+                    "DTSSpecification",
+                new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "DTSAPI",
+                    Version = "1"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,8 +57,16 @@ namespace DTS
             {
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(setupAction =>
+            {
+                setupAction.SwaggerEndpoint(
+                    "/swagger/DTSSpecification/swagger.json",
+                    "Document Template System API");
+                setupAction.RoutePrefix = "";
+            });
             app.UseMvc();
         }
     }
