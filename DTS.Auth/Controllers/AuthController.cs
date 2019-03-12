@@ -1,20 +1,18 @@
-﻿using DTS.Helpers;
-using DTS.Models.DTO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DTS.Auth.Helpers;
+using DTS.Auth.Models.DTO;
 using DTS.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DTS.Controller
+namespace DTS.Auth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    class AuthController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly IAuthServiceWrapper services;
         private readonly ITokenHelper tokenHelper;
@@ -26,6 +24,11 @@ namespace DTS.Controller
             this.tokenHelper = new TokenHelper(tokenSettings.Secret, tokenSettings.ExpirationTime);
         }
 
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return Ok("Working...");
+        }
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInForm form)
         {
@@ -44,7 +47,8 @@ namespace DTS.Controller
                     form.Email
                     ));
                 return Ok();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -57,7 +61,7 @@ namespace DTS.Controller
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 var token = await services.Login.HandleAsync(new LoginQuery(
@@ -71,7 +75,8 @@ namespace DTS.Controller
                 }
                 return Ok(tokenHelper.WriteToken(token));
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

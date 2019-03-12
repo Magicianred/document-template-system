@@ -21,7 +21,6 @@ namespace DAL.Models
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserStatus> UserStatus { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
-        public virtual DbSet<Authorization> Authorizations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -153,7 +152,7 @@ namespace DAL.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
-                    .HasMaxLength(30)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.StatusId).HasColumnName("status_id");

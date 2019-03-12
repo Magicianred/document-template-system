@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DTS.Helpers
+namespace DTS.Auth.Helpers
 {
     public interface ITokenHelper
     {

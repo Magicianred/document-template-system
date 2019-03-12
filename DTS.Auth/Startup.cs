@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Repositories;
+using DTS.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DAL.Data;
-using DAL.Repositories;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-using DTS;
-using System.Reflection;
 
-namespace DTS
+namespace DTS.Auth
 {
     public class Startup
     {
@@ -27,11 +25,11 @@ namespace DTS
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        { 
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+        {
             services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IAuthServiceWrapper, AuthServiceWrapper>();
             var tokenSettingsSection = Configuration.GetSection("TokenConfig");
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
             services.Configure<TokenConfig>(tokenSettingsSection);
@@ -40,7 +38,7 @@ namespace DTS
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -53,7 +51,7 @@ namespace DTS
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

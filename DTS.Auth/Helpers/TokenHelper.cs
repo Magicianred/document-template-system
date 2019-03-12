@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTS.Helpers
+namespace DTS.Auth.Helpers
 {
     public class TokenHelper : ITokenHelper
     {

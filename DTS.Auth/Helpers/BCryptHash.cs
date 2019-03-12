@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BCrypt.Net;
 
-namespace DTS.Helpers
+namespace DTS.Auth.Helpers
 {
     public class BCryptHash : IHashPassword
     {
