@@ -14,6 +14,7 @@ import { EditorsTemplatesComponent } from './editor-panel/editors-templates/edit
 import { TemplateDataComponent } from './editor-panel/template-data/template-data.component';
 import { FormPickerComponent } from './form-picker/form-picker.component';
 import { AdminTemplatePanelComponent } from './admin-template-panel/admin-template-panel.component';
+import { TemplateAdderComponent } from './editor-panel/template-adder/template-adder.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AdminTemplatePanelComponent } from './admin-template-panel/admin-templa
     EditorsTemplatesComponent,
     TemplateDataComponent,
     FormPickerComponent,
-    AdminTemplatePanelComponent
+    AdminTemplatePanelComponent,
+    TemplateAdderComponent
   ],
   imports: [
     BrowserModule,
