@@ -12,5 +12,6 @@ namespace DTS.Auth.Services
     {
         IQueryHandlerAsync<LoginQuery, SecurityToken> Login { get; }
         ICommandHandlerAsync<SignInCommand> SignIn { get; }
+        ICommandHandlerAsync<ChangeUserLoginAndPasswordCommand> ChangeUserLoginAndPassword { get; }
     }
 }

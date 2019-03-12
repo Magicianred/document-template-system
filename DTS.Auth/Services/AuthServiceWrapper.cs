@@ -13,6 +13,7 @@ namespace DTS.Auth.Services
     {
         private IQueryHandlerAsync<LoginQuery, SecurityToken> _login;
         private ICommandHandlerAsync<SignInCommand> _signIn;
+        private ICommandHandlerAsync<ChangeUserLoginAndPasswordCommand> _changeLoginPassword;
         private IRepositoryWrapper _repository;
 
         public IQueryHandlerAsync<LoginQuery, SecurityToken> Login
@@ -36,6 +37,18 @@ namespace DTS.Auth.Services
                     _signIn = new SignInCommandHandler(_repository);
                 }
                 return _signIn;
+            }
+        }
+
+        public ICommandHandlerAsync<ChangeUserLoginAndPasswordCommand> ChangeUserLoginAndPassword
+        {
+            get
+            {
+                if (_changeLoginPassword == null)
+                {
+                    _changeLoginPassword = new ChangeUserLoginAndPasswordCommandHandler(_repository);
+                }
+                return _changeLoginPassword;
             }
         }
 
