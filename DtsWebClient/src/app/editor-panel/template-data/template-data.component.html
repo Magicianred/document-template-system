@@ -26,5 +26,9 @@
 <div [hidden]="!templateChosen">
   <app-ngx-editor [placeholder]="' '" [spellcheck]="true" [(ngModel)]="htmlContent"></app-ngx-editor>
   <button type="submit" class="btn btn-primary" (click)="saveNewTemplateVersion()">Submit new Version</button>
-  <button type="submit" class="btn btn-primary" (click)="showVersions()">Back to templates</button>
+  <button type="submit" class="btn btn-primary" (click)="showVersions()">Back to version</button>
+</div>
+
+<div>
+  <button type="submit" class="btn btn-primary" (click)="goBackToTemplates()">Back to templates</button>
 </div>

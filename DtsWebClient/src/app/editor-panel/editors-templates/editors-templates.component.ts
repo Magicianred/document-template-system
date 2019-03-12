@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Template } from '../_models/template'
 
@@ -8,29 +8,32 @@ import { Template } from '../_models/template'
   styleUrls: ['./editors-templates.component.css']
 })
 export class EditorsTemplatesComponent implements OnInit {
-  baseUrl: string;
+
   apiClient: HttpClient;
   templates: Template[];
 
-  @Output() getTemplate: EventEmitter<string> = new EventEmitter<string>()
+  @Input()
+  editorsId: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  @Output() sendChosenId: EventEmitter<string> = new EventEmitter<string>()
+
+  constructor(http: HttpClient) {
     this.apiClient = http;
-    this.baseUrl = baseUrl;
+
   }
   ngOnInit() {
     this.getTemplates();
   }
-
+  
   getTemplates() {
-    this.apiClient.get<Template[]>("https://localhost:44346/api/templates/editor/2").subscribe(result => {
-      console.log(result);
+    let query = `https://localhost:44346/api/templates/editor/${this.editorsId}`
+    this.apiClient.get<Template[]>(query).subscribe(result => {
       this.templates = result;
     }, error => console.error(error));
   }
-
+  
   loadTemplate(id: string) {
-    //this.getTemplate.emit(id)
+    this.sendChosenId.emit(id);
   }
 
 

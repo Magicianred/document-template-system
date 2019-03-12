@@ -1,2 +1,5 @@
-<app-ngx-editor [placeholder]="'testujem'" [spellcheck]="true" [(ngModel)]="htmlContent" ></app-ngx-editor>
-<button type="submit" class="btn btn-primary" (click)="saveNewTemplate()">Submit</button>
+<div class="template-list-container" *ngIf="!openData">
+  <app-editors-templates [editorsId] ="editorsId" (sendChosenId)="loadTemplate($event)"></app-editors-templates>
+</div>
+
+<app-template-data *ngIf="openData" [tempId]="tempId" (back)="showTemplates()"></app-template-data>
