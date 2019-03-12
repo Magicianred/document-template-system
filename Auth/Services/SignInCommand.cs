@@ -41,7 +41,7 @@ namespace Auth.Services
             int suspendedStatusId = 2;
             int defoultUserTypeId = 3;
 
-            if (await repository.Authorizations.IsExistByLogin(command.Login))
+            if (await repository.Users.IsExistByLogin(command.Login))
             {
                 throw new InvalidOperationException("Login already exist");
             }

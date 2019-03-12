@@ -38,11 +38,11 @@ namespace Auth.Services
         {
             try
             {
-                Authorization auth = await repository.Authorizations.FindByUserLogin(query.Login);
-                if (validatePassword(auth, query.Password))
+                var user = await repository.Users.FindByUserLogin(query.Login);
+                if (validatePassword(user, query.Password))
                 {
                     ITokenHelper tokenHandler = new TokenHelper(secret);
-                    return tokenHandler.GetNewToken(auth.user.Id, auth.user.Type.Name);
+                    return tokenHandler.GetNewToken(user.Id, user.Type.Name);
                 }
                 throw new KeyNotFoundException("Password incorrect");
             } catch (InvalidOperationException)
@@ -51,10 +51,10 @@ namespace Auth.Services
             }
         }
 
-        private bool validatePassword(Authorization auth, string password)
+        private bool validatePassword(User user, string password)
         {
             IHashPassword hashHandler = new BCryptHash();
-            return hashHandler.Verify(password, auth.Pasword);
+            return hashHandler.Verify(password, user.Password);
         }
     }
 }
