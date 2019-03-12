@@ -13,7 +13,8 @@ export class EditorPanelComponent implements OnInit {
   templates: Template[];
   openData: boolean;
   tempId: string;
-  editorsId: string;
+  editorId: string;
+  createNew: boolean;
 
   constructor(http: HttpClient) {
     this.apiClient = http;
@@ -23,13 +24,13 @@ export class EditorPanelComponent implements OnInit {
   }
 
   getEditorsID() {
-    this.editorsId = prompt("Provide Editors ID");
+    this.editorId = prompt("Provide Editors ID");
   }
 
   saveNewTemplate() {
     let templateName = prompt("New template name?");
     let templateData = {
-      authorId: this.editorsId,
+      authorId: this.editorId,
       templateName: templateName,
       template: this.htmlContent
     }
