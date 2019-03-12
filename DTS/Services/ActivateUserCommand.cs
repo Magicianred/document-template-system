@@ -17,7 +17,7 @@ namespace DTS.API.Services
     public sealed class ActivateUserCommandHandler : ICommandHandlerAsync<ActivateUserCommand>
     {
         private readonly IRepositoryWrapper repository;
-        private readonly int _activeUserStatusId = 1;
+        private readonly string _activeUserStatus = "Active";
 
         public ActivateUserCommandHandler(IRepositoryWrapper repository)
         {
@@ -28,7 +28,7 @@ namespace DTS.API.Services
         {
             User user = await repository.Users.FindUserByIDAsync(command.Id);
             UserStatus activeStatus = await repository.UserStatus
-                .FindStatusById(_activeUserStatusId);
+                .FindStatusByName(_activeUserStatus);
 
             user.Status = activeStatus;
             await repository.Users.UpdateAsync(user);

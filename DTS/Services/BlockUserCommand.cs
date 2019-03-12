@@ -17,7 +17,7 @@ namespace DTS.API.Services
     public sealed class BlockUserCommandHandler : ICommandHandlerAsync<BlockUserCommand>
     {
         private readonly IRepositoryWrapper repository;
-        private readonly int _activeUserStatusId = 3;
+        private readonly string _activeUserStatus = "Blocked";
 
         public BlockUserCommandHandler(IRepositoryWrapper repository)
         {
@@ -28,7 +28,7 @@ namespace DTS.API.Services
         {
             User user = await repository.Users.FindUserByIDAsync(command.Id);
             UserStatus activeStatus = await repository.UserStatus
-                .FindStatusById(_activeUserStatusId);
+                .FindStatusByName(_activeUserStatus);
 
             user.Status = activeStatus;
             await repository.Users.UpdateAsync(user);
