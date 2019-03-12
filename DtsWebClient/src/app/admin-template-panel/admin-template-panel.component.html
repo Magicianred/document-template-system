@@ -5,19 +5,19 @@
         <tr>
           <th>Id</th>
           <th>Name</th>
-          <th>Template State</th>
           <th>Version Count</th>
           <th>Owner</th>
+          <th>Template State</th>
           <th>Activate/Deactivate</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let template of templates">
           <td> {{ template.id }} </td>
-          <td (click)="loadTemplateVersions(template.id)" id="{{template.id}}"> {{ template.name }} </td>
-          <td>{{ template.templateState }}</td>
+          <td (click)="loadTemplateVersions(template.id)" class="clickable" id="{{template.id}}"> {{ template.name }} </td>
           <td>{{ template.versionCount }}</td>
-          <td (click)="changeOwner(template.id - 1)">{{ template.owner.name }} {{ template.owner.surname }} {{ template.owner.email }}</td>
+          <td (click)="changeOwner(template.id - 1)" class="clickable"> {{ template.owner.name }} {{ template.owner.surname }} {{ template.owner.email }}</td>
+          <td>{{ template.templateState }}</td>
           <td><button type="submit" class="btn btn-primary" (click)="switchState(template.id - 1)">Switch State</button></td>
 
         </tr>
@@ -41,7 +41,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let version of pickedTemplate.versions">
+        <tr *ngFor="let version of pickedTemplate.versions" class="clickable">
           <td (click)="showVersion($event)">{{ version.id }}</td>
           <td (click)="showVersion($event)">{{ version.creationTime }}</td>
           <td (click)="showVersion($event)">{{ version.creator.name}} {{ version.creator.surname }}</td>
@@ -51,4 +51,5 @@
       </tbody>
     </table>
   </div>
+  <td><button type="submit" class="btn btn-primary" (click)="templateChosen = !templateChosen">Back to templates</button></td>
 </div>
