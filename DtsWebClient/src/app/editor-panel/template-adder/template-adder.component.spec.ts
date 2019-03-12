@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProcessDetailsComponent } from './processdetails.component';
+import { TemplateAdderComponent } from './template-adder.component';
 
-describe('ProcessdetailsComponent', () => {
-  let component: ProcessDetailsComponent;
-  let fixture: ComponentFixture<ProcessDetailsComponent>;
+describe('TemplateAdderComponent', () => {
+  let component: TemplateAdderComponent;
+  let fixture: ComponentFixture<TemplateAdderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProcessDetailsComponent ]
+      declarations: [ TemplateAdderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProcessDetailsComponent);
+    fixture = TestBed.createComponent(TemplateAdderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
