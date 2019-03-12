@@ -16,7 +16,7 @@ namespace DAL.Repositories
         private IUserStatusRepository _userStatus;
         private IUserTypeRepository _userType;
         private ITemplateStateRepository _templateState;
-        
+
         public IUserRepository Users
         {
             get
