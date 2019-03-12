@@ -152,7 +152,7 @@ namespace DAL.Models
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
-                    .HasMaxLength(30)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.StatusId).HasColumnName("status_id");
