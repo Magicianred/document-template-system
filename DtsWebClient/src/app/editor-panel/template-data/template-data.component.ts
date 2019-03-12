@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TemplateVersions } from '../_models/templateVersion'
+import { TemplateVersions } from '../../_models/templateVersion'
 import { document } from 'ngx-bootstrap';
-import { template } from '@angular/core/src/render3';
+
 
 
 @Component({
@@ -21,6 +21,8 @@ export class TemplateDataComponent implements OnInit {
 
   @Input()
   tempId: string;
+  @Input()
+  editorId: string;
 
   @Output() back: EventEmitter<string> = new EventEmitter<string>()
 
@@ -55,25 +57,22 @@ export class TemplateDataComponent implements OnInit {
   }
 
   saveNewTemplateVersion() {
-    let authorId = 2;
-    let templateName = "test50500";
     let templateData = {
-      authorId: authorId,
-      templateName: templateName,
+      authorId: this.editorId,
       template: this.htmlContent
     }
 
     let query = `https://localhost:44346/api/templates/template/${this.tempId}/version`;
 
     this.apiClient.put(query, templateData).subscribe(result => {
-      console.log(result)
+      this.templateChosen = false;
+      this.getTemplate();
     }, error => console.error(error));
-    this.templateChosen = false;
-    this.getTemplate();
+    
   }
 
   goBackToTemplates() {
-    this.back.emit("test")
+    this.back.emit("")
   }
 
 }
