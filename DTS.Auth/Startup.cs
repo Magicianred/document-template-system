@@ -36,6 +36,17 @@ namespace DTS.Auth
             services.AddSingleton<IConfiguration>(tokenSettingsSection);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc(
+                    "DTSAuthSpecification",
+                new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "DTSAuthAPI",
+                    Version = "1"
+                });
+            });
         }
 
 
@@ -51,6 +62,14 @@ namespace DTS.Auth
             }
 
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(setupAction =>
+            {
+                setupAction.SwaggerEndpoint(
+                    "/swagger/DTSAuthSpecification/swagger.json",
+                    "Document Template System API");
+                setupAction.RoutePrefix = "";
+            });
             app.UseMvcWithDefaultRoute();
         }
     }
