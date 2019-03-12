@@ -1,4 +1,5 @@
 ﻿using DTS.Services;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +10,7 @@ namespace Auth.Services
 {
     public interface IAuthServiceWrapper
     {
-        IQueryHandlerAsync<LoginQuery, JwtSecurityToken> Login { get; }
+        IQueryHandlerAsync<LoginQuery, SecurityToken> Login { get; }
         ICommandHandlerAsync<SignInCommand> SignIn { get; }
     }
 }

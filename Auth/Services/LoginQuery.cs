@@ -41,6 +41,11 @@ namespace Auth.Services
                 var user = await repository.Users.FindByUserLogin(query.Login);
                 if (validatePassword(user, query.Password))
                 {
+                    if (!user.Status.Name.Equals("Active"))
+                    {
+                        return null;
+                    }
+
                     ITokenHelper tokenHandler = new TokenHelper(secret);
                     return tokenHandler.GetNewToken(user.Id, user.Type.Name);
                 }
