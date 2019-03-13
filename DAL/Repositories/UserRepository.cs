@@ -27,7 +27,11 @@ namespace DAL.Repositories
 
         public async Task<IEnumerable<User>> FindUserByCondition(Expression<Func<User, bool>> expression)
         {
-            var users = await FindByConditionAsync(expression);
+            var users = await DTSContext.User
+                .Include(u => u.Status)
+                .Include(u => u.Type)
+                .Where(expression)
+                .ToListAsync();
             return users.DefaultIfEmpty() ?? throw new InvalidOperationException();
         }
 
@@ -36,7 +40,7 @@ namespace DAL.Repositories
             var users = await FindAllUsersAsync();
             var user = users
                 .Where(u => u.Login.Equals(login));
-            return user.FirstOrDefault() ?? throw new KeyNotFoundException();
+            return user.FirstOrDefault() ?? throw new KeyNotFoundException("User not dound");
         }
 
         public async Task<User> FindUserByIDAsync(int id)
@@ -44,7 +48,7 @@ namespace DAL.Repositories
             var users = await FindAllUsersAsync();
             var user = users
                 .Where(u => u.Id == id);
-            return user.FirstOrDefault() ?? throw new KeyNotFoundException();
+            return user.FirstOrDefault() ?? throw new KeyNotFoundException("User not dound");
         }
 
         public async Task<bool> Exists(int id)
