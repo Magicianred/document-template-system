@@ -15,7 +15,7 @@ using DTS.API.Services;
 namespace DTS.API.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -28,8 +28,8 @@ namespace DTS.API.Controllers
             this.userService = userService;
         }
 
-        // GET: api/Users
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers()
         {
             try
@@ -44,8 +44,8 @@ namespace DTS.API.Controllers
             }
         }
 
-        // GET: api/Users/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -64,6 +64,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet("status/{status}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsersByStatus(string status)
         {
             try
@@ -78,6 +79,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet("type/{type}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsersByType(string type)
         {
             try
@@ -92,7 +94,6 @@ namespace DTS.API.Controllers
             }
         }
 
-        // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangeUserPersonalData([FromRoute] int id, [FromBody] UserDTO user)
         {
@@ -125,6 +126,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpPut("{id}/type/{type}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserType(int id, string type)
         {
             var command = new ChangeUserTypeCommand(id, type);
@@ -139,6 +141,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpPut("{id}/activate")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ActivateUser(int id)
         {
             if (!ModelState.IsValid)
@@ -157,8 +160,8 @@ namespace DTS.API.Controllers
             }
         }
 
-        // DELETE: api/Users/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> BlockUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
