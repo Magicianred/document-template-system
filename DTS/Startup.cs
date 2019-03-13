@@ -18,7 +18,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using DTS.API.Services;
 
 namespace DTS
 {
@@ -50,6 +50,7 @@ namespace DTS
                 });
             });
 
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

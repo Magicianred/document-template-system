@@ -10,6 +10,7 @@ using DAL.Models;
 using DAL.Repositories;
 using DTS.API.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using DTS.API.Services;
 
 namespace DTS.API.Controllers
 {
@@ -19,41 +20,32 @@ namespace DTS.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IRepositoryWrapper repository;
+        private readonly IUserService userService;
 
-        public UsersController(IRepositoryWrapper repository)
+        public UsersController(IRepositoryWrapper repository, IUserService userService)
         {
             this.repository = repository;
+            this.userService = userService;
         }
 
-        // GET: api/Users
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers()
         {
             try
             {
-                var users = await repository.Users.FindAllUsersAsync();
-                var usersDto = new List<ExtendedUserDTO>();
-                foreach (var user in users)
-                {
-                    usersDto.Add(new ExtendedUserDTO
-                    {
-                        Id = user.Id,
-                        Name = user.Name,
-                        Surname = user.Surname,
-                        Email = user.Email,
-                        Status = user.Status.Name,
-                        Type = user.Type.Name
-                    });
-                }
-                return Ok(usersDto);
-            } catch (Exception)
+                var query = new GetUsersQuery();
+                var users = await userService.GetUsersQuery.HandleAsync(query);
+                return Ok(users);
+            }
+            catch (InvalidOperationException)
             {
                 return NotFound();
             }
         }
 
-        // GET: api/Users/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -62,76 +54,115 @@ namespace DTS.API.Controllers
             }
             try
             {
-                var user = await repository.Users.FindUserByIDAsync(id);
-                var userDto = new ExtendedUserDTO()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                    Status = user.Status.Name,
-                    Type = user.Type.Name
-                };
-                return Ok(userDto);
-            } catch (Exception)
+                var query = new GetUserByIdQuery(id);
+                var user = await userService.GetUserByIdQuery.HandleAsync(query);
+                return Ok(user);
+            } catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpGet("status/{status}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUsersByStatus(string status)
+        {
+            try
+            {
+                var query = new GetUsersByStatusQuery(status);
+                var users = await userService.GetUsersByStatusQuery.HandleAsync(query);
+                return Ok(users);
+            } catch (InvalidOperationException)
+            {
+                return NotFound($"No users with {status} status or is invalid");
+            }
+        }
+
+        [HttpGet("type/{type}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUsersByType(string type)
+        {
+            try
+            {
+                var query = new GetUsersByTypeQuery(type);
+                var users = await userService.GetUsersByTypeQuery.HandleAsync(query);
+                return Ok(users);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound($"No users with {type} type or is invalid");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ChangeUserPersonalData([FromRoute] int id, [FromBody] UserDTO user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+            var command = new ChangeUserPersonalDataCommand(
+                id,
+                user.Name,
+                user.Surname,
+                user.Email
+                );
+
+            try
+            {
+                await userService.ChangeUserPersonalDataCommand.HandleAsync(command);
+                return NoContent();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(503, "Server overload try again later");
+            }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPut("{id}/type/{type}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeUserType(int id, string type)
+        {
+            var command = new ChangeUserTypeCommand(id, type);
+            try
+            {
+                await userService.ChangeUserTypeCommand.HandleAsync(command);
+                return NoContent();
+            } catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPut("{id}/activate")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActivateUser(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var command = new ActivateUserCommand(id);
+                await userService.ActivateUserCommand.HandleAsync(command);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
         }
 
-        // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            
-
-            try
-            {
-                await repository.Users.UpdateAsync(user);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await repository.Users.Exists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Users
-        [HttpPost]
-        public async Task<IActionResult> PostUser([FromBody] User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-           
-            await repository.Users.CreateAsync(user);
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        }
-
-        // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BlockUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -139,22 +170,10 @@ namespace DTS.API.Controllers
             }
             try
             {
-                var user = await repository.Users.FindUserByIDAsync(id);
-                
-                user.Status = await repository.UserStatus.FindStatusById(3); //3 - BLOCKED
-                var userDto = new ExtendedUserDTO()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                    Status = user.Status.Name,
-                    Type = user.Type.Name
-                };
-
-                await repository.Users.UpdateAsync(user);
-                return Ok(userDto);
-            } catch (Exception)
+                var command = new BlockUserCommand(id);
+                await userService.BlockUserCommand.HandleAsync(command);
+                return Ok();
+            } catch (KeyNotFoundException)
             {
                 return NotFound();
             }

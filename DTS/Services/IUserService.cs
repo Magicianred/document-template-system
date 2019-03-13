@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTS.API.Services
 {
-    interface IUserService
+    public interface IUserService
     {
         ICommandHandlerAsync<ActivateUserCommand> ActivateUserCommand { get;}
         ICommandHandlerAsync<BlockUserCommand> BlockUserCommand { get; }
@@ -15,5 +15,6 @@ namespace DTS.API.Services
         IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> GetUsersByStatusQuery { get; }
         IQueryHandlerAsync<GetUsersByTypeQuery, List<ExtendedUserDTO>> GetUsersByTypeQuery { get; }
         IQueryHandlerAsync<GetUsersQuery, List<ExtendedUserDTO>> GetUsersQuery { get; }
+        IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> GetUserByIdQuery { get; }
     }
 }
