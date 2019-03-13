@@ -157,9 +157,8 @@ namespace DTS.API.Controllers
             }
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        [HttpPut("{id}/activate")]
+        public async Task<IActionResult> ActivateUser(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -167,22 +166,30 @@ namespace DTS.API.Controllers
             }
             try
             {
-                var user = await repository.Users.FindUserByIDAsync(id);
-                
-                user.Status = await repository.UserStatus.FindStatusById(3); //3 - BLOCKED
-                var userDto = new ExtendedUserDTO()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                    Status = user.Status.Name,
-                    Type = user.Type.Name
-                };
+                var command = new ActivateUserCommand(id);
+                await userService.ActivateUserCommand.HandleAsync(command);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
 
-                await repository.Users.UpdateAsync(user);
-                return Ok(userDto);
-            } catch (Exception)
+        // DELETE: api/Users/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> BlockUser([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var command = new BlockUserCommand(id);
+                await userService.BlockUserCommand.HandleAsync(command);
+                return Ok();
+            } catch (KeyNotFoundException)
             {
                 return NotFound();
             }
