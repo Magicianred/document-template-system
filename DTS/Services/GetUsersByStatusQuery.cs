@@ -31,7 +31,7 @@ namespace DTS.API.Services
         public async Task<List<ExtendedUserDTO>> HandleAsync(GetUsersByStatusQuery query)
         {
             var users = await repository.Users
-                .FindUserByCondition(u => u.Status.Name.Equals(query.Status));
+                .FindUserByCondition(u => u.Status.Name.ToUpper().Equals(query.Status.ToUpper()));
             return CollectUsersDTOs(users);
         }
 

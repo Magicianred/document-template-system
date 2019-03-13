@@ -27,7 +27,11 @@ namespace DAL.Repositories
 
         public async Task<IEnumerable<User>> FindUserByCondition(Expression<Func<User, bool>> expression)
         {
-            var users = await FindByConditionAsync(expression);
+            var users = await DTSContext.User
+                .Include(u => u.Status)
+                .Include(u => u.Type)
+                .Where(expression)
+                .ToListAsync();
             return users.DefaultIfEmpty() ?? throw new InvalidOperationException();
         }
 

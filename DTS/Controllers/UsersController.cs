@@ -15,7 +15,7 @@ using DTS.API.Services;
 namespace DTS.API.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -77,7 +77,7 @@ namespace DTS.API.Controllers
             }
         }
 
-        [HttpGet("status/{type}")]
+        [HttpGet("type/{type}")]
         public async Task<IActionResult> GetUsersByType(string type)
         {
             try
@@ -125,7 +125,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpPut("{id}/type/{type}")]
-        public async Task<IActionResult> ChangeUserStatus(int id, string type)
+        public async Task<IActionResult> ChangeUserType(int id, string type)
         {
             var command = new ChangeUserTypeCommand(id, type);
             try
