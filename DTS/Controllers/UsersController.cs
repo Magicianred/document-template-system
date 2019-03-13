@@ -113,37 +113,48 @@ namespace DTS.API.Controllers
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)
+        public async Task<IActionResult> ChangeUserPersonalData([FromRoute] int id, [FromBody] UserDTO user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
 
-            
+            var command = new ChangeUserPersonalDataCommand(
+                id,
+                user.Name,
+                user.Surname,
+                user.Email
+                );
 
             try
             {
-                await repository.Users.UpdateAsync(user);
+                await userService.ChangeUserPersonalDataCommand.HandleAsync(command);
+                return NoContent();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await repository.Users.Exists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return StatusCode(503, "Server overload try again later");
             }
+            catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
 
-            return NoContent();
+        [HttpPut("{id}/type/{type}")]
+        public async Task<IActionResult> ChangeUserStatus(int id, string type)
+        {
+            var command = new ChangeUserTypeCommand(id, type);
+            try
+            {
+                await userService.ChangeUserTypeCommand.HandleAsync(command);
+                return NoContent();
+            } catch (KeyNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         // DELETE: api/Users/5
