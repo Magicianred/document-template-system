@@ -54,20 +54,12 @@ namespace DTS.API.Controllers
             }
             try
             {
-                var user = await repository.Users.FindUserByIDAsync(id);
-                var userDto = new ExtendedUserDTO()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                    Status = user.Status.Name,
-                    Type = user.Type.Name
-                };
-                return Ok(userDto);
-            } catch (Exception)
+                var query = new GetUserByIdQuery(id);
+                var user = await userService.GetUserByIdQuery.HandleAsync(query);
+                return Ok(user);
+            } catch (KeyNotFoundException e)
             {
-                return NotFound();
+                return NotFound(e.Message);
             }
         }
 

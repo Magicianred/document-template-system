@@ -16,6 +16,7 @@ namespace DTS.API.Services
         private IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> _getUsersByStatusQuery;
         private IQueryHandlerAsync<GetUsersByTypeQuery, List<ExtendedUserDTO>> _getUsersByTypeQuery;
         private IQueryHandlerAsync<GetUsersQuery, List<ExtendedUserDTO>> _getUsersQuery;
+        private IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> _getUserByIdQuery;
         private IRepositoryWrapper repository;
 
         public UserService(IRepositoryWrapper repository)
@@ -103,6 +104,18 @@ namespace DTS.API.Services
                     _getUsersQuery = new GetUsersQueryHandler(repository);
                 }
                 return _getUsersQuery;
+            }
+        }
+
+        public IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> GetUserByIdQuery
+        {
+            get
+            {
+                if (_getUserByIdQuery == null)
+                {
+                    _getUserByIdQuery = new GetUserByIdQueryHandler(repository);
+                }
+                return _getUserByIdQuery;
             }
         }
     }
