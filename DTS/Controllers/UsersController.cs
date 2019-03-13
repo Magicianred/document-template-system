@@ -96,6 +96,21 @@ namespace DTS.API.Controllers
             }
         }
 
+        [HttpGet("status/{type}")]
+        public async Task<IActionResult> GetUsersByType(string type)
+        {
+            try
+            {
+                var query = new GetUsersByTypeQuery(type);
+                var users = await userService.GetUsersByTypeQuery.HandleAsync(query);
+                return Ok(users);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound($"No users with {type} type or is invalid");
+            }
+        }
+
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)
