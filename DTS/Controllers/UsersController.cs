@@ -34,22 +34,11 @@ namespace DTS.API.Controllers
         {
             try
             {
-                var users = await repository.Users.FindAllUsersAsync();
-                var usersDto = new List<ExtendedUserDTO>();
-                foreach (var user in users)
-                {
-                    usersDto.Add(new ExtendedUserDTO
-                    {
-                        Id = user.Id,
-                        Name = user.Name,
-                        Surname = user.Surname,
-                        Email = user.Email,
-                        Status = user.Status.Name,
-                        Type = user.Type.Name
-                    });
-                }
-                return Ok(usersDto);
-            } catch (Exception)
+                var query = new GetUsersQuery();
+                var users = await userService.GetUsersQuery.HandleAsync(query);
+                return Ok(users);
+            }
+            catch (InvalidOperationException)
             {
                 return NotFound();
             }
