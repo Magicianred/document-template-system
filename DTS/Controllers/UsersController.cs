@@ -10,6 +10,7 @@ using DAL.Models;
 using DAL.Repositories;
 using DTS.API.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using DTS.API.Services;
 
 namespace DTS.API.Controllers
 {
@@ -19,10 +20,12 @@ namespace DTS.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IRepositoryWrapper repository;
+        private readonly IUserService userService;
 
-        public UsersController(IRepositoryWrapper repository)
+        public UsersController(IRepositoryWrapper repository, IUserService userService)
         {
             this.repository = repository;
+            this.userService = userService;
         }
 
         // GET: api/Users
@@ -79,6 +82,20 @@ namespace DTS.API.Controllers
             }
         }
 
+        [HttpGet("status/{status}")]
+        public async Task<IActionResult> GetUsersByStatus(string status)
+        {
+            try
+            {
+                var query = new GetUsersByStatusQuery(status);
+                var users = await userService.GetUsersByStatusQuery.HandleAsync(query);
+                return Ok(users);
+            } catch (InvalidOperationException)
+            {
+                return NotFound($"No users with {status} status or is invalid");
+            }
+        }
+
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)
@@ -112,21 +129,6 @@ namespace DTS.API.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Users
-        [HttpPost]
-        public async Task<IActionResult> PostUser([FromBody] User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-           
-            await repository.Users.CreateAsync(user);
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5

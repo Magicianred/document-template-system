@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTS.API.Services
 {
-    interface IUserService
+    public interface IUserService
     {
         ICommandHandlerAsync<ActivateUserCommand> ActivateUserCommand { get;}
         ICommandHandlerAsync<BlockUserCommand> BlockUserCommand { get; }
