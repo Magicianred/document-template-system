@@ -8,6 +8,7 @@ namespace DAL.Repositories
 {
     public interface IUserStatusRepository
     {
-        Task<UserStatus> FindStatusById(int id); 
+        Task<UserStatus> FindStatusById(int id);
+        Task<UserStatus> FindStatusByName(string name);
     }
 }

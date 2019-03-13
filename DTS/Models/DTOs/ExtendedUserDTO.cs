@@ -1,9 +1,10 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DTS.Models.DTOs
+namespace DTS.API.Models.DTOs
 {
     public class ExtendedUserDTO
     {
@@ -13,5 +14,18 @@ namespace DTS.Models.DTOs
         public string Email { get; set; }
         public string Status { get; set; }
         public string Type { get; set; }
+
+        public static ExtendedUserDTO parseUser(User user)
+        {
+            return new ExtendedUserDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+                Status = user.Status.Name,
+                Type = user.Type.Name
+            };
+        }
     }
 }

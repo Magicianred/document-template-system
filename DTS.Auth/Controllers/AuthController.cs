@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DTS.Auth.Helpers;
 using DTS.Auth.Models.DTO;
-using DTS.Services;
+using DTS.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -69,16 +69,16 @@ namespace DTS.Auth.Controllers
                     credentials.Password,
                     tokenHelper
                     ));
-                if (token == null)
-                {
-                    return Unauthorized($"{credentials.Login} is not Active");
-                }
                 return Ok(tokenHelper.WriteToken(token));
 
             }
-            catch (Exception e)
+            catch (KeyNotFoundException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Unauthorized(e.Message);
             }
         }
     }

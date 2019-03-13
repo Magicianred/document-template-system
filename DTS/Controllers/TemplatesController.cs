@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.Models;
 using DAL.Repositories;
-using DTS.Models.DTOs;
-using DTS.Helpers;
+using DTS.API.Models.DTOs;
+using DTS.API.Helpers;
 using System;
-using DTS.Models;
+using DTS.API.Models;
 using Microsoft.AspNetCore.Authorization;
+using DTS.APi.Models;
 
-namespace DTS.Controllers
+namespace DTS.API.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]

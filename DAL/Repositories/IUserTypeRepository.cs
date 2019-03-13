@@ -9,5 +9,6 @@ namespace DAL.Repositories
     public interface IUserTypeRepository
     {
         Task<UserType> FindTypeById(int id);
+        Task<UserType> FindTypeByName(string name);
     }
 }

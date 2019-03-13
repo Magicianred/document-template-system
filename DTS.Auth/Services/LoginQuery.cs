@@ -1,16 +1,13 @@
-﻿using DTS.Helpers;
+﻿using DTS.Auth.Helpers;
 using DAL.Models;
 using DAL.Repositories;
-using DTS.Services;
+using DTS.API.Services;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
-using DTS.Auth.Helpers;
 
-namespace DTS.Services
+namespace DTS.Auth.Services
 {
     public sealed class LoginQuery : IQuery
     {
@@ -44,7 +41,7 @@ namespace DTS.Services
                 {
                     if (!user.Status.Name.Equals("Active"))
                     {
-                        return null;
+                        throw new InvalidOperationException($"{query.Login} is not Active");
                     }
 
                     return query.TokenHelper.GetNewToken(user.Id, user.Type.Name);

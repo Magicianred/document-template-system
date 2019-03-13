@@ -1,14 +1,14 @@
-﻿using DTS.Helpers;
+﻿using DTS.API.Helpers;
 using DAL.Models;
 using DAL.Repositories;
-using DTS.Services;
+using DTS.API.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DTS.Auth.Helpers;
 
-namespace DTS.Services
+namespace DTS.Auth.Services
 {
     public sealed class SignInCommand : ICommand
     {

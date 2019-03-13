@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using DAL.Data;
 using DAL.Models;
 using DAL.Repositories;
-using DTS.Models.DTOs;
+using DTS.API.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 
-namespace DTS.Controllers
+namespace DTS.API.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
