@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './login-form/login-form.component'
-import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
+import { LoginComponent } from './home/login-form/login-form.component'
+import { SignInFormComponent } from './home/sign-in-form/sign-in-form.component';
 import { EditorPanelComponent } from './editor-panel/editor-panel.component';
 import { FormsModule } from '@angular/forms';
 import { EditorsTemplatesComponent } from './editor-panel/editors-templates/editors-templates.component';
