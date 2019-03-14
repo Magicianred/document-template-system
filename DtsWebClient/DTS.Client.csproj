@@ -19,24 +19,40 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="src\app\NewFolder1\**" />
+    <Compile Remove="src\app\NewFolder\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="src\app\NewFolder1\**" />
+    <Content Remove="src\app\NewFolder\**" />
+    <EmbeddedResource Remove="src\app\NewFolder1\**" />
+    <EmbeddedResource Remove="src\app\NewFolder\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="src\app\NewFolder1\**" />
+    <None Remove="src\app\NewFolder\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="src\app\templateContent.ts" />
+    <None Remove="src\app\_guards\auth.guard.ts" />
+    <None Remove="src\app\_helpers\jwt.interceptor.ts" />
     <None Remove="src\app\_models\template.ts" />
     <None Remove="src\app\_models\templateDataUpdate.ts" />
     <None Remove="src\app\_models\templateVersion.ts" />
+    <None Remove="src\app\_models\token.ts" />
+    <None Remove="src\app\_models\user.ts" />
     <None Remove="src\app\_models\Version.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="src\app\_guards\auth.guard.ts" />
+    <TypeScriptCompile Include="src\app\_helpers\jwt.interceptor.ts" />
     <TypeScriptCompile Include="src\app\_models\templateContent.ts" />
     <TypeScriptCompile Include="src\app\_models\template.ts" />
     <TypeScriptCompile Include="src\app\_models\templateDataUpdate.ts" />
     <TypeScriptCompile Include="src\app\_models\templateVersion.ts" />
+    <TypeScriptCompile Include="src\app\_models\token.ts" />
+    <TypeScriptCompile Include="src\app\_models\user.ts" />
     <TypeScriptCompile Include="src\app\_models\Version.ts" />
   </ItemGroup>
 

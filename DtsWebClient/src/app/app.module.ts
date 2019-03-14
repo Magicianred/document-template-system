@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './home/login-form/login-form.component'
 import { SignInFormComponent } from './home/sign-in-form/sign-in-form.component';
 import { EditorPanelComponent } from './editor-panel/editor-panel.component';
@@ -15,6 +15,8 @@ import { TemplateDataComponent } from './editor-panel/template-data/template-dat
 import { FormPickerComponent } from './form-picker/form-picker.component';
 import { AdminTemplatePanelComponent } from './admin-template-panel/admin-template-panel.component';
 import { TemplateAdderComponent } from './editor-panel/template-adder/template-adder.component';
+import { AngularWebStorageModule } from 'angular-web-storage';
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
 
 
 @NgModule({
@@ -36,9 +38,13 @@ import { TemplateAdderComponent } from './editor-panel/template-adder/template-a
     AppRoutingModule,
     HttpClientModule,
     NgxEditorModule,
-    FormsModule
+    FormsModule,
+    AngularWebStorageModule
   ],
-  providers: [{ provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] }],
+  providers: [
+    { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
