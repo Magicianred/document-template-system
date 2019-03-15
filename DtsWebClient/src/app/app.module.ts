@@ -9,7 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './home/login-form/login-form.component'
 import { SignInFormComponent } from './home/sign-in-form/sign-in-form.component';
 import { EditorPanelComponent } from './editor-panel/editor-panel.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorsTemplatesComponent } from './editor-panel/editors-templates/editors-templates.component';
 import { TemplateDataComponent } from './editor-panel/template-data/template-data.component';
 import { FormPickerComponent } from './form-picker/form-picker.component';
@@ -39,7 +39,8 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
     HttpClientModule,
     NgxEditorModule,
     FormsModule,
-    AngularWebStorageModule
+    AngularWebStorageModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
