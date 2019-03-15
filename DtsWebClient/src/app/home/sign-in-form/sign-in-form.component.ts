@@ -3,6 +3,8 @@ import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services/authService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { retry } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { SignInForm } from 'src/app/_models/signIn';
 
 
 @Component({
@@ -15,12 +17,12 @@ export class SignInFormComponent implements OnInit {
   returnUrl: string;
   loading = false;
   submitted = false;
-  passMatch = false;
 
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService,
+    private apiClient: HttpClient) { }
 
   ngOnInit() {
     this.signInForm = this.formBuilder.group({
@@ -29,11 +31,8 @@ export class SignInFormComponent implements OnInit {
       login: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
-      passwordConfirm: ['', Validators.required],
+      passwordConfirm: [''],
     }, { validator: this.checkPasswords });
-
-    // reset login status
-    this.authenticationService.logout();
 
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -45,13 +44,21 @@ export class SignInFormComponent implements OnInit {
 
   signIn() {
     this.submitted = true;
-    this.passMatch = this.signInForm.hasError('notSame');
+
+
     if (this.signInForm.invalid) {
       return;
     }
-    
+    console.log(this.signInForm.value)
     this.loading = true;
-    console.log(this.FormControls.name.value);
+
+    let query = `https://localhost:44381/api/auth/signin`;
+
+    this.apiClient.post(query, this.signInForm.value).subscribe(result => {
+      
+      console.log(result);
+      this.loading = false;
+    }, error => console.error(error));
   }
 
   checkPasswords(signInForm: FormGroup) { // here we have the 'passwords' group

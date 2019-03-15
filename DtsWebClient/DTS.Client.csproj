@@ -32,6 +32,7 @@
     <None Remove="src\app\templateContent.ts" />
     <None Remove="src\app\_guards\auth.guard.ts" />
     <None Remove="src\app\_helpers\jwt.interceptor.ts" />
+    <None Remove="src\app\_models\signIn.ts" />
     <None Remove="src\app\_models\template.ts" />
     <None Remove="src\app\_models\templateDataUpdate.ts" />
     <None Remove="src\app\_models\templateVersion.ts" />
@@ -44,6 +45,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\app\_guards\auth.guard.ts" />
     <TypeScriptCompile Include="src\app\_helpers\jwt.interceptor.ts" />
+    <TypeScriptCompile Include="src\app\_models\signIn.ts" />
     <TypeScriptCompile Include="src\app\_models\templateContent.ts" />
     <TypeScriptCompile Include="src\app\_models\template.ts" />
     <TypeScriptCompile Include="src\app\_models\templateDataUpdate.ts" />

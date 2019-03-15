@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { User } from '../_models/user';
+import { User, UserData } from '../_models/user';
 import { Token, TokenValue } from '../_models/token';
 import { NgForm } from '@angular/forms';
 import { SessionStorageService } from 'angular-web-storage';
@@ -42,11 +42,20 @@ export class AuthenticationService {
       user.token = this.tokenValue.content;
 
       this.session.set("loggedUser", user);
+      let dataQuery = `https://localhost:44346/api/users/${user.id}`;
+
+      this.apiClient.get(dataQuery).subscribe(result => {
+        const userData = result;
+        this.session.set("userData", userData)
+        location.reload(true);
+      })
     }, error => console.error(error));
   }
 
     logout() {
       this.session.remove('loggedUser');
+      this.session.remove("userData");
       this.currentUserSubject.next(null);
+      location.reload(true);
     }
 }

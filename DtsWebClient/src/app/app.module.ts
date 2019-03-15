@@ -17,6 +17,7 @@ import { AdminTemplatePanelComponent } from './admin-template-panel/admin-templa
 import { TemplateAdderComponent } from './editor-panel/template-adder/template-adder.component';
 import { AngularWebStorageModule } from 'angular-web-storage';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { UserPanelComponent } from './home/user-panel/user-panel.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
     TemplateDataComponent,
     FormPickerComponent,
     AdminTemplatePanelComponent,
-    TemplateAdderComponent
+    TemplateAdderComponent,
+    UserPanelComponent
   ],
   imports: [
     BrowserModule,
