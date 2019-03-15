@@ -99,7 +99,7 @@ namespace DTS.API.Controllers
                     CreationTime = tempVersion.Date,
                     TemplateVersion = tempVersion.Content,
                     Id = tempVersion.Id,
-                    VersionState = tempVersion.State.State,
+                    VersionState = (await repository.TemplateState.FindStateByIdAsync(tempVersion.StateId)).State,
                     Creator = new UserDTO
                     {
                         Name = tempVersion.Creator.Name,

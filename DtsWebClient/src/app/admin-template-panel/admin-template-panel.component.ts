@@ -39,7 +39,7 @@ export class AdminTemplatePanelComponent implements OnInit {
       let updateData = new TemplateDataUpdate();
       updateData.id = +id;
       updateData.name = name;
-      updateData.ownerId = 2;
+      updateData.ownerId = +prompt("editor id");
       updateData.stateId = 1;
       this.apiClient.put(query, updateData).subscribe(result => {
         this.getTemplates();
