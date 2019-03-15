@@ -15,14 +15,11 @@ import { User } from 'src/app/_models/user';
 export class LoginComponent implements OnInit {
   password: string;
   login: string;
-  apiClient: HttpClient;
   token: Token;
   tokenValue: TokenValue;
 
-  constructor(http: HttpClient, public session: SessionStorageService) {
-    this.apiClient = http;
+  constructor(private apiClient: HttpClient, private session: SessionStorageService) {
   }
-
   ngOnInit() {
     
 

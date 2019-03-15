@@ -8,15 +8,15 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TemplateAdderComponent implements OnInit {
   htmlContent: string;
-  apiClient: HttpClient;
+
 
   @Input()
   editorId: string;
 
   @Output() closeEditor: EventEmitter<string> = new EventEmitter<string>()
 
-  constructor(http: HttpClient, ) {
-    this.apiClient = http;
+  constructor( private apiClient: HttpClient, ) {
+
   }
   ngOnInit() {
   }

@@ -11,17 +11,14 @@ import { TemplateContent } from '../_models/templateContent';
 })
 export class FormPickerComponent implements OnInit {
   baseUrl: string;
-  apiClient: HttpClient;
   templates: Template[];
   formBase: object;
   chosenFormId: number;
   gotForm: boolean;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.apiClient = http;
-    this.baseUrl = baseUrl;
-
+  constructor(private apiClient: HttpClient) {
   }
+
   ngOnInit() {
     this.getTemplates();
     this.gotForm = false;

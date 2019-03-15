@@ -9,7 +9,7 @@ import { Template } from '../../_models/template'
 })
 export class EditorsTemplatesComponent implements OnInit {
 
-  apiClient: HttpClient;
+
   templates: Template[];
 
   @Input()
@@ -17,8 +17,8 @@ export class EditorsTemplatesComponent implements OnInit {
 
   @Output() sendChosenId: EventEmitter<string> = new EventEmitter<string>()
 
-  constructor(http: HttpClient) {
-    this.apiClient = http;
+  constructor(private apiClient: HttpClient) {
+
 
   }
   ngOnInit() {

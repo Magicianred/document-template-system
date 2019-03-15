@@ -12,7 +12,7 @@ import { document } from 'ngx-bootstrap';
 })
 export class TemplateDataComponent implements OnInit {
 
-  apiClient: HttpClient;
+
   template: TemplateVersions;
   templateChosen: boolean;
   version: string;
@@ -26,8 +26,7 @@ export class TemplateDataComponent implements OnInit {
 
   @Output() back: EventEmitter<string> = new EventEmitter<string>()
 
-  constructor(http: HttpClient, ) {
-    this.apiClient = http;
+  constructor(private apiClient: HttpClient, ) {
   }
 
   ngOnInit() {

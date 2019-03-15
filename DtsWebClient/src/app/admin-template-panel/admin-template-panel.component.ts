@@ -11,14 +11,14 @@ import { TemplateVersions } from '../_models/templateVersion';
   styleUrls: ['./admin-template-panel.component.css']
 })
 export class AdminTemplatePanelComponent implements OnInit {
-  apiClient: HttpClient;
+
   templates: Template[];
   templateChosen: boolean;
   pickedTemplate: TemplateVersions;
 
-  constructor(http: HttpClient) {
-    this.apiClient = http;
+  constructor(private apiClient: HttpClient) {
   }
+
   ngOnInit() {
     this.getTemplates();
     this.templateChosen = false;

@@ -9,15 +9,14 @@ import { Template } from '../_models/template'
 })
 export class EditorPanelComponent implements OnInit {
   htmlContent: string;
-  apiClient: HttpClient;
   templates: Template[];
   openData: boolean;
   tempId: string;
   editorId: string;
   createNew: boolean;
 
-  constructor(http: HttpClient) {
-    this.apiClient = http;
+  constructor(private apiClient: HttpClient) {
+    
   }
   ngOnInit() {
     this.getEditorsID();
