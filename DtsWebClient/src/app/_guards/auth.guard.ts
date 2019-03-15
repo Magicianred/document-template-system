@@ -7,7 +7,7 @@ import { SessionStorageService } from 'angular-web-storage';
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    public session: SessionStorageService
+    private session: SessionStorageService
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
