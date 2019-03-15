@@ -133,13 +133,22 @@ namespace DTS.API.Controllers
                 return NotFound(e.Message);
             }
         }
-
-        private bool VerifyIfUserIdEqualsTokenClaimName(int id)
+        private int GetUserIdFromToken()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = identity.Claims;
-            var userId = claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault();
-            if (userId == null || int.Parse(userId.Value) != id)
+            var idString = claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
+            if (idString != null)
+            {
+                return int.Parse(idString);
+            }
+            return 0;
+        }
+
+        private bool VerifyIfUserIdEqualsTokenClaimName(int id)
+        {
+            var userId = GetUserIdFromToken();
+            if (userId == 0 || userId != id)
             {
                 return false;
             }
