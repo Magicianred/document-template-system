@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System;
 
 namespace DAL.Models
 {
@@ -22,6 +22,14 @@ namespace DAL.Models
         public virtual DbSet<UserStatus> UserStatus { get; set; }
         public virtual DbSet<UserType> UserType { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DTSLocalDB;Trusted_Connection=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +71,10 @@ namespace DAL.Models
             {
                 entity.ToTable("template_state");
 
+                entity.HasIndex(e => e.State)
+                    .HasName("UQ_template_state")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.State)
@@ -77,13 +89,11 @@ namespace DAL.Models
                 entity.ToTable("template_version");
 
                 entity.HasIndex(e => e.CreatorId)
-                    .HasName("IX_template_version_controll_created_by");
+                    .HasName("IX_template_version_created_by");
 
-                entity.HasIndex(e => e.StateId)
-                    .HasName("IX_template_version_controll_state_id");
+                entity.HasIndex(e => e.StateId);
 
-                entity.HasIndex(e => e.TemplateId)
-                    .HasName("IX_template_version_controll_template_id");
+                entity.HasIndex(e => e.TemplateId);
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -107,24 +117,32 @@ namespace DAL.Models
                     .WithMany(p => p.TemplateVersion)
                     .HasForeignKey(d => d.CreatorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.template_version_controll_dbo.user_id");
+                    .HasConstraintName("FK_dbo.template_version_dbo.user_id");
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.TemplateVersion)
                     .HasForeignKey(d => d.StateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.template_version_controll_dbo.template_state_id");
+                    .HasConstraintName("FK_dbo.template_version_dbo.template_state_id");
 
                 entity.HasOne(d => d.Template)
                     .WithMany(p => p.TemplateVersion)
                     .HasForeignKey(d => d.TemplateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.template_version_controll_dbo.template_id");
+                    .HasConstraintName("FK_dbo.template_version_dbo.template_id");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("user");
+
+                entity.HasIndex(e => e.Email)
+                    .HasName("UQ_user_email")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Login)
+                    .HasName("UQ_user_login")
+                    .IsUnique();
 
                 entity.HasIndex(e => e.StatusId);
 
@@ -141,7 +159,7 @@ namespace DAL.Models
                 entity.Property(e => e.Login)
                     .IsRequired()
                     .HasColumnName("login")
-                    .HasMaxLength(30)
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
@@ -181,6 +199,10 @@ namespace DAL.Models
             {
                 entity.ToTable("user_status");
 
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ_user_status")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
@@ -193,6 +215,10 @@ namespace DAL.Models
             modelBuilder.Entity<UserType>(entity =>
             {
                 entity.ToTable("user_type");
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ_user_type")
+                    .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
