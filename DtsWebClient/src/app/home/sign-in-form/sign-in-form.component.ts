@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { retry } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { SignInForm } from 'src/app/_models/signIn';
-
+import queries from '../../../assets/queries.json';
 
 @Component({
   selector: 'app-sign-in-form',
@@ -52,16 +52,14 @@ export class SignInFormComponent implements OnInit {
     console.log(this.signInForm.value)
     this.loading = true;
 
-    let query = `https://localhost:44381/api/auth/signin`;
-
-    this.apiClient.post(query, this.signInForm.value).subscribe(result => {
+    this.apiClient.post(queries.signInPath, this.signInForm.value).subscribe(result => {
       
       console.log(result);
       this.loading = false;
     }, error => console.error(error));
   }
 
-  checkPasswords(signInForm: FormGroup) { // here we have the 'passwords' group
+  checkPasswords(signInForm: FormGroup) {
     let pass = signInForm.controls.password.value;
     let confirmPass = signInForm.controls.passwordConfirm.value;
 

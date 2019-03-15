@@ -1,7 +1,8 @@
 import { Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Template } from '../_models/template'
-
+import queries from '../../assets/queries.json'
+import { SessionStorageService } from 'angular-web-storage';
 @Component({
   selector: 'app-editor-panel',
   templateUrl: './editor-panel.component.html',
@@ -15,7 +16,10 @@ export class EditorPanelComponent implements OnInit {
   editorId: string;
   createNew: boolean;
 
-  constructor(private apiClient: HttpClient) {
+  constructor(
+    private apiClient: HttpClient,
+    private session: SessionStorageService
+  ) {
     
   }
   ngOnInit() {
@@ -23,7 +27,7 @@ export class EditorPanelComponent implements OnInit {
   }
 
   getEditorsID() {
-    this.editorId = prompt("Provide Editors ID");
+    this.editorId = this.session.get("userData").id;
   }
 
   saveNewTemplate() {
@@ -34,8 +38,7 @@ export class EditorPanelComponent implements OnInit {
       template: this.htmlContent
     }
 
-    this.apiClient.post("https://localhost:44346/api/templates/", templateData).subscribe(result => {
-      console.log(result)
+    this.apiClient.post(queries.templatesPath, templateData).subscribe(result => {
     }, error => console.error(error));
   }
 

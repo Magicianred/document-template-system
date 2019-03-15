@@ -7,6 +7,7 @@ import { User, UserData } from '../_models/user';
 import { Token, TokenValue } from '../_models/token';
 import { NgForm } from '@angular/forms';
 import { SessionStorageService } from 'angular-web-storage';
+import queries from '../../assets/queries.json';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -27,9 +28,9 @@ export class AuthenticationService {
     }
 
   login(loginForm: NgForm) {
-    let query = `https://localhost:44381/api/auth/login`;
+    
 
-    this.apiClient.post(query, loginForm).subscribe(result => {
+    this.apiClient.post(queries.loginAPIPath, loginForm).subscribe(result => {
 
       const user = new User();
       this.tokenValue = result;
@@ -42,9 +43,8 @@ export class AuthenticationService {
       user.token = this.tokenValue.content;
 
       this.session.set("loggedUser", user);
-      let dataQuery = `https://localhost:44346/api/users/${user.id}`;
 
-      this.apiClient.get(dataQuery).subscribe(result => {
+      this.apiClient.get(queries.userDataPath + user.id).subscribe(result => {
         const userData = result;
         this.session.set("userData", userData)
         location.reload(true);
