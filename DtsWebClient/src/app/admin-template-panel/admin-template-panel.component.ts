@@ -26,7 +26,6 @@ export class AdminTemplatePanelComponent implements OnInit {
 
   getTemplates() {
     this.apiClient.get<Template[]>("https://localhost:44346/api/templates/").subscribe(result => {
-      console.log(result);
       this.templates = result;
     }, error => console.error(error));
   }
