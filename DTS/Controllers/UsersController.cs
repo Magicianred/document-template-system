@@ -11,6 +11,9 @@ using DAL.Repositories;
 using DTS.API.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using DTS.API.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace DTS.API.Controllers
 {
@@ -57,7 +60,8 @@ namespace DTS.API.Controllers
                 var query = new GetUserByIdQuery(id);
                 var user = await userService.GetUserByIdQuery.HandleAsync(query);
                 return Ok(user);
-            } catch (KeyNotFoundException e)
+            }
+            catch (KeyNotFoundException e)
             {
                 return NotFound(e.Message);
             }
@@ -72,7 +76,8 @@ namespace DTS.API.Controllers
                 var query = new GetUsersByStatusQuery(status);
                 var users = await userService.GetUsersByStatusQuery.HandleAsync(query);
                 return Ok(users);
-            } catch (InvalidOperationException)
+            }
+            catch (InvalidOperationException)
             {
                 return NotFound($"No users with {status} status or is invalid");
             }
@@ -102,6 +107,10 @@ namespace DTS.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            {
+                return BadRequest();
+            }
 
             var command = new ChangeUserPersonalDataCommand(
                 id,
@@ -125,7 +134,20 @@ namespace DTS.API.Controllers
             }
         }
 
-        [HttpPut("{id}/type/{type}")]
+        private bool VerifyIfUserIdEqualsTokenClaimName(int id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var userId = claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault();
+            if (userId == null || int.Parse(userId.Value) != id)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+[HttpPut("{id}/type/{type}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserType(int id, string type)
         {
