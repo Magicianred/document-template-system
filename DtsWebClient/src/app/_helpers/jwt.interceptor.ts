@@ -5,7 +5,7 @@ import { SessionStorageService } from 'angular-web-storage';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(public session: SessionStorageService) { }
+  constructor(private session: SessionStorageService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
