@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Template } from '../_models/template'
 import { TemplateDataUpdate } from '../_models/templateDataUpdate';
 import { TemplateVersions } from '../_models/templateVersion';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import queries from '../../assets/queries.json';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-admin-template-panel',
@@ -11,12 +13,17 @@ import queries from '../../assets/queries.json';
   styleUrls: ['./admin-template-panel.component.css']
 })
 export class AdminTemplatePanelComponent implements OnInit {
-
+  closeResult: string;
   templates: Template[];
   templateChosen: boolean;
   pickedTemplate: TemplateVersions;
+  templateContent: HTMLElement;
+  private eventsSubject: Subject<void> = new Subject<void>();
 
-  constructor(private apiClient: HttpClient) {
+  constructor(
+    private apiClient: HttpClient,
+    private modalService: NgbModal
+  ) {
   }
 
   ngOnInit() {
@@ -91,5 +98,20 @@ export class AdminTemplatePanelComponent implements OnInit {
       }, error => console.error(error));
     }
   }
+
+  showVersion(event: any, content) {
+    this.templateChosen = true;
+    let versionIndex = event.path[1].rowIndex - 1;
+    let version = this.pickedTemplate.versions[versionIndex].templateVersion;
+    this.templateContent = document.createElement("DIV");
+    this.templateContent.innerHTML = version;
+    this.open(content);
+  }
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size:'lg' });
+    document.getElementById("version-container").appendChild(this.templateContent);
+  }
+
 }
 

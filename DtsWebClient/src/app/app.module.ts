@@ -17,7 +17,9 @@ import { AdminTemplatePanelComponent } from './admin-template-panel/admin-templa
 import { TemplateAdderComponent } from './editor-panel/template-adder/template-adder.component';
 import { AngularWebStorageModule } from 'angular-web-storage';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { UserPanelComponent } from './home/user-panel/user-panel.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -33,7 +35,7 @@ import { UserPanelComponent } from './home/user-panel/user-panel.component';
     FormPickerComponent,
     AdminTemplatePanelComponent,
     TemplateAdderComponent,
-    UserPanelComponent
+    UserPanelComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,11 +44,13 @@ import { UserPanelComponent } from './home/user-panel/user-panel.component';
     NgxEditorModule,
     FormsModule,
     AngularWebStorageModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

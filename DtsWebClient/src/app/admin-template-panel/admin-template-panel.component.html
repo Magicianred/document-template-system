@@ -41,11 +41,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let version of pickedTemplate.versions" class="clickable">
-          <td (click)="showVersion($event)">{{ version.id }}</td>
-          <td (click)="showVersion($event)">{{ version.creationTime }}</td>
-          <td (click)="showVersion($event)">{{ version.creator.name}} {{ version.creator.surname }}</td>
-          <td (click)="showVersion($event)">{{ version.versionState }}</td>
+        <tr *ngFor="let version of pickedTemplate.versions" class="clickable" (click)="showVersion($event, content)">
+          <td>{{ version.id }}</td>
+          <td>{{ version.creationTime }}</td>
+          <td>{{ version.creator.name}} {{ version.creator.surname }}</td>
+          <td>{{ version.versionState }}</td>
           <td><button type="submit" class="btn btn-primary" (click)="switchVersionState(version.id, version.versionState)">Switch State</button></td>
         </tr>
       </tbody>
@@ -53,3 +53,18 @@
   </div>
   <button type="submit" class="btn btn-primary" (click)="templateChosen = !templateChosen">Back to templates</button>
 </div>
+
+<ng-template #content let-modal id="content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Version Data</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" id="version-container">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>
+
