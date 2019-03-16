@@ -23,12 +23,7 @@ namespace DTS.Auth.Controllers
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
             this.tokenHelper = new TokenHelper(tokenSettings.Secret, tokenSettings.ExpirationTime);
         }
-
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok("Working...");
-        }
+        
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInForm form)
         {
@@ -44,7 +39,8 @@ namespace DTS.Auth.Controllers
                     form.Password,
                     form.Name,
                     form.Surname,
-                    form.Email
+                    form.Email,
+                    new DefaultRestriction()
                     ));
                 return Ok();
             }
