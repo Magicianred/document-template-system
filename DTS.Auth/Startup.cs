@@ -20,13 +20,18 @@ namespace DTS.Auth
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddScoped<IAuthServiceWrapper, AuthServiceWrapper>();
             var tokenSettingsSection = Configuration.GetSection("TokenConfig");
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
             services.Configure<TokenConfig>(tokenSettingsSection);
+            var requestMonitorSettingsSection = Configuration.GetSection("RequestMonitorConfig");
+            var requestMonitorSettings = requestMonitorSettingsSection.Get<RequestMonitorConfig>();
+            services.Configure<RequestMonitorConfig>(requestMonitorSettingsSection);
+
+            services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IAuthServiceWrapper, AuthServiceWrapper>();
             services.AddSingleton<IConfiguration>(tokenSettingsSection);
+            services.AddSingleton<RequestMonitorConfig>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

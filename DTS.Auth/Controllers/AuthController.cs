@@ -16,12 +16,14 @@ namespace DTS.Auth.Controllers
     {
         private readonly IAuthServiceWrapper services;
         private readonly ITokenHelper tokenHelper;
+        private readonly IRequestMonitor requestMonitor;
 
-        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection)
+        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, RequestMonitorConfig monitorConfig)
         {
             this.services = services;
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
             this.tokenHelper = new TokenHelper(tokenSettings.Secret, tokenSettings.ExpirationTime);
+            this.requestMonitor = new RequestMonitor(monitorConfig.LoginAttempts);
         }
         
         [HttpPost("signin")]

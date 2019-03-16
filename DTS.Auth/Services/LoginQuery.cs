@@ -14,12 +14,14 @@ namespace DTS.Auth.Services
         public string Login { get; }
         public string Password { get; }
         public ITokenHelper TokenHelper { get; }
+        public IRequestMonitor RequestMonitor { get; }
 
-        public LoginQuery(string login, string password, ITokenHelper tokenHelper)
+        public LoginQuery(string login, string password, ITokenHelper tokenHelper, IRequestMonitor requestMonitor)
         {
             Login = login;
             Password = password;
             TokenHelper = tokenHelper;
+            RequestMonitor = requestMonitor;
         }
     }
 
@@ -38,8 +40,15 @@ namespace DTS.Auth.Services
             try
             {
                 var user = await repository.Users.FindByUserLogin(query.Login);
+
+                if (query.RequestMonitor.IsReachedLoginAttemptsLimit(query.Login))
+                {
+                    throw new KeyNotFoundException(errorMessage);
+                }
+
                 if (validatePassword(user, query.Password))
                 {
+                    query.RequestMonitor.ResetLoginAttempts(query.Login);
                     if (!user.Status.Name.Equals("Active"))
                     {
                         throw new KeyNotFoundException(errorMessage);

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DTS.Auth.Helpers
 {
-    interface IRequestMonitor
+    public interface IRequestMonitor
     {
         bool IsReachedLoginAttemptsLimit(string login);
         void ResetLoginAttempts(string login);

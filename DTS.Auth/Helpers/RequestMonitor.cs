@@ -23,17 +23,17 @@ namespace DTS.Auth.Helpers
                 _loggins[login]++;
                 if (_loggins[login] < _maxLoginAttempts)
                 {
-                    return true;
+                    return false;
                 }
                 else
                 {
-                    return false;
+                    return true;
                 }
             }
             else
             {
                 _loggins.Add(login, 1);
-                return true;
+                return false;
             }
         }
 
@@ -49,5 +49,7 @@ namespace DTS.Auth.Helpers
         {
             throw new NotImplementedException();
         }
+
+
     }
 }
