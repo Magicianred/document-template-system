@@ -7,9 +7,42 @@ namespace DTS.Auth.Helpers
 {
     public class RequestMonitor : IRequestMonitor
     {
-        public bool VerifyLoginLimitAttempts(string login)
+        private Dictionary<string, int> _loggins;
+        private int _maxLoginAttempts;
+
+        public RequestMonitor(int loginAttempts)
         {
-            throw new NotImplementedException();
+            this._maxLoginAttempts = loginAttempts;
+            this._loggins = new Dictionary<string, int>();
+        }
+
+        public bool IsReachedLoginAttemptsLimit(string login)
+        {
+            if (_loggins.ContainsKey(login))
+            {
+                _loggins[login]++;
+                if (_loggins[login] < _maxLoginAttempts)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                _loggins.Add(login, 1);
+                return true;
+            }
+        }
+
+        public void ResetLoginAttempts(string login)
+        {
+            if (_loggins.ContainsKey(login))
+            {
+                _loggins.Remove(login);
+            }
         }
 
         public bool VerifyRequestRateLimit(string ip)

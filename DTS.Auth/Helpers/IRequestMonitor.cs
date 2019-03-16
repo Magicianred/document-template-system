@@ -7,7 +7,8 @@ namespace DTS.Auth.Helpers
 {
     interface IRequestMonitor
     {
-        bool VerifyLoginLimitAttempts(string login);
+        bool IsReachedLoginAttemptsLimit(string login);
+        void ResetLoginAttempts(string login);
         bool VerifyRequestRateLimit(string ip);
     }
 }
