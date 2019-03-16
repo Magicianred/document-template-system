@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Template } from '../_models/template'
 import { TemplateDataUpdate } from '../_models/templateDataUpdate';
 import { TemplateVersions } from '../_models/templateVersion';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import queries from '../../assets/queries.json';
-import { Subject } from 'rxjs';
+
 
 @Component({
   selector: 'app-admin-template-panel',
@@ -18,7 +18,6 @@ export class AdminTemplatePanelComponent implements OnInit {
   templateChosen: boolean;
   pickedTemplate: TemplateVersions;
   templateContent: HTMLElement;
-  private eventsSubject: Subject<void> = new Subject<void>();
 
   constructor(
     private apiClient: HttpClient,
