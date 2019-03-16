@@ -39,9 +39,8 @@ export class AuthenticationService {
       user.token = result.content;
 
       
-
+      this.session.set("loggedUser", user);
       this.apiClient.get(queries.userDataPath + user.id).subscribe(result => {
-        this.session.set("loggedUser", user);
         const userData = result;
         this.session.set("userData", userData)
         location.reload(true);
