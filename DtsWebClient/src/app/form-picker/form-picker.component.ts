@@ -3,6 +3,7 @@ import { HttpClient} from '@angular/common/http';
 import { Template } from '../_models/template'
 import { TemplateContent } from '../_models/templateContent';
 import queries from '../../assets/queries.json';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-form-picker',
@@ -16,7 +17,10 @@ export class FormPickerComponent implements OnInit {
   chosenFormId: number;
   gotForm: boolean;
 
-  constructor(private apiClient: HttpClient) {
+  constructor(
+    private apiClient: HttpClient,
+    private modalService: NgbModal
+  ) {
   }
 
   ngOnInit() {
@@ -38,19 +42,22 @@ export class FormPickerComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  postData(formValues: any) { 
+  postData(formValues: any, content) { 
 
     this.apiClient.post<TemplateContent>(queries.formPath + this.chosenFormId, formValues).subscribe(result => {
       let templateContent = result;
       const tempCont = document.createElement("DIV");
       tempCont.innerHTML = templateContent.content;
-      this.gotForm = false;
+      //this.gotForm = false;
 
-      let w = window.open();
-    
-      $(w.document.body).html(tempCont);
+      this.open(content, tempCont)
 
     }, error => console.error(error));
+  }
+
+  open(content, tempCont: HTMLElement) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' });
+    document.getElementById("version-container").appendChild(tempCont);
   }
 
 
