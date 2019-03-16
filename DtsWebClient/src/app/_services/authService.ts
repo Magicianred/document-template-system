@@ -13,8 +13,6 @@ import queries from '../../assets/queries.json';
 export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
-    token: Token;
-    tokenValue: TokenValue;
 
 
 
@@ -30,21 +28,20 @@ export class AuthenticationService {
   login(loginForm: NgForm) {
     
 
-    this.apiClient.post(queries.loginAPIPath, loginForm).subscribe(result => {
-
+    this.apiClient.post<TokenValue>(queries.loginAPIPath, loginForm).subscribe(result => {
       const user = new User();
-      this.tokenValue = result;
 
       const helper = new JwtHelperService();
-      this.token = helper.decodeToken(this.tokenValue.content);
+      let token = helper.decodeToken(result.content);
 
-      user.id = this.token.unique_name;
-      user.role = this.token.role;
-      user.token = this.tokenValue.content;
+      user.id = token.unique_name;
+      user.role = token.role;
+      user.token = result.content;
 
-      this.session.set("loggedUser", user);
+      
 
       this.apiClient.get(queries.userDataPath + user.id).subscribe(result => {
+        this.session.set("loggedUser", user);
         const userData = result;
         this.session.set("userData", userData)
         location.reload(true);
