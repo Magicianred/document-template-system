@@ -8,5 +8,6 @@ namespace DTS.Auth
     public class RequestMonitorConfig
     {
         public int LoginAttempts { get; set; }
+        public int BanTime { get; set; }
     }
 }

@@ -18,12 +18,12 @@ namespace DTS.Auth.Controllers
         private readonly ITokenHelper tokenHelper;
         private readonly IRequestMonitor requestMonitor;
 
-        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, RequestMonitorConfig monitorConfig)
+        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, IRequestMonitor monitor)
         {
             this.services = services;
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
             this.tokenHelper = new TokenHelper(tokenSettings.Secret, tokenSettings.ExpirationTime);
-            this.requestMonitor = new RequestMonitor(monitorConfig.LoginAttempts);
+            this.requestMonitor = monitor;
         }
         
         [HttpPost("signin")]
@@ -65,7 +65,8 @@ namespace DTS.Auth.Controllers
                 var token = await services.Login.HandleAsync(new LoginQuery(
                     credentials.Login,
                     credentials.Password,
-                    tokenHelper
+                    tokenHelper,
+                    requestMonitor
                     ));
                 return Ok(tokenHelper.WriteToken(token));
 
