@@ -8,6 +8,8 @@ namespace DTS.Auth
     public class RequestMonitorConfig
     {
         public int LoginAttempts { get; set; }
-        public int BanTime { get; set; }
+        public int LoginBanTime { get; set; }
+        public int MaxRequestsPerSec { get; set; }
+        public int IpBanTime { get; set; }
     }
 }

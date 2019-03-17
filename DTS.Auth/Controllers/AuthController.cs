@@ -29,6 +29,11 @@ namespace DTS.Auth.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInForm form)
         {
+            if (VerifyRequestLimit())
+            {
+                return StatusCode(429, "Reached request limit. Come back after few minutes");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -55,6 +60,11 @@ namespace DTS.Auth.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LogIn([FromBody] UserCredentials credentials)
         {
+            if (VerifyRequestLimit())
+            {
+                return StatusCode(429, "Reached request limit. Come back after few minutes");
+            } 
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -85,6 +95,12 @@ namespace DTS.Auth.Controllers
             {
                 return Unauthorized(e.Message);
             }
+        }
+
+        private bool VerifyRequestLimit()
+        {
+            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+            return requestMonitor.VerifyRequestRateLimit(ip);
         }
     }
 }
