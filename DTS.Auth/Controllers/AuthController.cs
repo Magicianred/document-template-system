@@ -68,7 +68,13 @@ namespace DTS.Auth.Controllers
                     tokenHelper,
                     requestMonitor
                     ));
-                return Ok(tokenHelper.WriteToken(token));
+
+                var tokenDTO = new Token
+                {
+                    Content = tokenHelper.WriteToken(token)
+                };
+
+                return Ok(tokenDTO);
 
             }
             catch (KeyNotFoundException e)

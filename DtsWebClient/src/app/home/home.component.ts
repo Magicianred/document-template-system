@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-
+import { Component, OnInit } from '@angular/core';
+import { SessionStorageService } from 'angular-web-storage';
+import { AuthenticationService } from '../_services/authService';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-home',
@@ -9,15 +9,13 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  loggedUser: User;
 
-  apiClient: HttpClient;
-  baseUrl: string;
-  processId: string;
-  activeComment: string;
-
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.apiClient = http;
-    this.baseUrl = baseUrl;
+  constructor(
+    private session: SessionStorageService,
+    private authenticationService: AuthenticationService
+  ) {
+    this.loggedUser = session.get("userData")
   }
 
   ngOnInit() {

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SessionStorageService } from 'angular-web-storage';
+import { User } from '../_models/user';
+import { AuthenticationService } from '../_services/authService';
 
 @Component({
   selector: 'app-nav',
@@ -8,10 +11,18 @@ import { Component, OnInit } from '@angular/core';
 export class NavComponent implements OnInit {
 
   appTitle: string = 'Document Template System';
-
-  constructor() { }
+  loggedUser: User;
+  constructor(
+    private session: SessionStorageService,
+    private authenticationService: AuthenticationService
+  ) { }
 
   ngOnInit() {
+    this.loggedUser = this.session.get("userData");
+  }
+
+  logout() {
+    this.authenticationService.logout();
   }
 
 }
