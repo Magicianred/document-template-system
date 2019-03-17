@@ -34,7 +34,7 @@ namespace DAL.Repositories
             return template.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
 
-        public async Task<IEnumerable<TemplateVersion>> FindByTemplateIdAsync(int id)
+        public async Task<IEnumerable<TemplateVersion>> FindAllTemplateVersionsByTemplateIdAsync(int id)
         {
             var templates = await FindAllVersions();
             var template = templates
