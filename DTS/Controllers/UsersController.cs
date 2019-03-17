@@ -45,7 +45,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)

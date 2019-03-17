@@ -16,10 +16,25 @@ namespace DTS.Auth
             Configuration = configuration;
         }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200/"
+                                        )
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod()
+                                        .AllowAnyOrigin();
+                });
+            });
+
             services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IAuthServiceWrapper, AuthServiceWrapper>();
@@ -53,7 +68,7 @@ namespace DTS.Auth
             {
                 app.UseHsts();
             }
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(setupAction =>

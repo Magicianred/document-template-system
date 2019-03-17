@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TemplateVersions } from '../../_models/templateVersion'
 import { document } from 'ngx-bootstrap';
-
+import queries from '../../../assets/queries.json';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { document } from 'ngx-bootstrap';
 })
 export class TemplateDataComponent implements OnInit {
 
-  apiClient: HttpClient;
+
   template: TemplateVersions;
   templateChosen: boolean;
   version: string;
@@ -26,8 +26,7 @@ export class TemplateDataComponent implements OnInit {
 
   @Output() back: EventEmitter<string> = new EventEmitter<string>()
 
-  constructor(http: HttpClient, ) {
-    this.apiClient = http;
+  constructor(private apiClient: HttpClient, ) {
   }
 
   ngOnInit() {
@@ -46,8 +45,7 @@ export class TemplateDataComponent implements OnInit {
   
   getTemplate() {
     this.templateChosen = false;
-    let query = `https://localhost:44346/api/templates/${this.tempId}`
-    this.apiClient.get<TemplateVersions>(query).subscribe(result => {
+    this.apiClient.get<TemplateVersions>(queries.templatesPath + this.tempId).subscribe(result => {
       this.template = result;
     }, error => console.error(error));
   }
@@ -62,9 +60,7 @@ export class TemplateDataComponent implements OnInit {
       template: this.htmlContent
     }
 
-    let query = `https://localhost:44346/api/templates/template/${this.tempId}/version`;
-
-    this.apiClient.put(query, templateData).subscribe(result => {
+    this.apiClient.put(queries.templatesPath + this.tempId +"/version", templateData).subscribe(result => {
       this.templateChosen = false;
       this.getTemplate();
     }, error => console.error(error));

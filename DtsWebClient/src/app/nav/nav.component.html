@@ -7,19 +7,22 @@
   </button>
 
   <div class="float-right">
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <div class="collapse navbar-collapse" id="collapsibleNavbar" *ngIf="loggedUser">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" routerLink="/">Home</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="loggedUser.type=='Editor'">
           <a class="nav-link" routerLink="/editorPanel">Editor Panel</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="loggedUser.type=='Admin'">
           <a class="nav-link" routerLink="/adminTemplatePanel">Admin Template Panel</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/formPicker">Form Picker</a>
+        </li>
+        <li class="nav-item" >
+          <a class="nav-link" routerLink="/" (click)="logout()">Log out</a>
         </li>
       </ul>
     </div>
