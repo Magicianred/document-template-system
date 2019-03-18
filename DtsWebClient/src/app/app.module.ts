@@ -23,8 +23,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminUserPanelComponent } from './admin-user-panel/admin-user-panel.component';
 import { MatSortModule } from '@angular/material'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {SearchUsersPipe } from './user-filter.pipe';
-
 
 @NgModule({
   declarations: [
@@ -41,7 +39,6 @@ import {SearchUsersPipe } from './user-filter.pipe';
     TemplateAdderComponent,
     UserPanelComponent,
     AdminUserPanelComponent,
-    SearchUsersPipe,
   ],
   imports: [
     BrowserModule,

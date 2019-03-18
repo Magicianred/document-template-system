@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of (users | searchUsers: searchText)">
+        <tr *ngFor="let user of sortedUsers">
           <td class="clickable" id="{{user.id}}"> {{ user.name }} </td>
           <td class="clickable" id="{{user.id}}"> {{user.surname}} </td>
           <td>{{ user.type }}</td>

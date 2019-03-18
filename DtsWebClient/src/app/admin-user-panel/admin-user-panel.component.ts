@@ -28,7 +28,8 @@ export class AdminUserPanelComponent implements OnInit {
   }
 
   sortUsers(sort: Sort) {
-    const data = this.users;
+    const data = this.sortedUsers;
+    
     if (!sort.active || sort.direction === '') {
       this.sortedUsers = data;
       return;
@@ -54,10 +55,20 @@ export class AdminUserPanelComponent implements OnInit {
   getUsers() {
     this.apiClient.get<UserData[]>(queries.userPath).subscribe(result => {
       this.users = result;
+      this.sortedUsers = result;
     }, error => console.error(error));
   }
 
-  filterUsers(event: any) {
-    console.log(event)
+  filterUsers(searchText: string) {
+    this.sortedUsers = this.users.filter(user =>
+      user.name.indexOf(searchText) !== -1
+      || user.email.indexOf(searchText) !== -1
+      || user.surname.indexOf(searchText) !== -1
+      || user.type.indexOf(searchText) !== -1
+      || user.status.indexOf(searchText) !== -1);
+    if (searchText.length == 0) {
+      this.sortedUsers = this.users;
+    }
   }
+  
 }
