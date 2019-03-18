@@ -19,8 +19,7 @@
           <td class="clickable"> {{user.surname}} </td>
           <td>{{ user.type }}</td>
           <td>{{ user.email }}</td>
-          <td class="clickable" (click) ="activateUser(user.id)"> {{ user.status }}</td>
-          <td>{{ user.type }}</td>
+          <td class="clickable" (click) ="changeUserState(user.id, user.status)"> {{ user.status }}</td>
         </tr>
       </tbody>
     </table>

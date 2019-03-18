@@ -16,7 +16,7 @@ export class AdminUserPanelComponent implements OnInit {
   chosenUser: UserData;
   sortedUsers: UserData[];
   searchText: string = '';
-  headElements = ['name', 'surname', 'role', 'email', 'status', 'type'];
+  headElements = ['name', 'surname', 'type', 'email', 'status'];
 
   constructor(
     private apiClient: HttpClient,
@@ -68,8 +68,18 @@ export class AdminUserPanelComponent implements OnInit {
       || user.status.indexOf(searchText) !== -1);
   }
 
-  activateUser(id: string) {
-    console.log(id);
+  changeUserState(id: string, status: string) {
+    if (status == "Active") {
+      this.apiClient.delete(queries.userPath + id).subscribe(result => {
+        this.getUsers();
+      }, error => console.error(error));
+    }
+    else {
+      this.apiClient.put(queries.userPath + id + "/activate", id).subscribe(result => {
+        this.getUsers();
+      }, error => console.error(error));
+    }
+    
   }
   
 }
