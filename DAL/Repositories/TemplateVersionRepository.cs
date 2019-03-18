@@ -15,64 +15,64 @@ namespace DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<TemplateVersion>> FindAllVersions()
+        public async Task<IEnumerable<TemplateVersion>> FindAllTemplatesVersions()
         {
-            var templates = await DTSContext.TemplateVersion
+            var templatesVersions = await DTSContext.TemplateVersion
                 .Include(temp => temp.State)
                 .Include(temp => temp.Template)
                 .Include(temp => temp.Creator)
                 .ToListAsync();
 
-            return templates.DefaultIfEmpty() ?? throw new InvalidOperationException();
+            return templatesVersions.DefaultIfEmpty() ?? throw new InvalidOperationException();
         }
 
-        public async Task<TemplateVersion> FindVersionByIDAsync(int id)
+        public async Task<TemplateVersion> FindTemplateVersionByIdAsync(int id)
         {
-            var templates = await FindAllVersions();
-            var template = templates
+            var templatesVersions = await FindAllTemplatesVersions();
+            var templateVersion = templatesVersions
                 .Where(temp => temp.Id == id);
-            return template.FirstOrDefault() ?? throw new KeyNotFoundException();
+            return templateVersion.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
 
         public async Task<IEnumerable<TemplateVersion>> FindAllTemplateVersionsByTemplateIdAsync(int id)
         {
-            var templates = await FindAllVersions();
-            var template = templates
+            var templatesVersions = await FindAllTemplatesVersions();
+            var templateVersions = templatesVersions
                 .Where(temp => temp.TemplateId == id);
-            return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
+            return templateVersions.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
-        public async Task<IEnumerable<TemplateVersion>> FindByUserIdAsync(int id)
+        public async Task<IEnumerable<TemplateVersion>> FindTemplatesVersionsByUserIdAsync(int id)
         {
-            var templates = await FindAllVersions();
-            var template = templates
+            var templatesVersions = await FindAllTemplatesVersions();
+            var userTemplatesVersions = templatesVersions
                 .Where(temp => temp.CreatorId == id);
-            return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
+            return userTemplatesVersions.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
-        public async Task CreateAsync(TemplateVersion template)
+        public async Task CreateTemplateVersionAsync(TemplateVersion templateVersion)
         {
-            Create(template);
+            Create(templateVersion);
             await SaveAsync();
         }
 
-        public async Task UpdateAsync(TemplateVersion template)
+        public async Task UpdateTemplateVersionAsync(TemplateVersion templateVersion)
         {
-            Update(template);
+            Update(templateVersion);
             await SaveAsync();
         }
 
-        public async Task<IEnumerable<TemplateVersion>> FindVersionByConditionAsync(Expression<Func<TemplateVersion, bool>> expression)
+        public async Task<IEnumerable<TemplateVersion>> FindTemplatesVersionsByConditionAsync(Expression<Func<TemplateVersion, bool>> expression)
         {
-            var templates = await FindByConditionAsync(expression);
-            return templates.DefaultIfEmpty() ?? throw new InvalidOperationException();
+            var templatesVersions = await FindByConditionAsync(expression);
+            return templatesVersions.DefaultIfEmpty() ?? throw new InvalidOperationException();
         }
 
-        public async Task UpdateAsync(IEnumerable<TemplateVersion> templates)
+        public async Task UpdateTemplatesVersionsAsync(IEnumerable<TemplateVersion> templatesVersions)
         {
-            foreach (var template in templates)
+            foreach (var templateVersion in templatesVersions)
             {
-                Update(template);
+                Update(templateVersion);
             }
             await SaveAsync();
         }

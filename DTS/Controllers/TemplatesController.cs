@@ -124,7 +124,7 @@ namespace DTS.API.Controllers
             try
             {
                 var templates = await repository.TemplatesVersions
-                    .FindVersionByConditionAsync(temp => temp.TemplateId == id && temp.State.State == "Active");
+                    .FindTemplatesVersionsByConditionAsync(temp => temp.TemplateId == id && temp.State.State == "Active");
 
                 var template = templates.First();
             
@@ -240,7 +240,7 @@ namespace DTS.API.Controllers
 
             try
             {
-                var templateVersions = await repository.TemplatesVersions.FindAllVersions();
+                var templateVersions = await repository.TemplatesVersions.FindAllTemplatesVersions();
                 foreach (var templateVersion in templateVersions)
                 {
                     if (templateVersion.TemplateId == tempId && templateVersion.Id != verId)
@@ -253,7 +253,7 @@ namespace DTS.API.Controllers
                     }
                 }
 
-                await repository.TemplatesVersions.UpdateAsync(templateVersions);
+                await repository.TemplatesVersions.UpdateTemplatesVersionsAsync(templateVersions);
             }
             catch (InvalidOperationException)
             {
@@ -292,7 +292,7 @@ namespace DTS.API.Controllers
                 State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
             };
-            await repository.TemplatesVersions.CreateAsync(templateVC);
+            await repository.TemplatesVersions.CreateTemplateVersionAsync(templateVC);
 
             return NoContent();
         }
@@ -325,7 +325,7 @@ namespace DTS.API.Controllers
                     State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
 
                 };
-                await repository.TemplatesVersions.CreateAsync(templateVC);
+                await repository.TemplatesVersions.CreateTemplateVersionAsync(templateVC);
 
                 var templateSpecific = new SpecificTemplateVersion()
                 {
@@ -353,7 +353,7 @@ namespace DTS.API.Controllers
             try
             {
                 var templates = await repository.TemplatesVersions
-                    .FindVersionByConditionAsync(temp => temp.TemplateId == id && temp.State.State == "Active");
+                    .FindTemplatesVersionsByConditionAsync(temp => temp.TemplateId == id && temp.State.State == "Active");
                 var template = templates.FirstOrDefault();
 
                 template.Content = new JsonInputParser().FillTemplateFromJson(data, template);
@@ -415,10 +415,10 @@ namespace DTS.API.Controllers
             }
             try
             {
-                var template = await repository.TemplatesVersions.FindVersionByIDAsync(id);
+                var template = await repository.TemplatesVersions.FindTemplateVersionByIdAsync(id);
                 
                 template.State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
-                await repository.TemplatesVersions.UpdateAsync(template);
+                await repository.TemplatesVersions.UpdateTemplateVersionAsync(template);
 
                 var templateDto = new SpecificTemplateVersion()
                 {

@@ -34,7 +34,7 @@ namespace DTS.API.Services
         public async Task HandleAsync(ActivateTemplateVersionCommand command)
         {
             var templateVersion = await repository.TemplatesVersions
-                .FindVersionByIDAsync(command.TemplateVersionId);
+                .FindTemplateVersionByIdAsync(command.TemplateVersionId);
 
             var allTemplateVersions = await repository.TemplatesVersions
                 .FindAllTemplateVersionsByTemplateIdAsync(command.TemplateId);
@@ -47,12 +47,12 @@ namespace DTS.API.Services
                 if (tempVersion.State.Equals(activeState))
                 {
                     tempVersion.State = inactiveState;
-                    await repository.TemplatesVersions.UpdateAsync(tempVersion);
+                    await repository.TemplatesVersions.UpdateTemplateVersionAsync(tempVersion);
                 } 
             }
 
             templateVersion.State = activeState;
-            await repository.TemplatesVersions.UpdateAsync(templateVersion);
+            await repository.TemplatesVersions.UpdateTemplateVersionAsync(templateVersion);
 
         }
     }
