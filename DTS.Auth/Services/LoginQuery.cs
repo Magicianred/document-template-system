@@ -13,19 +13,17 @@ namespace DTS.Auth.Services
     {
         public string Login { get; }
         public string Password { get; }
-        public ITokenHelper TokenHelper { get; }
         public IRequestMonitor RequestMonitor { get; }
 
-        public LoginQuery(string login, string password, ITokenHelper tokenHelper, IRequestMonitor requestMonitor)
+        public LoginQuery(string login, string password, IRequestMonitor requestMonitor)
         {
             Login = login;
             Password = password;
-            TokenHelper = tokenHelper;
             RequestMonitor = requestMonitor;
         }
     }
 
-    public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, SecurityToken>
+    public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, User>
     {
         private readonly IRepositoryWrapper repository;
 
@@ -34,7 +32,7 @@ namespace DTS.Auth.Services
             this.repository = repository;
         }
 
-        public async Task<SecurityToken> HandleAsync(LoginQuery query)
+        public async Task<User> HandleAsync(LoginQuery query)
         {
             string errorMessage = "Account is inactive or Incorrect Login or Password";
             try
@@ -54,7 +52,7 @@ namespace DTS.Auth.Services
                         throw new KeyNotFoundException(errorMessage);
                     }
 
-                    return query.TokenHelper.GetNewToken(user.Id, user.Type.Name);
+                    return user;
                 }
                 throw new KeyNotFoundException(errorMessage);
             } catch (KeyNotFoundException)
