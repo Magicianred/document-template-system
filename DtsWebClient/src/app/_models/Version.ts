@@ -4,6 +4,7 @@ export class Version {
   templateVersion: string;
   versionState: string;
   creator: {
+    id: string;
     name: string;
     surname: string;
     email: string;

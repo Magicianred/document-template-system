@@ -13,17 +13,17 @@ namespace DTS.Auth.Services
     {
         public string Login { get; }
         public string Password { get; }
-        internal ITokenHelper TokenHelper { get; }
+        public IRequestMonitor RequestMonitor { get; }
 
-        public LoginQuery(string login, string password, ITokenHelper tokenHelper)
+        public LoginQuery(string login, string password, IRequestMonitor requestMonitor)
         {
             Login = login;
             Password = password;
-            TokenHelper = tokenHelper;
+            RequestMonitor = requestMonitor;
         }
     }
 
-    public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, SecurityToken>
+    public sealed class LoginQueryHandler : IQueryHandlerAsync<LoginQuery, User>
     {
         private readonly IRepositoryWrapper repository;
 
@@ -32,24 +32,32 @@ namespace DTS.Auth.Services
             this.repository = repository;
         }
 
-        public async Task<SecurityToken> HandleAsync(LoginQuery query)
+        public async Task<User> HandleAsync(LoginQuery query)
         {
+            string errorMessage = "Account is inactive or Incorrect Login or Password";
             try
             {
                 var user = await repository.Users.FindByUserLogin(query.Login);
+
+                if (query.RequestMonitor.IsReachedLoginAttemptsLimit(query.Login))
+                {
+                    throw new KeyNotFoundException(errorMessage);
+                }
+
                 if (validatePassword(user, query.Password))
                 {
+                    query.RequestMonitor.ResetLoginAttempts(query.Login);
                     if (!user.Status.Name.Equals("Active"))
                     {
-                        throw new InvalidOperationException($"{query.Login} is not Active");
+                        throw new KeyNotFoundException(errorMessage);
                     }
 
-                    return query.TokenHelper.GetNewToken(user.Id, user.Type.Name);
+                    return user;
                 }
-                throw new KeyNotFoundException("Password incorrect");
-            } catch (InvalidOperationException)
+                throw new KeyNotFoundException(errorMessage);
+            } catch (KeyNotFoundException)
             {
-                throw new KeyNotFoundException("Incorrect Login");
+                throw new KeyNotFoundException(errorMessage);
             }
         }
 

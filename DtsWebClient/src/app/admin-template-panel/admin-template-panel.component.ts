@@ -36,13 +36,13 @@ export class AdminTemplatePanelComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  switchState(id: string, state: string, name:string) {
+  switchState(id: string, state: string, name:string, ownerId: string) {
 
     if (state == "Inactive") {
       let updateData = new TemplateDataUpdate();
       updateData.id = +id;
       updateData.name = name;
-      updateData.ownerId = +prompt("editor id");
+      updateData.ownerId = +ownerId;
       updateData.stateId = 1;
       this.apiClient.put(queries.templatesPath + id, updateData).subscribe(result => {
         this.getTemplates();
