@@ -13,6 +13,7 @@ namespace DTS.API.Models.DTOs
         public UserDTO Owner { get; set; }
         public List<TemplateVersionDTO> TemplateVersions { get; set; }
 
+
         public static TemplateDTO ParseTemplateDTO(Template template)
         {
             var userDTO = UserDTO.ParseUserDTO(template.Owner);
@@ -29,7 +30,6 @@ namespace DTS.API.Models.DTOs
                 Name = template.Name,
                 Owner = userDTO,
                 TemplateVersions = templateVersions
-
             };
         }
 
