@@ -17,14 +17,16 @@ namespace DTS.Auth.Services
         public string Name { get; }
         public string Surname { get; }
         public string Email { get; }
+        public ICredentialsRestrictionValidation credentialsRestriction;
 
-        public SignInCommand(string login, string password, string name, string surname, string email)
+        public SignInCommand(string login, string password, string name, string surname, string email, ICredentialsRestrictionValidation credentialsRestriction)
         {
             Login = login;
             Password = password;
             Name = name;
             Surname = surname;
             Email = email;
+            this.credentialsRestriction = credentialsRestriction;
         }
     }
 
@@ -39,12 +41,18 @@ namespace DTS.Auth.Services
 
         public async Task HandleAsync(SignInCommand command)
         {
+            string errorMessage = "Account exist or password is in wrong format";
             int suspendedStatusId = 2;
             int defoultUserTypeId = 3;
 
+            if (command.credentialsRestriction.VerifyPassword(command.Login, command.Password))
+            {
+                throw new KeyNotFoundException(errorMessage);
+            }
+
             if (await repository.Users.IsExistByLogin(command.Login))
             {
-                throw new InvalidOperationException("Login already exist");
+                throw new InvalidOperationException(errorMessage);
             }
             UserStatus status = await repository.UserStatus.FindStatusById(suspendedStatusId);
             UserType type = await repository.UserType.FindTypeById(defoultUserTypeId); 

@@ -16,22 +16,24 @@ namespace DTS.Auth.Controllers
     {
         private readonly IAuthServiceWrapper services;
         private readonly ITokenHelper tokenHelper;
+        private readonly IRequestMonitor requestMonitor;
 
-        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection)
+        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, IRequestMonitor monitor)
         {
             this.services = services;
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
             this.tokenHelper = new TokenHelper(tokenSettings.Secret, tokenSettings.ExpirationTime);
+            this.requestMonitor = monitor;
         }
-
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok("Working...");
-        }
+        
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInForm form)
         {
+            if (VerifyRequestLimit())
+            {
+                return StatusCode(429, "Reached request limit. Come back after few minutes");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -44,7 +46,8 @@ namespace DTS.Auth.Controllers
                     form.Password,
                     form.Name,
                     form.Surname,
-                    form.Email
+                    form.Email,
+                    new DefaultRestriction()
                     ));
                 return Ok();
             }
@@ -57,6 +60,11 @@ namespace DTS.Auth.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LogIn([FromBody] UserCredentials credentials)
         {
+            if (VerifyRequestLimit())
+            {
+                return StatusCode(429, "Reached request limit. Come back after few minutes");
+            } 
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -67,7 +75,8 @@ namespace DTS.Auth.Controllers
                 var token = await services.Login.HandleAsync(new LoginQuery(
                     credentials.Login,
                     credentials.Password,
-                    tokenHelper
+                    tokenHelper,
+                    requestMonitor
                     ));
 
                 var tokenDTO = new Token
@@ -86,6 +95,12 @@ namespace DTS.Auth.Controllers
             {
                 return Unauthorized(e.Message);
             }
+        }
+
+        private bool VerifyRequestLimit()
+        {
+            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+            return requestMonitor.VerifyRequestRateLimit(ip);
         }
     }
 }
