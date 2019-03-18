@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthenticationService } from 'src/app/_services/authService';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { retry } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { SignInForm } from 'src/app/_models/signIn';
 import queries from '../../../assets/queries.json';
 
 @Component({
@@ -15,25 +12,26 @@ import queries from '../../../assets/queries.json';
 export class SignInFormComponent implements OnInit {
   signInForm: FormGroup;
   returnUrl: string;
-  loading = false;
+  loaded = false;
   submitted = false;
+  submitResult: string;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    private apiClient: HttpClient) { }
+    private apiClient: HttpClient)
+  { }
 
   ngOnInit() {
     this.signInForm = this.formBuilder.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
       login: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', Validators.email],
       password: ['', Validators.required],
       passwordConfirm: [''],
     }, { validator: this.checkPasswords });
-
+    this.loaded = false;
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
@@ -49,14 +47,11 @@ export class SignInFormComponent implements OnInit {
     if (this.signInForm.invalid) {
       return;
     }
-    console.log(this.signInForm.value)
-    this.loading = true;
 
     this.apiClient.post(queries.signInPath, this.signInForm.value).subscribe(result => {
-      
-      console.log(result);
-      this.loading = false;
-    }, error => console.error(error));
+      this.loaded = true;
+      this.submitResult = "Account created properly, please wait for activation"
+    }, error => this.submitResult = error);
   }
 
   checkPasswords(signInForm: FormGroup) {
