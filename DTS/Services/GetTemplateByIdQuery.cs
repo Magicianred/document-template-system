@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DTS.API.Services
 {
-    public class GetTemplateByIdQuerry : IQuery
+    public class GetTemplateByIdQuery : IQuery
     {
         public int Id { get; }
 
-        public GetTemplateByIdQuerry(int id)
+        public GetTemplateByIdQuery(int id)
         {
             Id = id;
         }
@@ -20,7 +20,7 @@ namespace DTS.API.Services
 
 
     public sealed class GetTemplateByIdQueryHandler
-        : IQueryHandlerAsync<GetTemplateByIdQuerry, TemplateDTO>
+        : IQueryHandlerAsync<GetTemplateByIdQuery, TemplateDTO>
     {
         private readonly IRepositoryWrapper repository;
 
@@ -29,7 +29,7 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
-        public async Task<TemplateDTO> HandleAsync(GetTemplateByIdQuerry query)
+        public async Task<TemplateDTO> HandleAsync(GetTemplateByIdQuery query)
         {
             var template = await repository.Templates.FindTemplateByIdAsync(query.Id);
             return TemplateDTO.ParseTemplate(template);
