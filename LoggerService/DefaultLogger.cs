@@ -8,34 +8,35 @@ namespace LoggerService
     class DefaultLogger : ILoggerService
     {
         private static ILogger logger = LogManager.GetCurrentClassLogger();
+
         public void Debug(string log)
         {
-            throw new NotImplementedException();
+            logger.Debug(log);
         }
 
         public void Error(string log)
         {
-            throw new NotImplementedException();
+            logger.Error(log);
         }
 
         public void Fatal(string log)
         {
-            throw new NotImplementedException();
+            logger.Fatal(log);
         }
 
         public void Info(string log)
         {
-            throw new NotImplementedException();
+            logger.Info(log);
         }
 
         public void Trace(string log)
         {
-            throw new NotImplementedException();
+            logger.Trace(log);
         }
 
         public void Warn(string log)
         {
-            throw new NotImplementedException();
+            logger.Warn(log);
         }
     }
 }
