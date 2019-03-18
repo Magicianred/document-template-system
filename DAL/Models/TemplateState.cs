@@ -31,5 +31,7 @@ namespace DAL.Models
             }
         }
 
+        public override int GetHashCode() => HashCode.Combine(Id, State);
+
     }
 }
