@@ -358,7 +358,7 @@ namespace DTS.API.Controllers
 
                 template.Content = new JsonInputParser().FillTemplateFromJson(data, template);
 
-                var contentDTO = new TemplateContent
+                var contentDTO = new TemplateContentDTO
                 {
                     Content = template.Content
                 };

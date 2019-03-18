@@ -27,7 +27,10 @@ namespace DTS.API.Services
 
         private IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> _getTemplatesQuery;
 
+        private IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> _fillInTemplateQuery;
+
         private IRepositoryWrapper repository;
+
 
         public TemplateService(IRepositoryWrapper repository)
         {
@@ -149,6 +152,17 @@ namespace DTS.API.Services
             }
         }
 
-        public ICommandHandlerAsync<AddTemplateCommand> AddTemplteCommand => throw new NotImplementedException();
+
+        public IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> FillInTemplateQuery
+        {
+            get
+            {
+                if (_fillInTemplateQuery == null)
+                {
+                    _fillInTemplateQuery = new FillInTemplateQueryHandler(repository);
+                }
+                return _fillInTemplateQuery;
+            }
+        }
     }
 }
