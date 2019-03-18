@@ -72,7 +72,7 @@ namespace DTS.API.Controllers
                 return BadRequest("Passed negative id value");
             }
 
-            var template = await repository.Templates.FindTemplateByIDAsync(id);
+            var template = await repository.Templates.FindTemplateByIdAsync(id);
 
             if (template.Name == null)
             {
@@ -162,7 +162,7 @@ namespace DTS.API.Controllers
             try
             {
                 var templates = await repository.Templates
-                    .FindByUserIdAsync(id);
+                    .FindTemplatesByOwnerIdAsync(id);
 
                 var templatesDTOs = new List<AllTemplates>();
 
@@ -202,13 +202,13 @@ namespace DTS.API.Controllers
 
             try
             {
-                var template = await repository.Templates.FindTemplateByIDAsync(id);
+                var template = await repository.Templates.FindTemplateByIdAsync(id);
 
                 template.State = await repository.TemplateState.FindStateByIdAsync(newTemplateData.StateId);
                 template.Name = newTemplateData.Name;
                 template.Owner = await repository.Users.FindUserByIDAsync(newTemplateData.OwnerID);
 
-                await repository.Templates.UpdateAsync(template);
+                await repository.Templates.UpdateTemplateAsync(template);
             }
             catch (KeyNotFoundException)
             {
@@ -315,7 +315,7 @@ namespace DTS.API.Controllers
                     State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID),
                 };
 
-                await repository.Templates.CreateAsync(template);
+                await repository.Templates.CreateTemplateAsync(template);
 
                 var templateVC = new TemplateVersion()
                 {
@@ -382,10 +382,10 @@ namespace DTS.API.Controllers
             }
             try
             {
-                var template = await repository.Templates.FindTemplateByIDAsync(id);
+                var template = await repository.Templates.FindTemplateByIdAsync(id);
 
                 template.State = await repository.TemplateState.FindStateByIdAsync(_inactiveStatusRowID);
-                await repository.Templates.UpdateAsync(template);
+                await repository.Templates.UpdateTemplateAsync(template);
                 var templateDto = new AllTemplates()
                 {
                     ID = template.Id,
