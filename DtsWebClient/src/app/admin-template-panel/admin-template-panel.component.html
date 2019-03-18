@@ -42,7 +42,7 @@
           <td>{{ version.creationTime }}</td>
           <td>{{ version.creator.name}} {{ version.creator.surname }}</td>
           <td>{{ version.versionState }}</td>
-          <td><button type="submit" class="btn btn-primary" (click)="switchVersionState(version.id, version.versionState)">Switch State</button></td>
+          <td><button type="submit" class="btn btn-primary" (click)="switchVersionState(version.id, version.versionState, version.creator.id)">Switch State</button></td>
         </tr>
       </tbody>
     </table>

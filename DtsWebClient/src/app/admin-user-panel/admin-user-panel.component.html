@@ -11,19 +11,16 @@
       <thead class="thead-dark">
         <tr>
           <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}} </th>
-          <th>Activate/Deactivate</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let user of sortedUsers">
-          <td class="clickable" id="{{user.id}}"> {{ user.name }} </td>
-          <td class="clickable" id="{{user.id}}"> {{user.surname}} </td>
+          <td class="clickable"> {{ user.name }} </td>
+          <td class="clickable"> {{user.surname}} </td>
           <td>{{ user.type }}</td>
           <td>{{ user.email }}</td>
-          <td class="clickable"> {{ user.status }}</td>
+          <td class="clickable" (click) ="activateUser(user.id)"> {{ user.status }}</td>
           <td>{{ user.type }}</td>
-          <td><button type="submit" class="btn btn-primary">test</button></td>
-
         </tr>
       </tbody>
     </table>

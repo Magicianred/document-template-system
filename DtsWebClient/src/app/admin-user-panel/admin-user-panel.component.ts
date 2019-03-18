@@ -66,9 +66,10 @@ export class AdminUserPanelComponent implements OnInit {
       || user.surname.indexOf(searchText) !== -1
       || user.type.indexOf(searchText) !== -1
       || user.status.indexOf(searchText) !== -1);
-    if (searchText.length == 0) {
-      this.sortedUsers = this.users;
-    }
+  }
+
+  activateUser(id: string) {
+    console.log(id);
   }
   
 }
