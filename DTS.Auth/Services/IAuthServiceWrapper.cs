@@ -1,4 +1,5 @@
-﻿using DTS.API.Services;
+﻿using DAL.Models;
+using DTS.API.Services;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace DTS.Auth.Services
 {
     public interface IAuthServiceWrapper
     {
-        IQueryHandlerAsync<LoginQuery, SecurityToken> Login { get; }
+        IQueryHandlerAsync<LoginQuery, User> Login { get; }
         ICommandHandlerAsync<SignInCommand> SignIn { get; }
         ICommandHandlerAsync<ChangeUserLoginAndPasswordCommand> ChangeUserLoginAndPassword { get; }
     }

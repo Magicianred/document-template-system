@@ -11,12 +11,12 @@ namespace DTS.Auth.Services
 {
     public class AuthServiceWrapper : IAuthServiceWrapper
     {
-        private IQueryHandlerAsync<LoginQuery, SecurityToken> _login;
+        private IQueryHandlerAsync<LoginQuery, User> _login;
         private ICommandHandlerAsync<SignInCommand> _signIn;
         private ICommandHandlerAsync<ChangeUserLoginAndPasswordCommand> _changeLoginPassword;
         private IRepositoryWrapper _repository;
 
-        public IQueryHandlerAsync<LoginQuery, SecurityToken> Login
+        public IQueryHandlerAsync<LoginQuery, User> Login
         {
             get
             {
