@@ -31,7 +31,7 @@ namespace DTS.API.Services
 
         private IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> _getTemplateFormQuery;
 
-        private IRepositoryWrapper repository;
+        private readonly IRepositoryWrapper repository;
 
 
         public TemplateService(IRepositoryWrapper repository)
