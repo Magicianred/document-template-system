@@ -15,7 +15,7 @@ namespace DTS.API.Models.DTOs
         public string Status { get; set; }
         public string Type { get; set; }
 
-        public static ExtendedUserDTO parseUser(User user)
+        public static ExtendedUserDTO ParseUser(User user)
         {
             return new ExtendedUserDTO
             {

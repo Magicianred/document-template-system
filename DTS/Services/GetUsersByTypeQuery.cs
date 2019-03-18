@@ -40,7 +40,7 @@ namespace DTS.API.Services
             var usersDtos = new List<ExtendedUserDTO>();
             foreach (var user in users)
             {
-                usersDtos.Add(ExtendedUserDTO.parseUser(user));
+                usersDtos.Add(ExtendedUserDTO.ParseUser(user));
             }
             return usersDtos;
         }
