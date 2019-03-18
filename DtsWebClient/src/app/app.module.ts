@@ -20,6 +20,10 @@ import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { UserPanelComponent } from './home/user-panel/user-panel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AdminUserPanelComponent } from './admin-user-panel/admin-user-panel.component';
+import { MatSortModule } from '@angular/material'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {SearchUsersPipe } from './user-filter.pipe';
 
 
 @NgModule({
@@ -36,6 +40,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AdminTemplatePanelComponent,
     TemplateAdderComponent,
     UserPanelComponent,
+    AdminUserPanelComponent,
+    SearchUsersPipe,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +51,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     AngularWebStorageModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    MatSortModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl, deps: [] },

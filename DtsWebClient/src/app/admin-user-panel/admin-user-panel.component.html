@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-md-12 mx-auto">
+    <div class="md-form">
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" mdbInput (keyup) ="filterUsers($event.target.value)">
+      <label for="search">Search</label>
+    </div>
+  </div>
+</div>
+<div *ngIf="!userChosen">
+    <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange) = "sortUsers($event)">
+      <thead class="thead-dark">
+        <tr>
+          <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}} </th>
+          <th>Activate/Deactivate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of (users | searchUsers: searchText)">
+          <td class="clickable" id="{{user.id}}"> {{ user.name }} </td>
+          <td class="clickable" id="{{user.id}}"> {{user.surname}} </td>
+          <td>{{ user.type }}</td>
+          <td>{{ user.email }}</td>
+          <td class="clickable"> {{ user.status }}</td>
+          <td>{{ user.type }}</td>
+          <td><button type="submit" class="btn btn-primary">test</button></td>
+
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+
