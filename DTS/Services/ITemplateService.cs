@@ -18,5 +18,6 @@ namespace DTS.API.Services
         IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>> GetTemplatesByUserQuery { get; }
         IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> GetTemplatesQuery { get; }
         IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> FillInTemplateQuery { get; }
+        IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> GetTemplateFormQuery { get; }
     }
 }

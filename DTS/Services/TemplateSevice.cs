@@ -29,6 +29,8 @@ namespace DTS.API.Services
 
         private IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> _fillInTemplateQuery;
 
+        private IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> _getTemplateFormQuery;
+
         private IRepositoryWrapper repository;
 
 
@@ -162,6 +164,19 @@ namespace DTS.API.Services
                     _fillInTemplateQuery = new FillInTemplateQueryHandler(repository);
                 }
                 return _fillInTemplateQuery;
+            }
+        }
+
+
+        public IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> GetTemplateFormQuery
+        {
+            get
+            {
+                if (_getTemplateFormQuery == null)
+                {
+                    _getTemplateFormQuery = new GetTemplateFormQueryHandler(repository);
+                }
+                return _getTemplateFormQuery;
             }
         }
     }
