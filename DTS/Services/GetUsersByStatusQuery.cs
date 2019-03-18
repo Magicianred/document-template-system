@@ -28,21 +28,13 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
+
         public async Task<List<ExtendedUserDTO>> HandleAsync(GetUsersByStatusQuery query)
         {
             var users = await repository.Users
                 .FindUserByCondition(u => u.Status.Name.ToUpper().Equals(query.Status.ToUpper()));
-            return CollectUsersDTOs(users);
-        }
 
-        private List<ExtendedUserDTO> CollectUsersDTOs(IEnumerable<User> users)
-        {
-            var usersDtos = new List<ExtendedUserDTO>();
-            foreach (var user in users)
-            {
-                usersDtos.Add(ExtendedUserDTO.ParseUser(user));
-            }
-            return usersDtos;
-        }
+            return UserDTO.ParseUsersDTO(users);
+        }   
     }
 }

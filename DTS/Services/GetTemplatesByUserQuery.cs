@@ -27,18 +27,13 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
+
         public async Task<List<TemplateDTO>> HandleAsync(GetTemplatesByUserQuery query)
         {
-            var userTemplates = await repository.Templates.FindTemplatesByOwnerIdAsync(query.UserId);
-
-            var userTemplatesDTO = new List<TemplateDTO>();
-
-            foreach (var template in userTemplates)
-            {
-                userTemplatesDTO.Add(TemplateDTO.ParseTemplate(template));
-            }
-
-            return userTemplatesDTO;
+            var userTemplates = await repository
+                .Templates.FindTemplatesByOwnerIdAsync(query.UserId);
+  
+            return TemplateDTO.ParseTemplatesDTO(userTemplates);
         }
     }
 }

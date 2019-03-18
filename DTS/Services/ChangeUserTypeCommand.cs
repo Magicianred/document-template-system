@@ -15,7 +15,7 @@ namespace DTS.API.Services
         public ChangeUserTypeCommand(int id, string type)
         {
             Id = id;
-            this.Type = type;
+            Type = type;
         }
     }
 

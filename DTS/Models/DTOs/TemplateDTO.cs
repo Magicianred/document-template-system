@@ -10,11 +10,13 @@ namespace DTS.API.Models.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int OwnerId { get; set; }
+        public UserDTO Owner { get; set; }
         public List<TemplateVersionDTO> TemplateVersions { get; set; }
 
-        public static TemplateDTO ParseTemplate(Template template)
+        public static TemplateDTO ParseTemplateDTO(Template template)
         {
+            var userDTO = UserDTO.ParseUserDTO(template.Owner);
+
             var templateVersions = new List<TemplateVersionDTO>();
             foreach (var templateVersion in template.TemplateVersion)
             {
@@ -25,12 +27,26 @@ namespace DTS.API.Models.DTOs
             {
                 Id = template.Id,
                 Name = template.Name,
-                OwnerId = template.OwnerId,
+                Owner = userDTO,
                 TemplateVersions = templateVersions
 
             };
         }
+
+
+        public static List<TemplateDTO> ParseTemplatesDTO(IEnumerable<Template> templates)
+        {
+            var templatesDTO = new List<TemplateDTO>();
+
+            foreach (var template in templates)
+            {
+                templatesDTO.Add(ParseTemplateDTO(template));
+            }
+
+            return templatesDTO;
+        }
     }
+}
 
     
 

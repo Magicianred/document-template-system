@@ -17,8 +17,7 @@ namespace DTS.API.Services
         }
     }
 
-
-
+    
     public sealed class GetTemplateByIdQueryHandler
         : IQueryHandlerAsync<GetTemplateByIdQuery, TemplateDTO>
     {
@@ -32,10 +31,8 @@ namespace DTS.API.Services
         public async Task<TemplateDTO> HandleAsync(GetTemplateByIdQuery query)
         {
             var template = await repository.Templates.FindTemplateByIdAsync(query.Id);
-            return TemplateDTO.ParseTemplate(template);
+            return TemplateDTO.ParseTemplateDTO(template);
         }
 
-
-        
     }
 }

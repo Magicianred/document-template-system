@@ -27,6 +27,7 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
+
         public async Task<Dictionary<string, string>> HandleAsync(GetTemplateFormQuery query)
         {
             var activeState = await repository.TemplateState.FindStateByName(_activeTemplateState);
@@ -34,11 +35,9 @@ namespace DTS.API.Services
                     .FindTemplatesVersionsByConditionAsync(tempVer => tempVer.TemplateId == query.TemplateId && tempVer.State.Equals(activeState));
 
             var template = templates.FirstOrDefault(); 
-
             var templateFormContent = template.Content;
 
             return new TemplateParser().ParseFields(templateFormContent);
         }
     }
-
 }

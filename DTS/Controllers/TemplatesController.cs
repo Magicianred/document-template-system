@@ -49,7 +49,7 @@ namespace DTS.API.Controllers
                         VersionCount = template.TemplateVersion.Count(),
                         Owner = new UserDTO
                         {
-                            ID = template.Owner.Id,
+                            Id = template.Owner.Id,
                             Name = template.Owner.Name,
                             Surname = template.Owner.Surname,
                             Email = template.Owner.Email
@@ -87,7 +87,7 @@ namespace DTS.API.Controllers
                 Versions = new List<SpecificTemplateVersion>(),
                 Owner = new UserDTO
                 {
-                    ID = template.Owner.Id,
+                    Id = template.Owner.Id,
                     Name = template.Owner.Name,
                     Surname = template.Owner.Surname,
                     Email = template.Owner.Email
@@ -104,7 +104,7 @@ namespace DTS.API.Controllers
                     VersionState = (await repository.TemplateState.FindStateByIdAsync(tempVersion.StateId)).State,
                     Creator = new UserDTO
                     {
-                        ID = tempVersion.Creator.Id,
+                        Id = tempVersion.Creator.Id,
                         Name = tempVersion.Creator.Name,
                         Surname = tempVersion.Creator.Surname,
                         Email = tempVersion.Creator.Email
@@ -179,7 +179,7 @@ namespace DTS.API.Controllers
                         VersionCount = template.TemplateVersion.Count(),
                         Owner = new UserDTO
                         {
-                            ID = template.Owner.Id,
+                            Id = template.Owner.Id,
                             Name = template.Owner.Name,
                             Surname = template.Owner.Surname,
                             Email = template.Owner.Email
@@ -337,7 +337,7 @@ namespace DTS.API.Controllers
                     TemplateVersion = templateVC.Content,
                     Creator = new UserDTO
                     {
-                        ID = template.Owner.Id,
+                        Id = template.Owner.Id,
                         Name = template.Owner.Name,
                         Surname = template.Owner.Surname,
                         Email = template.Owner.Email
@@ -399,7 +399,7 @@ namespace DTS.API.Controllers
                     VersionCount = template.TemplateVersion.Count,
                     Owner = new UserDTO
                     {
-                        ID = template.Owner.Id,
+                        Id = template.Owner.Id,
                         Name = template.Owner.Name,
                         Surname = template.Owner.Surname,
                         Email = template.Owner.Email
@@ -432,7 +432,7 @@ namespace DTS.API.Controllers
                     TemplateVersion = template.Content,
                     Creator = new UserDTO
                     {
-                        ID = template.Creator.Id,
+                        Id = template.Creator.Id,
                         Name = template.Creator.Name,
                         Surname = template.Creator.Surname,
                         Email = template.Creator.Email

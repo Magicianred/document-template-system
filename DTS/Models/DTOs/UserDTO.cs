@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,11 +8,34 @@ namespace DTS.API.Models.DTOs
 {
     public class UserDTO
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
 
+        internal static UserDTO ParseUserDTO(User user)
+        {
+            return new UserDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                Email = user.Email
+            };
+        }
 
+
+        public static List<ExtendedUserDTO> ParseUsersDTO(IEnumerable<User> users)
+        {
+            var usersDTO = new List<ExtendedUserDTO>();
+
+            foreach (var user in users)
+            {
+                usersDTO.Add(ExtendedUserDTO.ParseUser(user));
+            }
+
+            return usersDTO;
+        }
     }
+
 }

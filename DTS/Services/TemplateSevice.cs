@@ -10,27 +10,16 @@ namespace DTS.API.Services
     public class TemplateService : ITemplateService
     {
         private ICommandHandlerAsync<ActivateTemplateCommand> _activateTemplateCommand;
-
         private ICommandHandlerAsync<ActivateTemplateVersionCommand> _activateTemplateVersionCommand;
-
         private ICommandHandlerAsync<AddTemplateCommand> _addTemplateCommand;
-
         private ICommandHandlerAsync<AddTemplateVersionCommand> _addTemplateVersionCommand;
-
         private ICommandHandlerAsync<DeactivateTemplateCommand> _deactivateTemplateCommand;
-
         private ICommandHandlerAsync<SetTemplateOwnerCommand> _setTemplateOwnerCommand;
-
         private IQueryHandlerAsync<GetTemplateByIdQuery, TemplateDTO> _getTemplateByIdQuery;
-
         private IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>> _getTemplatesByUserQuery;
-
         private IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> _getTemplatesQuery;
-
         private IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> _fillInTemplateQuery;
-
         private IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> _getTemplateFormQuery;
-
         private readonly IRepositoryWrapper repository;
 
 
@@ -38,6 +27,7 @@ namespace DTS.API.Services
         {
             this.repository = repository;
         }
+
 
         public ICommandHandlerAsync<ActivateTemplateCommand> ActivateTemplateCommand
         {
@@ -50,6 +40,7 @@ namespace DTS.API.Services
                 return _activateTemplateCommand;
             }
         }
+
 
         public ICommandHandlerAsync<ActivateTemplateVersionCommand> ActivateTemplateVersionCommand
         {

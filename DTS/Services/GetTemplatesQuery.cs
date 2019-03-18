@@ -11,6 +11,7 @@ namespace DTS.API.Services
     {
     }
 
+
     public sealed class GetTemplatesQueryHandler : IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>>
     {
         private readonly IRepositoryWrapper repository;
@@ -24,13 +25,8 @@ namespace DTS.API.Services
         public async Task<List<TemplateDTO>> HandleAsync(GetTemplatesQuery query)
         {
             var templates = await repository.Templates.FindAllTemplatesAsync();
-            var templatesDTO = new List<TemplateDTO>();
-            foreach (var template in templates)
-            {
-                templatesDTO.Add(TemplateDTO.ParseTemplate(template));
-            }
-
-            return templatesDTO;
+            
+            return TemplateDTO.ParseTemplatesDTO(templates);
         }
     }
 }
