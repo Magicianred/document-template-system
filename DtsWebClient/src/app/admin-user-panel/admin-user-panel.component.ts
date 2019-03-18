@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
-import { UserData } from '../_models/user';
+import { UserData, UserChangingData } from '../_models/user';
 import queries from '../../assets/queries.json';
 import { HttpClient } from '@angular/common/http';
 import { Sort } from '@angular/material';
@@ -16,7 +16,7 @@ export class AdminUserPanelComponent implements OnInit {
   chosenUser: UserData;
   sortedUsers: UserData[];
   searchText: string = '';
-  headElements = ['name', 'surname', 'type', 'email', 'status'];
+  headElements = ['Name', 'Surname', 'Email', 'Type', 'Status'];
 
   constructor(
     private apiClient: HttpClient,
@@ -37,12 +37,12 @@ export class AdminUserPanelComponent implements OnInit {
     this.sortedUsers = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name': return this.compare(a.name, b.name, isAsc);
-        case 'surname': return this.compare(a.surname, b.surname, isAsc);
-        case 'role': return this.compare(a.role, b.role, isAsc);
-        case 'email': return this.compare(a.email, b.email, isAsc);
-        case 'type': return this.compare(a.type, b.type, isAsc);
-        case 'status': return this.compare(a.status, b.status, isAsc);
+        case 'Name': return this.compare(a.name, b.name, isAsc);
+        case 'Surname': return this.compare(a.surname, b.surname, isAsc);
+        case 'Role': return this.compare(a.role, b.role, isAsc);
+        case 'Email': return this.compare(a.email, b.email, isAsc);
+        case 'Type': return this.compare(a.type, b.type, isAsc);
+        case 'Status': return this.compare(a.status, b.status, isAsc);
         default: return 0;
       }
     });
@@ -79,7 +79,36 @@ export class AdminUserPanelComponent implements OnInit {
         this.getUsers();
       }, error => console.error(error));
     }
-    
+  }
+
+  switchUserType(type: string, currentType: string, id: string) {
+    if (type == currentType) {
+      return
+    }
+    let query = `${queries.userPath}${id}/type/${type}`
+
+    this.apiClient.put(query, "EmptyBody").subscribe(result => {
+      this.getUsers();
+    }, error => console.error(error));
+  } 
+
+  changeUserData(name: any, surname: any, email: any, event: any) {
+    let userIndex = event.path[4].rowIndex - 1;
+    this.chosenUser = this.users[userIndex];
+    let newData = new UserChangingData();
+
+    if (name == "" && surname == "" && email == "") {
+      return
+    }
+
+    newData.name = name == "" ? this.chosenUser.name : name;
+    newData.surname = surname == "" ? this.chosenUser.surname : surname;
+    newData.email = email == "" ? this.chosenUser.email : email;
+
+    let query = `${queries.userPath}${this.chosenUser.id}`
+    this.apiClient.put(query, newData).subscribe(result => {
+      this.getUsers();
+    }, error => console.error(error));
   }
   
 }

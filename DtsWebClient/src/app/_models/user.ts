@@ -14,3 +14,9 @@ export class UserData {
   status: string;
   type: string;
 }
+
+export class UserChangingData {
+  name: string;
+  surname: string;
+  email: string;
+}
