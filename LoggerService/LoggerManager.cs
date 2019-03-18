@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LoggerService
 {
-    class DefaultLogger : ILoggerService
+    class LoggerManager : ILoggerService
     {
         private static ILogger logger = LogManager.GetCurrentClassLogger();
 
