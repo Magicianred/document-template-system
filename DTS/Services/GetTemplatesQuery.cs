@@ -24,13 +24,13 @@ namespace DTS.API.Services
         public async Task<List<TemplateDTO>> HandleAsync(GetTemplatesQuery query)
         {
             var templates = await repository.Templates.FindAllTemplatesAsync();
-            var allTemplates = new List<TemplateDTO>();
+            var templatesDTO = new List<TemplateDTO>();
             foreach (var template in templates)
             {
-                allTemplates.Add(TemplateDTO.ParseTemplate(template));
+                templatesDTO.Add(TemplateDTO.ParseTemplate(template));
             }
 
-            return allTemplates;
+            return templatesDTO;
         }
     }
 }
