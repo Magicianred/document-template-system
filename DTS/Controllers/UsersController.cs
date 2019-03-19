@@ -253,11 +253,13 @@ namespace DTS.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Bad request", 400);
                 return BadRequest(ModelState);
             }
 
             if (!VerifyIfUserIdEqualsTokenClaimName(id))
             {
+                LogEndOfRequest($"User id {GetUserTypeFromToken()} {GetUserTypeFromToken()}, Trying to block himself.", 400);
                 return BadRequest();
             }
 
@@ -265,9 +267,11 @@ namespace DTS.API.Controllers
             {
                 var command = new BlockUserCommand(id);
                 await userService.BlockUserCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
             } catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"User with id {id} not found", 404);
                 return NotFound();
             }
         }
