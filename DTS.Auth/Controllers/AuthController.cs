@@ -6,6 +6,7 @@ using DTS.Auth.Models.DTO;
 using DTS.Auth.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DTS.Auth.Controllers
 {
@@ -18,8 +19,9 @@ namespace DTS.Auth.Controllers
         private readonly IHashPassword hashHandler;
         private readonly IRequestMonitor requestMonitor;
         private readonly ICredentialsRestrictionValidation credentialsRestriction;
+        private readonly ILogger logger;
 
-        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, IRequestMonitor monitor)
+        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, IRequestMonitor monitor, ILogger logger)
         {
             this.services = services;
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
@@ -27,8 +29,29 @@ namespace DTS.Auth.Controllers
             this.hashHandler = new BCryptHash();
             this.requestMonitor = monitor;
             this.credentialsRestriction = new DefaultRestriction();
+            this.logger = logger;
         }
-        
+
+        private void LogBeginOfRequest()
+        {
+            logger.LogInformation("request ip: {ip}, start request handling.", GetRequestIp());
+        }
+
+        private void LogEndOfRequest(string message, int status)
+        {
+            logger.LogInformation("status: {status} : {message}.",
+                status,
+                message
+                );
+        }
+        private void LogWarning(string message, int status)
+        {
+            logger.LogWarning("status: {status} : {message}.",
+                status,
+                message
+                );
+        }
+
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInForm form)
         {
@@ -67,7 +90,7 @@ namespace DTS.Auth.Controllers
             if (VerifyRequestLimit())
             {
                 return StatusCode(429, "Reached request limit. Come back after few minutes");
-            } 
+            }
 
             if (!ModelState.IsValid)
             {
@@ -142,10 +165,15 @@ namespace DTS.Auth.Controllers
             }
         }
 
-    private bool VerifyRequestLimit()
+        private bool VerifyRequestLimit()
         {
-            var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+            var ip = GetRequestIp();
             return requestMonitor.VerifyRequestRateLimit(ip);
+        }
+
+        private string GetRequestIp()
+        {
+            return HttpContext.Connection.RemoteIpAddress.ToString();
         }
     }
 }

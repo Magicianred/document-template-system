@@ -44,14 +44,14 @@ namespace DTS.API.Controllers
 
         private void LogEndOfRequest(string message, int status)
         {
-            logger.LogInformation("status: {status} : {message}",
+            logger.LogInformation("status: {status} : {message}.",
                 status,
                 message
                 );
         }
         private void LogWarning(string message, int status)
         {
-            logger.LogWarning("status: {status} : {message}",
+            logger.LogWarning("status: {status} : {message}.",
                 status,
                 message
                 );
@@ -259,7 +259,7 @@ namespace DTS.API.Controllers
 
             if (!VerifyIfUserIdEqualsTokenClaimName(id))
             {
-                LogEndOfRequest($"User id {GetUserTypeFromToken()} {GetUserTypeFromToken()}, Trying to block himself.", 400);
+                LogEndOfRequest($"User id {GetUserTypeFromToken()} {GetUserTypeFromToken()}, Trying to block himself", 400);
                 return BadRequest();
             }
 
