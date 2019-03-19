@@ -55,13 +55,16 @@ namespace DTS.Auth.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInForm form)
         {
+            LogBeginOfRequest();
             if (VerifyRequestLimit())
             {
+                LogEndOfRequest($"Failed request Ip: {GetRequestIp()} reached limit", 429);
                 return StatusCode(429, "Reached request limit. Come back after few minutes");
             }
 
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -76,10 +79,12 @@ namespace DTS.Auth.Controllers
                     hashHandler,
                     credentialsRestriction
                     ));
+                LogEndOfRequest($"Success created user {form}", 200);
                 return Ok();
             }
             catch (Exception e)
             {
+                LogEndOfRequest("Failed " + e.Message, 400);
                 return BadRequest(e.Message);
             }
         }
