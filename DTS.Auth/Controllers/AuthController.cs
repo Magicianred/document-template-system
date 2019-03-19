@@ -119,6 +119,7 @@ namespace DTS.Auth.Controllers
                 var user = await services.Login.HandleAsync(new LoginQuery(
                     changeCredentialsForm.Login,
                     changeCredentialsForm.Password,
+                    hashHandler,
                     requestMonitor
                     ));
 
@@ -126,6 +127,7 @@ namespace DTS.Auth.Controllers
                     user.Id,
                     changeCredentialsForm.NewLogin,
                     changeCredentialsForm.NewPassword,
+                    hashHandler,
                     credentialsRestriction
                     ));
                 return Ok();
