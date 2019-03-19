@@ -50,6 +50,7 @@ namespace DTS.Auth.Controllers
                     form.Name,
                     form.Surname,
                     form.Email,
+                    hashHandler,
                     credentialsRestriction
                     ));
                 return Ok();
