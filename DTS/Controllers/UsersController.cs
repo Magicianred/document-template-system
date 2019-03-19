@@ -84,7 +84,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet("type/{type}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> GetUsersByType(string type)
         {
             try
