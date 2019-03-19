@@ -16,5 +16,22 @@ namespace DAL.Models
 
         public virtual ICollection<Template> Template { get; set; }
         public virtual ICollection<TemplateVersion> TemplateVersion { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                TemplateState ts = (TemplateState)obj;
+                return (Id == ts.Id) && (State == ts.State);
+            }
+        }
+
+        public override int GetHashCode() => HashCode.Combine(Id, State);
+
     }
 }
