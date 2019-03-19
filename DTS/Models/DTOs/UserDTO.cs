@@ -13,7 +13,7 @@ namespace DTS.API.Models.DTOs
         public string Surname { get; set; }
         public string Email { get; set; }
 
-        internal static UserDTO ParseUserDTO(User user)
+        public static UserDTO ParseUserDTO(User user)
         {
             return new UserDTO
             {
