@@ -30,9 +30,13 @@
 
   <ItemGroup>
     <None Remove="src\app\templateContent.ts" />
+    <None Remove="src\app\_guards\admin.guard.ts" />
     <None Remove="src\app\_guards\auth.guard.ts" />
+    <None Remove="src\app\_guards\editor.guard.ts" />
+    <None Remove="src\app\_guards\user.guard.ts" />
     <None Remove="src\app\_helpers\error.interceptor.ts" />
     <None Remove="src\app\_helpers\jwt.interceptor.ts" />
+    <None Remove="src\app\_models\loginData.ts" />
     <None Remove="src\app\_models\signIn.ts" />
     <None Remove="src\app\_models\template.ts" />
     <None Remove="src\app\_models\templateDataUpdate.ts" />
@@ -44,9 +48,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="src\app\_guards\admin.guard.ts" />
     <TypeScriptCompile Include="src\app\_guards\auth.guard.ts" />
+    <TypeScriptCompile Include="src\app\_guards\editor.guard.ts" />
+    <TypeScriptCompile Include="src\app\_guards\user.guard.ts" />
     <TypeScriptCompile Include="src\app\_helpers\error.interceptor.ts" />
     <TypeScriptCompile Include="src\app\_helpers\jwt.interceptor.ts" />
+    <TypeScriptCompile Include="src\app\_models\loginData.ts" />
     <TypeScriptCompile Include="src\app\_models\signIn.ts" />
     <TypeScriptCompile Include="src\app\_models\templateContent.ts" />
     <TypeScriptCompile Include="src\app\_models\template.ts" />
