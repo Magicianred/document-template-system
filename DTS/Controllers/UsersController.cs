@@ -34,19 +34,37 @@ namespace DTS.API.Controllers
             this.logger = logger;
         }
 
+        private void LogBeginOfRequest()
+        {
+            logger.LogInformation("User id: {userId} type: {userType}, start request handling.",
+                GetUserIdFromToken(),
+                GetUserTypeFromToken()
+                );
+        }
+
+        private void LogEndOfRequest(string message, int status)
+        {
+            logger.LogInformation("status: {status} : {message}",
+                status,
+                message
+                );
+        }
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers()
         {
-            logger.LogInformation("LOOOGING.........................................................");
+            LogBeginOfRequest();
             try
             {
                 var query = new GetUsersQuery();
                 var users = await userService.GetUsersQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {users.Count} elements found", 200);
                 return Ok(users);
             }
             catch (InvalidOperationException)
             {
+                LogEndOfRequest($"Failed user list is empty", 404);
                 return NotFound();
             }
         }
@@ -55,18 +73,22 @@ namespace DTS.API.Controllers
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Bad request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var query = new GetUserByIdQuery(id);
                 var user = await userService.GetUserByIdQuery.HandleAsync(query);
+                LogEndOfRequest($"Success return {user}", 200);
                 return Ok(user);
             }
             catch (KeyNotFoundException e)
             {
+                LogEndOfRequest($"Failed user with id {id} not found", 404);
                 return NotFound(e.Message);
             }
         }
