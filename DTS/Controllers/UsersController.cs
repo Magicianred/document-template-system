@@ -14,6 +14,7 @@ using DTS.API.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace DTS.API.Controllers
 {
@@ -24,17 +25,20 @@ namespace DTS.API.Controllers
     {
         private readonly IRepositoryWrapper repository;
         private readonly IUserService userService;
+        private readonly ILogger<UsersController> logger;
 
-        public UsersController(IRepositoryWrapper repository, IUserService userService)
+        public UsersController(IRepositoryWrapper repository, IUserService userService, ILogger<UsersController> logger)
         {
             this.repository = repository;
             this.userService = userService;
+            this.logger = logger;
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers()
         {
+            logger.LogInformation("LOOOGING.........................................................");
             try
             {
                 var query = new GetUsersQuery();
