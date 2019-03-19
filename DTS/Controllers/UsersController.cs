@@ -107,10 +107,10 @@ namespace DTS.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            //if (!VerifyIfUserIdEqualsTokenClaimName(id))
-            //{
-            //    return BadRequest();
-            //}
+            if (!VerifyIfUserIdEqualsTokenClaimName(id) && !IsUserAdmin())
+            {
+                return BadRequest();
+            }
 
             var command = new ChangeUserPersonalDataCommand(
                 id,
@@ -134,17 +134,10 @@ namespace DTS.API.Controllers
             }
         }
 
-
-        private int GetUserIdFromToken()
+        private bool IsUserAdmin()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            IEnumerable<Claim> claims = identity.Claims;
-            var idString = claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
-            if (idString != null)
-            {
-                return int.Parse(idString);
-            }
-            return 0;
+            var userType = GetUserTypeFromToken();
+            return userType.Equals("Admin");
         }
 
         private bool VerifyIfUserIdEqualsTokenClaimName(int id)
@@ -158,11 +151,17 @@ namespace DTS.API.Controllers
         }
 
 
-[HttpPut("{id}/type/{type}")]
+        [HttpPut("{id}/type/{type}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserType(int id, string type)
         {
             var command = new ChangeUserTypeCommand(id, type);
+
+            if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            {
+                return BadRequest();
+            }
+
             try
             {
                 await userService.ChangeUserTypeCommand.HandleAsync(command);
@@ -201,6 +200,12 @@ namespace DTS.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            {
+                return BadRequest();
+            }
+
             try
             {
                 var command = new BlockUserCommand(id);
@@ -210,6 +215,30 @@ namespace DTS.API.Controllers
             {
                 return NotFound();
             }
+        }
+
+        private int GetUserIdFromToken()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var idString = claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
+            if (idString != null)
+            {
+                return int.Parse(idString);
+            }
+            return 0;
+        }
+
+        private string GetUserTypeFromToken()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var type = claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value;
+            if (type != null)
+            {
+                return type;
+            }
+            return null;
         }
     }
 }
