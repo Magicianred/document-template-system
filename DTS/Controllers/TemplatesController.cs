@@ -242,21 +242,26 @@ namespace DTS.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
         {
+            LogBeginOfRequest();
             try
             {
                 if (!ModelState.IsValid)
                 {
+                    LogEndOfRequest("Failed Bad Request", 400);
                     return BadRequest(ModelState);
                 }
 
                 var command = new AddTemplateCommand(templateInput);
                 await templateService.AddTemplateCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
             }
             catch (Exception)
             {
+                LogEndOfRequest($"Failed user with id {templateInput.AuthorId} not found", 404);
                 return NotFound();
             }
         }
