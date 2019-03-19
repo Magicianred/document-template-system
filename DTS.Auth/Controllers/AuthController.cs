@@ -21,7 +21,7 @@ namespace DTS.Auth.Controllers
         private readonly ICredentialsRestrictionValidation credentialsRestriction;
         private readonly ILogger logger;
 
-        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, IRequestMonitor monitor, ILogger logger)
+        public AuthController(IAuthServiceWrapper services, IConfiguration tokenSettingsSection, IRequestMonitor monitor, ILogger<AuthController> logger)
         {
             this.services = services;
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
@@ -92,13 +92,16 @@ namespace DTS.Auth.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LogIn([FromBody] UserCredentials credentials)
         {
+            LogBeginOfRequest();
             if (VerifyRequestLimit())
             {
+                LogEndOfRequest($"Failed request Ip: {GetRequestIp()} reached limit", 429);
                 return StatusCode(429, "Reached request limit. Come back after few minutes");
             }
 
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -116,29 +119,30 @@ namespace DTS.Auth.Controllers
                     Content = tokenHelper.WriteToken(tokenHelper.GetNewToken(user.Id, user.Type.Name))
                 };
 
+                LogEndOfRequest($"Success logged user {user.Id}, return token {tokenDTO.Content}", 200);
                 return Ok(tokenDTO);
 
             }
             catch (KeyNotFoundException e)
             {
+                LogEndOfRequest("Failed " + e.Message, 400);
                 return BadRequest(e.Message);
-            }
-            catch (InvalidOperationException e)
-            {
-                return Unauthorized(e.Message);
             }
         }
 
         [HttpPut("login")]
         public async Task<IActionResult> ChangeCredentials([FromBody] ChangeCredentialsForm changeCredentialsForm)
         {
+            LogBeginOfRequest();
             if (VerifyRequestLimit())
             {
+                LogEndOfRequest($"Failed request Ip: {GetRequestIp()} reached limit", 429);
                 return StatusCode(429, "Reached request limit. Come back after few minutes");
             }
 
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -158,15 +162,13 @@ namespace DTS.Auth.Controllers
                     hashHandler,
                     credentialsRestriction
                     ));
+                LogEndOfRequest("Success", 200);
                 return Ok();
             }
             catch (KeyNotFoundException e)
             {
+                LogEndOfRequest("Failed " + e.Message, 400);
                 return BadRequest(e.Message);
-            }
-            catch (InvalidOperationException e)
-            {
-                return Unauthorized(e.Message);
             }
         }
 
