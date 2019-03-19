@@ -61,11 +61,15 @@ export class AdminUserPanelComponent implements OnInit {
 
   filterUsers(searchText: string) {
     this.sortedUsers = this.users.filter(user =>
-      user.name.indexOf(searchText) !== -1
+      user.name.indexOf(searchText.charAt(0).toUpperCase() + searchText.slice(1)) !== -1
       || user.email.indexOf(searchText) !== -1
-      || user.surname.indexOf(searchText) !== -1
-      || user.type.indexOf(searchText) !== -1
-      || user.status.indexOf(searchText) !== -1);
+      || user.surname.indexOf(this.capitalize(searchText)) !== -1
+      || user.type.indexOf(this.capitalize(searchText)) !== -1
+      || user.status.indexOf(this.capitalize(searchText)) !== -1);
+  }
+
+  capitalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   changeUserState(id: string, status: string) {
