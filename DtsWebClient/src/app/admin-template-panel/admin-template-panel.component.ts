@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Template } from '../_models/template'
-import { TemplateDataUpdate } from '../_models/templateDataUpdate';
 import { TemplateVersions } from '../_models/templateVersion';
+import { TemplateDataUpdate } from '../_models/templateDataUpdate';
 import { Version } from '../_models/Version';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import queries from '../../assets/queries.json';
@@ -19,8 +18,8 @@ export class AdminTemplatePanelComponent implements OnInit {
   closeResult: string;
   searchTemplates: string = '';
   searchVersions: string = '';
-  templates: Template[];
-  sortedTemplates: Template[];
+  templates: TemplateVersions[];
+  sortedTemplates: TemplateVersions[];
   templateChosen: boolean;
   pickedTemplate: TemplateVersions;
   sortedVersions: Version[];
@@ -43,7 +42,7 @@ export class AdminTemplatePanelComponent implements OnInit {
   }
 
   getTemplates() {
-    this.apiClient.get<Template[]>(queries.templatesPath).subscribe(result => {
+    this.apiClient.get<TemplateVersions[]>(queries.templatesPath).subscribe(result => {
       this.templates = result;
       this.sortedTemplates = result;
     }, error => console.error(error));
@@ -71,7 +70,7 @@ export class AdminTemplatePanelComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'Name': return this.compare(a.name, b.name, isAsc);
-        case 'Version Count': return this.compare(a.versionCount, b.versionCount, isAsc);
+        case 'Version Count': return this.compare(a.templateVersions.length, b.templateVersions.length, isAsc);
         case 'Owner': return this.compare(a.owner.surname, b.owner.surname, isAsc);
         case 'Template State': return this.compare(a.templateState, b.templateState, isAsc);
         default: return 0;
@@ -109,7 +108,7 @@ export class AdminTemplatePanelComponent implements OnInit {
   }
 
   filterVersions(searchVersions: string) {
-    this.sortedVersions = this.pickedTemplate.versions.filter(version =>
+    this.sortedVersions = this.pickedTemplate.templateVersions.filter(version =>
       version.creationTime.indexOf(searchVersions) !== -1
       || version.creator.surname.indexOf(searchVersions) !== -1
       || version.versionState.indexOf(searchVersions) !== -1);
@@ -119,10 +118,10 @@ export class AdminTemplatePanelComponent implements OnInit {
 
     if (state == "Inactive") {
       let updateData = new TemplateDataUpdate();
-      updateData.id = +id;
       updateData.name = name;
       updateData.ownerId = +ownerId;
       updateData.stateId = 1;
+      console.log(updateData);
       this.apiClient.put(queries.templatesPath + id, updateData).subscribe(result => {
         this.getTemplates();
       }, error => console.error(error));
@@ -150,7 +149,8 @@ export class AdminTemplatePanelComponent implements OnInit {
     this.templateChosen = true;
     this.apiClient.get<TemplateVersions>(queries.templatesPath + id).subscribe(result => {
       this.pickedTemplate = result;
-      this.sortedVersions = result.versions;
+      this.sortedVersions = result.templateVersions;
+      console.log(this.pickedTemplate)
     }, error => console.error(error));
   }
 
@@ -170,7 +170,7 @@ export class AdminTemplatePanelComponent implements OnInit {
   showVersion(event: any, content) {
     this.templateChosen = true;
     let versionIndex = event.path[1].rowIndex - 1;
-    let version = this.pickedTemplate.versions[versionIndex].templateVersion;
+    let version = this.pickedTemplate.templateVersions[versionIndex].content;
     this.templateContent = document.createElement("DIV");
     this.templateContent.innerHTML = version;
     this.open(content);

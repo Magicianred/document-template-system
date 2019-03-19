@@ -18,7 +18,7 @@
       <tbody>
         <tr *ngFor="let template of sortedTemplates">
           <td align="center" (click)="loadTemplateVersions(template.id)" class="clickable" id="{{template.id}}"> {{ template.name }} </td>
-          <td align="center">{{ template.versionCount }}</td>
+          <td align="center">{{ template.templateVersions.length }}</td>
           <td align="center">
             <div ngbDropdown class="d-inline-block">
               <button class="btn btn-secondary" id="typeChanger" ngbDropdownToggle>{{template.owner.name}} {{template.owner.surname}}</button>
@@ -27,7 +27,7 @@
               </div>
             </div>
           </td>
-          <td><button type="submit" class="btn btn-primary" (click)="switchState(template.id, template.templateState, template.name)">{{template.templateState}}</button></td>
+          <td><button type="submit" class="btn btn-primary" (click)="switchState(template.id, template.templateState, template.name, template.owner.id)">{{template.templateState}}</button></td>
 
         </tr>
       </tbody>
