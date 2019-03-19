@@ -13,16 +13,21 @@
       <thead class="thead-dark">
         <tr>
           <th *ngFor="let head of headTemplateElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
-          <th>Activate/Deactivate</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let template of sortedTemplates">
-          <td (click)="loadTemplateVersions(template.id)" class="clickable" id="{{template.id}}"> {{ template.name }} </td>
-          <td>{{ template.versionCount }}</td>
-          <td (click)="changeOwner($event)" class="clickable"> {{ template.owner.name }} {{ template.owner.surname }} {{ template.owner.email }}</td>
-          <td>{{ template.templateState }}</td>
-          <td><button type="submit" class="btn btn-primary" (click)="switchState(template.id, template.templateState, template.name)">Switch State</button></td>
+          <td align="center" (click)="loadTemplateVersions(template.id)" class="clickable" id="{{template.id}}"> {{ template.name }} </td>
+          <td align="center">{{ template.versionCount }}</td>
+          <td align="center">
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-secondary" id="typeChanger" ngbDropdownToggle>{{template.owner.name}} {{template.owner.surname}}</button>
+              <div ngbDropdownMenu aria-labelledby="typeChanger">
+                <button *ngFor="let editor of editors" (click)="changeTemplateOwner(editor, template.id, template.name)" ngbDropdownItem>{{editor.name}} {{editor.surname}}</button>
+              </div>
+            </div>
+          </td>
+          <td><button type="submit" class="btn btn-primary" (click)="switchState(template.id, template.templateState, template.name)">{{template.templateState}}</button></td>
 
         </tr>
       </tbody>
@@ -47,15 +52,13 @@
       <thead class="thead-dark">
         <tr>
           <th *ngFor="let head of headVersionsElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
-          <th>Activate/Deactivate</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let version of sortedVersions" class="clickable" (click)="showVersion($event, content)">
           <td>{{ version.creationTime }}</td>
           <td>{{ version.creator.name}} {{ version.creator.surname }}</td>
-          <td>{{ version.versionState }}</td>
-          <td><button type="submit" class="btn btn-primary" (click)="switchVersionState(version.id, version.versionState, version.creator.id)">Switch State</button></td>
+          <td><button type="submit" class="btn btn-primary" (click)="switchVersionState(version.id, version.versionState, version.creator.id)">{{ version.versionState }}</button></td>
         </tr>
       </tbody>
     </table>

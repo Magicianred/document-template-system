@@ -7,6 +7,7 @@ import { Version } from '../_models/Version';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import queries from '../../assets/queries.json';
 import { Sort } from '@angular/material';
+import { UserData } from '../_models/user';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class AdminTemplatePanelComponent implements OnInit {
   templateContent: HTMLElement;
   headTemplateElements = ['Name', 'Version Count', 'Owner', 'Template State'];
   headVersionsElements = ['Creation Date', 'Creator', 'State'];
+  selectedEditor: UserData;
+  editors: UserData[];
 
   constructor(
     private apiClient: HttpClient,
@@ -35,6 +38,7 @@ export class AdminTemplatePanelComponent implements OnInit {
 
   ngOnInit() {
     this.getTemplates();
+    this.getEditors();
     this.templateChosen = false;
   }
 
@@ -43,6 +47,17 @@ export class AdminTemplatePanelComponent implements OnInit {
       this.templates = result;
       this.sortedTemplates = result;
     }, error => console.error(error));
+  }
+
+  getEditors() {
+    let query = `${queries.userPath}type/editor`
+    this.apiClient.get<UserData[]>(query).subscribe(result => {
+      this.editors = result;
+    }, error => console.error(error));
+  }
+
+  switchSelectedEditor(editor: UserData) {
+    this.selectedEditor = editor;
   }
 
   sortTemplates(sort: Sort) {
@@ -119,27 +134,16 @@ export class AdminTemplatePanelComponent implements OnInit {
     }
   }
 
-  changeOwner(event: any) {
-    let templateIndex = event.path[1].rowIndex - 1;
-    let template = this.templates[templateIndex];
-    let updateData = new TemplateDataUpdate();
-
-    updateData.id = template.id;
-    updateData.name = template.name;
-    updateData.ownerId = +prompt("New owner id?");
-
-    if (template.templateState == "Active") {
-      updateData.stateId = 1;
-      this.apiClient.put(queries.templatesPath + template.id, updateData).subscribe(result => {
-        this.getTemplates();
-      }, error => console.error(error));
-    }
-    else {
-      updateData.stateId = 2;
-      this.apiClient.put(queries.templatesPath + template.id, updateData).subscribe(result => {
-        this.getTemplates();
-      }, error => console.error(error));
-    }
+  changeTemplateOwner(editor: UserData, templateId: string, name: string) {
+    let query = `${queries.templatesPath}${templateId}`
+    let DTO = {
+      name: name,
+      ownerId: editor.id,
+      stateId: 2,
+    };
+    this.apiClient.put(query, DTO).subscribe(result => {
+      this.getTemplates();
+    }, error => console.error(error));
   }
 
   loadTemplateVersions(id: string) {
