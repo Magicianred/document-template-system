@@ -86,7 +86,7 @@ export class UserPanelComponent implements OnInit {
 
     let query = `${queries.userPath}${this.loggedUser.id}`
     this.apiClient.put(query, newData).subscribe(result => {
-      this.auth.updateUserData(+this.loggedUser.id);
+      this.auth.updateUserData(String(this.loggedUser.id));
     }, error => console.error(error));
   }
 }
