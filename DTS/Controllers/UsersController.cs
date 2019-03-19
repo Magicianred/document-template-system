@@ -230,16 +230,19 @@ namespace DTS.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Bad request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var command = new ActivateUserCommand(id);
                 await userService.ActivateUserCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
             }
             catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"User with id {id} not found", 404);
                 return NotFound();
             }
         }
