@@ -17,15 +17,17 @@ namespace DTS.Auth.Services
         public string Name { get; }
         public string Surname { get; }
         public string Email { get; }
+        public IHashPassword HashHendler { get; }
         public ICredentialsRestrictionValidation credentialsRestriction;
 
-        public SignInCommand(string login, string password, string name, string surname, string email, ICredentialsRestrictionValidation credentialsRestriction)
+        public SignInCommand(string login, string password, string name, string surname, string email, IHashPassword hashHendler, ICredentialsRestrictionValidation credentialsRestriction)
         {
             Login = login;
             Password = password;
             Name = name;
             Surname = surname;
             Email = email;
+            HashHendler = hashHendler;
             this.credentialsRestriction = credentialsRestriction;
         }
     }
@@ -62,14 +64,13 @@ namespace DTS.Auth.Services
 
         private User createUser(SignInCommand command, UserStatus userStatus, UserType userType)
         {
-            IHashPassword hashHendler = new BCryptHash();
             return new User()
             {
                 Name = command.Name,
                 Surname = command.Surname,
                 Email = command.Email,
                 Login = command.Login,
-                Password = hashHendler.Hash(command.Password),
+                Password = command.HashHendler.Hash(command.Password),
                 Status = userStatus,
                 Type = userType
             };

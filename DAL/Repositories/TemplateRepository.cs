@@ -19,14 +19,17 @@ namespace DAL.Repositories
         {
             var templates = await DTSContext.Template
                 .Include(temp => temp.TemplateVersion)
+                    .ThenInclude(temp => temp.State)
                 .Include(temp => temp.State)
+                .Include(temp => temp.TemplateVersion)
+                    .ThenInclude(vers => vers.Creator)
                 .Include(temp => temp.Owner)
                 .ToListAsync();
 
             return templates.DefaultIfEmpty() ?? throw new InvalidOperationException();
         }
 
-        public async Task<Template> FindTemplateByIDAsync(int id)
+        public async Task<Template> FindTemplateByIdAsync(int id)
         {
             var templates = await FindAllTemplatesAsync();
             var template = templates
@@ -36,7 +39,7 @@ namespace DAL.Repositories
             return template ?? throw new KeyNotFoundException();
         }
 
-        public async Task<IEnumerable<Template>> FindByUserIdAsync(int id)
+        public async Task<IEnumerable<Template>> FindTemplatesByOwnerIdAsync(int id)
         {
             var templates = await FindAllTemplatesAsync();
             var template = templates
@@ -45,13 +48,13 @@ namespace DAL.Repositories
             return template.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
-        public async Task CreateAsync(Template template)
+        public async Task CreateTemplateAsync(Template template)
         {
             Create(template);
             await SaveAsync();
         }
 
-        public async Task UpdateAsync(Template template)
+        public async Task UpdateTemplateAsync(Template template)
         {
             Update(template);
             await SaveAsync();

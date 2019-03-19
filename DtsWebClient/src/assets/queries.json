@@ -1,7 +1,8 @@
 {
   "loginAPIPath": "https://localhost:44381/api/auth/login",
   "signInPath": "https://localhost:44381/api/auth/signin",
-  "userDataPath": "https://localhost:44346/api/users/",
+  "credentialsPath":"https://localhost:44381/api/auth/",
+  "userPath": "https://localhost:44346/api/users/",
   "templatesPath": "https://localhost:44346/api/templates/",
   "templateVersions": "https://localhost:44346/api/templates/version/",
   "editorTemplates": "https://localhost:44346/api/templates/editor/",

@@ -14,13 +14,15 @@ namespace DTS.Auth.Services
         public int Id { get; }
         public string Login { get; }
         public string Password { get; }
+        public IHashPassword HashHandler { get; }
         public ICredentialsRestrictionValidation credentialsRestriction;
 
-        public ChangeUserLoginAndPasswordCommand(int id, string login, string password, ICredentialsRestrictionValidation credentialsRestriction)
+        public ChangeUserLoginAndPasswordCommand(int id, string login, string password, IHashPassword hashHandler, ICredentialsRestrictionValidation credentialsRestriction)
         {
             Id = id;
             Login = login;
             Password = password;
+            HashHandler = hashHandler;
             this.credentialsRestriction = credentialsRestriction;
         }
     }
@@ -49,7 +51,7 @@ namespace DTS.Auth.Services
             }
             if (command.Password != null)
             {
-                user.Password = command.Password;
+                user.Password = command.HashHandler.Hash(command.Password);
             }
 
             await repository.Users.UpdateAsync(user);

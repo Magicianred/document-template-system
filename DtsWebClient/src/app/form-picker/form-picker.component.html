@@ -1,17 +1,22 @@
+<div class="row" *ngIf="!gotForm">
+  <div class="col-md-12 mx-auto">
+    <div class="md-form">
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" mdbInput (keyup)="filterTemplates($event.target.value)">
+      <label for="search">Search</label>
+    </div>
+  </div>
+</div>
 <div *ngIf="!gotForm" class="table-wrapper-scroll-y" >
-  <table class="table table-striped table-sm">
+  <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange)="sortTemplates($event)">
     <thead class="thead-dark">
       <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Template State</th>
+        <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let template of templates">
-        <td (click)="showVersion(template.id)" id="{{template.id}}" class="clickable">{{ template.id }}</td>
+      <tr *ngFor="let template of sortedTemplates">
         <td (click)="showVersion(template.id)" id="{{template.id}}" class="clickable">{{ template.name }}</td>
-        <td>{{ template.templateState }}</td>
+        <td (click)="showVersion(template.id)" class="clickable">{{ template.owner.name }}  {{template.owner.surname}} {{template.owner.email}}</td>
       </tr>
     </tbody>
   </table>

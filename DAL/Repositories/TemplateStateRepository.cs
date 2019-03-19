@@ -19,5 +19,11 @@ namespace DAL.Repositories
             var states = await FindByConditionAsync(s => s.Id == id);
             return states.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
+
+        public async Task<TemplateState> FindStateByName(string name)
+        {
+            var states = await FindByConditionAsync(s => s.State.Equals(name));
+            return states.FirstOrDefault() ?? throw new KeyNotFoundException();
+        }
     }
 }

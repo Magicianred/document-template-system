@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DTS.API.Models.DTOs
 {
-    public class TemplateContent
+    public class TemplateContentDTO
     {
         public string Content { get; set; }
     }

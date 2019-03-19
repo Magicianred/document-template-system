@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';  
 import { document } from 'ngx-bootstrap';
+import { Sort } from '@angular/material';
 
 @Component({
   selector: 'app-form-picker',
@@ -16,10 +17,12 @@ import { document } from 'ngx-bootstrap';
 export class FormPickerComponent implements OnInit {
   baseUrl: string;
   templates: Template[];
+  sortedTemplates: Template[];
   formBase: object;
   chosenFormId: number;
   gotForm: boolean;
   tempElem: HTMLElement;
+  headElements = ['Name', 'Creator'];
 
 
   constructor(
@@ -36,6 +39,7 @@ export class FormPickerComponent implements OnInit {
   getTemplates() {
     this.apiClient.get<Template[]>(queries.templatesPath).subscribe(result => {
       this.templates = result;
+      this.sortedTemplates = result;
     }, error => console.error(error));
   }
 
@@ -80,6 +84,34 @@ export class FormPickerComponent implements OnInit {
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
       pdf.save('MYPdf.pdf');
    }); 
- }
+  }
 
+  sortTemplates(sort: Sort) {
+    const data = this.templates;
+
+    if (!sort.active || sort.direction === '') {
+      this.sortedTemplates = data;
+      return;
+    }
+    this.sortedTemplates = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'Name': return this.compare(a.name, b.name, isAsc);
+        case 'Owner': return this.compare(a.owner.surname, b.owner.surname, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  filterTemplates(searchText: string) {
+    this.sortedTemplates = this.templates.filter(template =>
+      template.name.indexOf(searchText) !== -1
+      || template.owner.name.indexOf(searchText) !== -1
+      || template.owner.surname.indexOf(searchText) !== -1
+      || template.owner.email.indexOf(searchText) !== -1);
+  }
 }

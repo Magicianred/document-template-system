@@ -7,17 +7,16 @@ import { SessionStorageService } from 'angular-web-storage';
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private session: SessionStorageService
+    private sessin: SessionStorageService
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentUser = this.session.get("loggedUser");
+    const currentUser = this.sessin.get('loggedUser');
     if (currentUser) {
-      // logged in so return true
+
       return true;
     }
 
-    // not logged in so redirect to login page with the return url
     this.router.navigate(['/'], { queryParams: { returnUrl: state.url } });
     return false;
   }

@@ -6,11 +6,18 @@ export class User
 }
 
 export class UserData {
+  id: number;
   name: string;
   surname: string;
   role: string;
-  login: string;
   email: string;
   status: string;
   type: string;
+}
+
+export class UserChangingData {
+  id: string;
+  name: string;
+  surname: string;
+  email: string;
 }

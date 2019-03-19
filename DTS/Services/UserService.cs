@@ -19,10 +19,12 @@ namespace DTS.API.Services
         private IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> _getUserByIdQuery;
         private IRepositoryWrapper repository;
 
+
         public UserService(IRepositoryWrapper repository)
         {
             this.repository = repository;
         }
+
 
         public ICommandHandlerAsync<ActivateUserCommand> ActivateUserCommand
         {
@@ -35,6 +37,8 @@ namespace DTS.API.Services
                 return _activateUserCommand;
             }
         }
+
+
         public ICommandHandlerAsync<BlockUserCommand> BlockUserCommand
         {
             get
@@ -46,6 +50,7 @@ namespace DTS.API.Services
                 return _blockUserCommand;
             }
         }
+
 
         public ICommandHandlerAsync<ChangeUserPersonalDataCommand> ChangeUserPersonalDataCommand
         {
@@ -59,6 +64,7 @@ namespace DTS.API.Services
             }
         }
 
+
         public ICommandHandlerAsync<ChangeUserTypeCommand> ChangeUserTypeCommand
         {
             get
@@ -70,6 +76,7 @@ namespace DTS.API.Services
                 return _changeUserTypeCommand;
             }
         }
+
 
         public IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> GetUsersByStatusQuery
         {
@@ -83,6 +90,7 @@ namespace DTS.API.Services
             }
         }
 
+
         public IQueryHandlerAsync<GetUsersByTypeQuery, List<ExtendedUserDTO>> GetUsersByTypeQuery
         {
             get
@@ -95,6 +103,7 @@ namespace DTS.API.Services
             }
         }
 
+
         public IQueryHandlerAsync<GetUsersQuery, List<ExtendedUserDTO>> GetUsersQuery
         {
             get
@@ -106,6 +115,7 @@ namespace DTS.API.Services
                 return _getUsersQuery;
             }
         }
+
 
         public IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> GetUserByIdQuery
         {

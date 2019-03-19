@@ -30,7 +30,7 @@ namespace DTS.API.Services
         public async Task<ExtendedUserDTO> HandleAsync(GetUserByIdQuery query)
         {
             var user = await repository.Users.FindUserByIDAsync(query.Id);
-            return ExtendedUserDTO.parseUser(user);
+            return ExtendedUserDTO.ParseUserDTO(user);
         }
     }
 }

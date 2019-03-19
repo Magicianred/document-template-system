@@ -2,7 +2,7 @@
   Sign In
 </h3>
 
-<form form [formGroup]="signInForm" (ngSubmit)="signIn()">
+<form form [formGroup]="signInForm" (ngSubmit)="signIn()" *ngIf="!loaded">
   <div class="form-group">
     <label for="name">Name</label>
     <input type="text" class="form-control" formControlName="name" placeholder="Enter name" [ngClass]="{ 'is-invalid': submitted && FormControls.name.errors}">
@@ -21,14 +21,14 @@
     <label for="login">Login</label>
     <input type="text" class="form-control" formControlName="login" placeholder="Enter login" [ngClass]="{ 'is-invalid': submitted && FormControls.login.errors}">
     <div *ngIf="submitted && FormControls.login.errors" class="invalid-feedback">
-      <div *ngIf="FormControls.login.errors.required">Last Name is required</div>
+      <div *ngIf="FormControls.login.errors.required">Login is required</div>
     </div>
   </div>
   <div class="form-group">
     <label for="EmailInput">Email address</label>
     <input type="email" class="form-control" formControlName="email" aria-describedby="emailHelp" placeholder="Enter email"[ngClass]="{ 'is-invalid': submitted && FormControls.email.errors}">
     <div *ngIf="submitted && FormControls.email.errors" class="invalid-feedback">
-      <div *ngIf="FormControls.email.errors.required">Email is required</div>
+      <div *ngIf="FormControls.email.errors.email">Proper email is required</div>
     </div>
     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
@@ -48,3 +48,7 @@
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+<div *ngIf="loaded">
+  {{submitResult}}
+</div>
