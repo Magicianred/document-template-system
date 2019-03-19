@@ -18,6 +18,7 @@ namespace DTS.API.Services
         }
     }
 
+
     public sealed class GetUsersByTypeQueryHandler
         : IQueryHandlerAsync<GetUsersByTypeQuery, List<ExtendedUserDTO>>
     {
@@ -28,21 +29,13 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
+
         public async Task<List<ExtendedUserDTO>> HandleAsync(GetUsersByTypeQuery query)
         {
             var users = await repository.Users
                 .FindUserByCondition(u => u.Type.Name.ToUpper().Equals(query.Type.ToUpper()));
-            return CollectUsersDTOs(users);
-        }
 
-        private List<ExtendedUserDTO> CollectUsersDTOs(IEnumerable<User> users)
-        {
-            var usersDtos = new List<ExtendedUserDTO>();
-            foreach (var user in users)
-            {
-                usersDtos.Add(ExtendedUserDTO.parseUser(user));
-            }
-            return usersDtos;
+            return ExtendedUserDTO.ParseUsersDTO(users);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace DAL.Repositories
 {
     public interface ITemplateStateRepository
     {
-        Task<TemplateState> FindStateByIdAsync(int id); 
+        Task<TemplateState> FindStateByIdAsync(int id);
+        Task<TemplateState> FindStateByName(string name); 
     }
 }

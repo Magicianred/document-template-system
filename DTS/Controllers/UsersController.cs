@@ -133,6 +133,8 @@ namespace DTS.API.Controllers
                 return NotFound(e.Message);
             }
         }
+
+
         private int GetUserIdFromToken()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
