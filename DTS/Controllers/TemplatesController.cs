@@ -57,17 +57,20 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetTemplates()
         {
+            LogBeginOfRequest();
             try
             {
                 var query = new GetTemplatesQuery();
                 var templates = await templateService.GetTemplatesQuery.HandleAsync(query);
-            
+                LogEndOfRequest($"Success {templates.Count} elements Found", 200);
                 return Ok(templates);
             }
             catch (InvalidOperationException)
             {
+                LogEndOfRequest("Failed templates list is empty", 404);
                 return NotFound();
             }            
         }
