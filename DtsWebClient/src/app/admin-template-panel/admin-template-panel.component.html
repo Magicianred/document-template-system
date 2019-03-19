@@ -1,17 +1,23 @@
+<div class="row" *ngIf="!templateChosen">
+  <div class="col-md-12 mx-auto">
+    <div class="md-form">
+      <input type="search" [(ngModel)]="searchTemplates" class="form-control" id="search" mdbInput (keyup)="filterTemplates($event.target.value)">
+      <label for="search">Search</label>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="!templateChosen">
   <div class="table-wrapper-scroll-y">
-    <table class="table table-striped table-sm">
+    <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange)="sortTemplates($event)">
       <thead class="thead-dark">
         <tr>
-          <th>Name</th>
-          <th>Version Count</th>
-          <th>Owner</th>
-          <th>Template State</th>
+          <th *ngFor="let head of headTemplateElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
           <th>Activate/Deactivate</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let template of templates">
+        <tr *ngFor="let template of sortedTemplates">
           <td (click)="loadTemplateVersions(template.id)" class="clickable" id="{{template.id}}"> {{ template.name }} </td>
           <td>{{ template.versionCount }}</td>
           <td (click)="changeOwner($event)" class="clickable"> {{ template.owner.name }} {{ template.owner.surname }} {{ template.owner.email }}</td>
@@ -24,21 +30,28 @@
   </div>
 </div>
 
+<div class="row" *ngIf="templateChosen">
+  <div class="col-md-12 mx-auto">
+    <div class="md-form">
+      <input type="search" [(ngModel)]="searchVersions" class="form-control" id="search" mdbInput (keyup)="filterVersions($event.target.value)">
+      <label for="search">Search</label>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="templateChosen">
   <h2>{{pickedTemplate.name}}</h2>
   <h3>{{pickedTemplate.owner.name}} {{pickedTemplate.owner.surname}}</h3>
   <div class="table-wrapper-scroll-y">
-    <table class="table table-striped table-sm">
+    <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange)="sortVersions($event)">
       <thead class="thead-dark">
         <tr>
-          <th>Creation Date</th>
-          <th>Creator</th>
-          <th>State</th>
+          <th *ngFor="let head of headVersionsElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
           <th>Activate/Deactivate</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let version of pickedTemplate.versions" class="clickable" (click)="showVersion($event, content)">
+        <tr *ngFor="let version of sortedVersions" class="clickable" (click)="showVersion($event, content)">
           <td>{{ version.creationTime }}</td>
           <td>{{ version.creator.name}} {{ version.creator.surname }}</td>
           <td>{{ version.versionState }}</td>

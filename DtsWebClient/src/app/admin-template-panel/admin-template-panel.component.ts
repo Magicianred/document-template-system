@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Template } from '../_models/template'
 import { TemplateDataUpdate } from '../_models/templateDataUpdate';
 import { TemplateVersions } from '../_models/templateVersion';
+import { Version } from '../_models/Version';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import queries from '../../assets/queries.json';
+import { Sort } from '@angular/material';
 
 
 @Component({
@@ -14,10 +16,16 @@ import queries from '../../assets/queries.json';
 })
 export class AdminTemplatePanelComponent implements OnInit {
   closeResult: string;
+  searchTemplates: string = '';
+  searchVersions: string = '';
   templates: Template[];
+  sortedTemplates: Template[];
   templateChosen: boolean;
   pickedTemplate: TemplateVersions;
+  sortedVersions: Version[];
   templateContent: HTMLElement;
+  headTemplateElements = ['Name', 'Version Count', 'Owner', 'Template State'];
+  headVersionsElements = ['Creation Date', 'Creator', 'State'];
 
   constructor(
     private apiClient: HttpClient,
@@ -33,7 +41,63 @@ export class AdminTemplatePanelComponent implements OnInit {
   getTemplates() {
     this.apiClient.get<Template[]>(queries.templatesPath).subscribe(result => {
       this.templates = result;
+      this.sortedTemplates = result;
     }, error => console.error(error));
+  }
+
+  sortTemplates(sort: Sort) {
+    const data = this.sortedTemplates;
+
+    if (!sort.active || sort.direction === '') {
+      this.sortedTemplates = data;
+      return;
+    }
+    this.sortedTemplates = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'Name': return this.compare(a.name, b.name, isAsc);
+        case 'Version Count': return this.compare(a.versionCount, b.versionCount, isAsc);
+        case 'Owner': return this.compare(a.owner.surname, b.owner.surname, isAsc);
+        case 'Template State': return this.compare(a.templateState, b.templateState, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  filterTemplates(searchTemplates: string) {
+    this.sortedTemplates = this.templates.filter(template =>
+      template.name.indexOf(searchTemplates) !== -1
+      || template.owner.surname.indexOf(searchTemplates) !== -1
+      || template.templateState.indexOf(searchTemplates) !== -1);
+  }
+
+  sortVersions(sort: Sort) {
+    const data = this.sortedVersions;
+
+    if (!sort.active || sort.direction === '') {
+      this.sortedVersions = data;
+      return;
+    }
+    this.sortedVersions = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'Creation Date': return this.compare(a.creationTime, b.creationTime, isAsc);
+        case 'Creator': return this.compare(a.creator.surname, b.creator.surname, isAsc);
+        case 'State': return this.compare(a.versionState, b.versionState, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+  filterVersions(searchVersions: string) {
+    this.sortedVersions = this.pickedTemplate.versions.filter(version =>
+      version.creationTime.indexOf(searchVersions) !== -1
+      || version.creator.surname.indexOf(searchVersions) !== -1
+      || version.versionState.indexOf(searchVersions) !== -1);
   }
 
   switchState(id: string, state: string, name:string, ownerId: string) {
@@ -82,6 +146,7 @@ export class AdminTemplatePanelComponent implements OnInit {
     this.templateChosen = true;
     this.apiClient.get<TemplateVersions>(queries.templatesPath + id).subscribe(result => {
       this.pickedTemplate = result;
+      this.sortedVersions = result.versions;
     }, error => console.error(error));
   }
 
