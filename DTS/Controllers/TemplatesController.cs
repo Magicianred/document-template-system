@@ -315,18 +315,21 @@ namespace DTS.API.Controllers
         [HttpDelete("version/{id}")]
         public async Task<IActionResult> DeleteTemplateVersion([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var command = new DeactivateTemplateVersionCommand(id);
                 await templateService.DeactivateTemplateVersionCommand.HandleAsync(command);
-
+                LogEndOfRequest("Success", 200);
                 return Ok();
             } catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"Failed template version with id {id} not found", 404);
                 return NotFound();
             }
         }
