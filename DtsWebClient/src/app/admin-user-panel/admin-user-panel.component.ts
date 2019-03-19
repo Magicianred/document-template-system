@@ -92,7 +92,7 @@ export class AdminUserPanelComponent implements OnInit {
     }, error => console.error(error));
   } 
 
-  changeUserData(name: any, surname: any, email: any, event: any) {
+  changeUserData(name: any, surname: any, email: any, id: string, event: any) {
     let userIndex = event.path[4].rowIndex - 1;
     this.chosenUser = this.users[userIndex];
     let newData = new UserChangingData();
@@ -100,10 +100,12 @@ export class AdminUserPanelComponent implements OnInit {
     if (name == "" && surname == "" && email == "") {
       return
     }
-
+    newData.id = String(this.chosenUser.id);
     newData.name = name == "" ? this.chosenUser.name : name;
     newData.surname = surname == "" ? this.chosenUser.surname : surname;
     newData.email = email == "" ? this.chosenUser.email : email;
+
+    console.log(newData)
 
     let query = `${queries.userPath}${this.chosenUser.id}`
     this.apiClient.put(query, newData).subscribe(result => {

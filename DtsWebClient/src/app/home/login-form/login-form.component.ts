@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http'
 import { AuthenticationService } from '../../_services/authService';
+import { LoginData } from 'src/app/_models/loginData';
 
 @Component({
   selector: 'app-login-form',
@@ -11,14 +10,19 @@ import { AuthenticationService } from '../../_services/authService';
 export class LoginComponent implements OnInit {
   password: string;
   login: string;
+  @Output() loading: EventEmitter<boolean> = new EventEmitter<boolean>()
 
-  constructor(private apiClient: HttpClient, private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService) {
   }
   ngOnInit() {
   }
 
-  logUserIn(loginForm: NgForm) {
-    this.authenticationService.login(loginForm)
+  logUserIn() {
+    let loginData = new LoginData();
+    loginData.Login = this.login;
+    loginData.Password = this.password;
+    this.loading.emit(true);
+    this.authenticationService.login(loginData);
   }
 
   logout() {

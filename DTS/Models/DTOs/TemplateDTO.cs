@@ -11,6 +11,7 @@ namespace DTS.API.Models.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public UserDTO Owner { get; set; }
+        public string TemplateState { get; set; }
         public List<TemplateVersionDTO> TemplateVersions { get; set; }
 
 
@@ -29,6 +30,7 @@ namespace DTS.API.Models.DTOs
                 Id = template.Id,
                 Name = template.Name,
                 Owner = userDTO,
+                TemplateState = template.State.State,
                 TemplateVersions = templateVersions
             };
         }

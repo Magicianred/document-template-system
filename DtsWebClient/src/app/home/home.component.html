@@ -1,9 +1,9 @@
-<div *ngIf="loggedUser == null">
+<div *ngIf="loggedUser == null && !loading">
   <div class="row">
     <div class="col-sm-6 mt-2">
       <div class="row justify-space mb-2 mx-0">
       </div>
-      <app-login-form></app-login-form>
+      <app-login-form (loading)="loading = true"></app-login-form>
     </div>
 
     <div class="col-sm-6 mt-2">
@@ -11,10 +11,12 @@
     </div>
   </div>
 </div>
-<div *ngIf="loggedUser != null">
-  <app-user-panel></app-user-panel>
+<div *ngIf="loggedUser != null && !loading">
+  <app-user-panel (loading)="loading = true"></app-user-panel>
 </div>
 
-
+<div class="spinner-border" role="status" *ngIf="loading">
+  <span class="sr-only">Loading...</span>
+</div>
 
 

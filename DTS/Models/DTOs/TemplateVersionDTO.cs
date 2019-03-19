@@ -8,7 +8,7 @@ namespace DTS.API.Models.DTOs
         public int Id { get; set; }
         public DateTime CreationTime { get; set; }
         public string Content { get; set; }
-        public int CreatorId { get; set; }
+        public UserDTO Creator { get; set; }
         public string VersionState { get; set; }
 
         public static TemplateVersionDTO ParseTemplateVersion(TemplateVersion templateVersion)
@@ -18,7 +18,7 @@ namespace DTS.API.Models.DTOs
                 Id = templateVersion.Id,
                 CreationTime = templateVersion.Date,
                 Content = templateVersion.Content,
-                CreatorId = templateVersion.Creator.Id,
+                Creator = UserDTO.ParseUserDTO(templateVersion.Creator),
                 VersionState = templateVersion.State.State
             };
         }

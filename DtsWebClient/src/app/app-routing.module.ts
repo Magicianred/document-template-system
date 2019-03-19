@@ -5,6 +5,8 @@ import { EditorPanelComponent } from './editor-panel/editor-panel.component'
 import { FormPickerComponent } from './form-picker/form-picker.component';
 import { AdminTemplatePanelComponent } from './admin-template-panel/admin-template-panel.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { EditorGuard } from './_guards/editor.guard';
+import { AdminGuard } from './_guards/admin.guard';
 import { AdminUserPanelComponent } from './admin-user-panel/admin-user-panel.component';
 
 const routes: Routes = [
@@ -16,7 +18,7 @@ const routes: Routes = [
   {
     path: 'editorPanel',
     component: EditorPanelComponent,
-    canActivate: [AuthGuard]
+    canActivate: [EditorGuard]
   },
   {
     path: 'formPicker',
@@ -26,12 +28,12 @@ const routes: Routes = [
   {
     path: 'adminTemplatePanel',
     component: AdminTemplatePanelComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AdminGuard]
   },
   {
     path: 'adminUserPanel',
     component: AdminUserPanelComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AdminGuard]
   }
 ];
 

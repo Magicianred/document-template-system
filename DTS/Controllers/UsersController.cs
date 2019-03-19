@@ -84,7 +84,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet("type/{type}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> GetUsersByType(string type)
         {
             try
@@ -107,10 +107,10 @@ namespace DTS.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!VerifyIfUserIdEqualsTokenClaimName(id))
-            {
-                return BadRequest();
-            }
+            //if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            //{
+            //    return BadRequest();
+            //}
 
             var command = new ChangeUserPersonalDataCommand(
                 id,

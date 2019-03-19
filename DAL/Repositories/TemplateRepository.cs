@@ -19,7 +19,10 @@ namespace DAL.Repositories
         {
             var templates = await DTSContext.Template
                 .Include(temp => temp.TemplateVersion)
+                    .ThenInclude(temp => temp.State)
                 .Include(temp => temp.State)
+                .Include(temp => temp.TemplateVersion)
+                    .ThenInclude(vers => vers.Creator)
                 .Include(temp => temp.Owner)
                 .ToListAsync();
 

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Template } from '../_models/template'
 import queries from '../../assets/queries.json'
 import { SessionStorageService } from 'angular-web-storage';
+import { AuthenticationService } from '../_services/authService';
 @Component({
   selector: 'app-editor-panel',
   templateUrl: './editor-panel.component.html',
@@ -18,7 +19,7 @@ export class EditorPanelComponent implements OnInit {
 
   constructor(
     private apiClient: HttpClient,
-    private session: SessionStorageService
+    private session: SessionStorageService,
   ) {
     
   }
@@ -27,7 +28,7 @@ export class EditorPanelComponent implements OnInit {
   }
 
   getEditorsID() {
-    this.editorId = this.session.get("userData").id;
+    this.editorId = this.session.get("loggedUser").id
   }
 
   saveNewTemplate() {
