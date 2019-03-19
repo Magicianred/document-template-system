@@ -31,7 +31,6 @@ namespace DTS.API.Controllers
 
         // GET: api/Templates
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetTemplates()
         {
             try
