@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DTS.Auth.Helpers
 {
-    interface IHashPassword
+    public interface IHashPassword
     {
         string Hash(string s);
         bool Verify(string submited, string hashed);
