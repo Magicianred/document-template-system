@@ -115,7 +115,7 @@ namespace DTS.API.Controllers
             catch (InvalidOperationException)
             {
                 string errorMessage = $"No users with {status} status or is invalid";
-                LogEndOfRequest(errorMessage, 404);
+                LogEndOfRequest("Failed " + errorMessage, 404);
                 return NotFound(errorMessage);
             }
         }
@@ -135,7 +135,7 @@ namespace DTS.API.Controllers
             catch (InvalidOperationException)
             {
                 string errorMessage = $"No users with {type} type or is invalid";
-                LogEndOfRequest(errorMessage, 404);
+                LogEndOfRequest("Failed" + errorMessage, 404);
                 return NotFound(errorMessage);
             }
         }
@@ -146,7 +146,7 @@ namespace DTS.API.Controllers
             LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
-                LogEndOfRequest("Bad request", 400);
+                LogEndOfRequest("Failed Bad request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -177,7 +177,7 @@ namespace DTS.API.Controllers
             }
             catch (KeyNotFoundException e)
             {
-                LogEndOfRequest(e.Message, 404);
+                LogEndOfRequest("Failed" + e.Message, 404);
                 return NotFound(e.Message);
             }
         }
@@ -208,7 +208,7 @@ namespace DTS.API.Controllers
 
             if (!VerifyIfUserIdEqualsTokenClaimName(id))
             {
-                LogEndOfRequest("Bad request", 400);
+                LogEndOfRequest("Failed Bad request", 400);
                 return BadRequest();
             }
 
@@ -219,7 +219,7 @@ namespace DTS.API.Controllers
                 return NoContent();
             } catch (KeyNotFoundException e)
             {
-                LogEndOfRequest(e.Message, 404);
+                LogEndOfRequest("Failed" + e.Message, 404);
                 return NotFound(e.Message);
             }
         }
@@ -230,7 +230,7 @@ namespace DTS.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                LogEndOfRequest("Bad request", 400);
+                LogEndOfRequest("Failed Bad request", 400);
                 return BadRequest(ModelState);
             }
             try
@@ -242,7 +242,7 @@ namespace DTS.API.Controllers
             }
             catch (KeyNotFoundException)
             {
-                LogEndOfRequest($"User with id {id} not found", 404);
+                LogEndOfRequest($"Failed User with id {id} not found", 404);
                 return NotFound();
             }
         }
@@ -253,7 +253,7 @@ namespace DTS.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                LogEndOfRequest("Bad request", 400);
+                LogEndOfRequest("Failed Bad request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -271,7 +271,7 @@ namespace DTS.API.Controllers
                 return Ok();
             } catch (KeyNotFoundException)
             {
-                LogEndOfRequest($"User with id {id} not found", 404);
+                LogEndOfRequest($"Failed User with id {id} not found", 404);
                 return NotFound();
             }
         }
