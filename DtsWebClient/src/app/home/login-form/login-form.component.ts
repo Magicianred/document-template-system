@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http'
 import { AuthenticationService } from '../../_services/authService';
+import { LoginData } from 'src/app/_models/loginData';
 
 @Component({
   selector: 'app-login-form',
@@ -11,14 +10,20 @@ import { AuthenticationService } from '../../_services/authService';
 export class LoginComponent implements OnInit {
   password: string;
   login: string;
+  loading: boolean
 
-  constructor(private apiClient: HttpClient, private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService) {
   }
   ngOnInit() {
+    this.loading = false;
   }
 
-  logUserIn(loginForm: NgForm) {
-    this.authenticationService.login(loginForm)
+  logUserIn() {
+    this.loading = true;
+    let loginData = new LoginData();
+    loginData.Login = this.login;
+    loginData.Password = this.password;
+    this.authenticationService.login(loginData);
   }
 
   logout() {

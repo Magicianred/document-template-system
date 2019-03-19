@@ -1,7 +1,7 @@
 <h3>Login</h3>
-<form  #loginForm="ngForm" (ngSubmit)="logUserIn(loginForm.value)">
+<form  #loginForm="ngForm" (ngSubmit)="logUserIn()" *ngIf="!loading">
   <div class="form-group">
-    <label for="inputEmail">Email address</label>
+    <label for="inputLogin">Login</label>
     <input type="email" class="form-control" name="Login" [(ngModel)] ="login" placeholder="Enter email">
   </div>
   <div class="form-group">
@@ -10,3 +10,7 @@
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+<div class="spinner-border" role="status" *ngIf="loading">
+  <span class="sr-only">Loading...</span>
+</div>
