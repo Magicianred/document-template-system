@@ -267,18 +267,22 @@ namespace DTS.API.Controllers
         }
 
         [HttpPost("form/{id}")]
+        [Authorize]
         public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
         {
+            LogBeginOfRequest();
             try
             {
                 var query = new FillInTemplateQuery(id, data);
                 var filledDocument = await templateService.FillInTemplateQuery.HandleAsync(query);
-
+                LogEndOfRequest("Success", 200);
                 return Ok(filledDocument);
             }
             catch (Exception)
             {
-                return BadRequest("Template does not exist or is inactive");
+                string errorMessage = "Template does not exist or is inactive";
+                LogEndOfRequest("Failed " + errorMessage, 404);
+                return BadRequest(errorMessage);
             }
         }
 
