@@ -8,27 +8,16 @@ import { Token, TokenValue } from '../_models/token';
 import { NgForm } from '@angular/forms';
 import { SessionStorageService } from 'angular-web-storage';
 import queries from '../../assets/queries.json';
+import { LoginData } from '../_models/loginData';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
 
-
-
-  constructor(private apiClient: HttpClient, private session: SessionStorageService) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('loggedUser')));
-        this.currentUser = this.currentUserSubject.asObservable();
+  constructor(private apiClient: HttpClient, private session: SessionStorageService) { 
     }
 
-    public get currentUserValue(): User {
-        return this.currentUserSubject.value;
-    }
-
-  login(loginForm: NgForm) {
-    
-
-    this.apiClient.post<TokenValue>(queries.loginAPIPath, loginForm).subscribe(result => {
+  login(loginData: LoginData) {
+    this.apiClient.post<TokenValue>(queries.loginAPIPath, loginData).subscribe(result => {
       const user = new User();
 
       const helper = new JwtHelperService();
@@ -48,10 +37,17 @@ export class AuthenticationService {
     }, error => console.error(error));
   }
 
-    logout() {
-      this.session.remove('loggedUser');
-      this.session.remove("userData");
-      this.currentUserSubject.next(null);
+  logout() {
+    this.session.remove('loggedUser');
+    this.session.remove("userData");
+    location.reload(true);
+  }
+
+  updateUserData(userId: string) {
+    this.apiClient.get(queries.userPath + userId).subscribe(result => {
+      const userData = result;
+      this.session.set("userData", userData)
       location.reload(true);
-    }
+    })
+  }
 }
