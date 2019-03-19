@@ -9,6 +9,7 @@ import { User } from '../_models/user';
 })
 export class HomeComponent implements OnInit {
   loggedUser: User;
+  loading: boolean;
 
   constructor(
     private session: SessionStorageService,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -12,15 +12,18 @@ import queries from '../../../assets/queries.json';
 export class SignInFormComponent implements OnInit {
   signInForm: FormGroup;
   returnUrl: string;
-  loaded = false;
   submitted = false;
   submitResult: string;
+
+  @Output() loading: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private apiClient: HttpClient)
   { }
+
+  
 
   ngOnInit() {
     this.signInForm = this.formBuilder.group({
@@ -31,7 +34,6 @@ export class SignInFormComponent implements OnInit {
       password: ['', Validators.required],
       passwordConfirm: [''],
     }, { validator: this.checkPasswords });
-    this.loaded = false;
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
@@ -47,9 +49,8 @@ export class SignInFormComponent implements OnInit {
     if (this.signInForm.invalid) {
       return;
     }
-
+    this.loading.emit(true);
     this.apiClient.post(queries.signInPath, this.signInForm.value).subscribe(result => {
-      this.loaded = true;
       this.submitResult = "Account created properly, please wait for activation"
     }, error => this.submitResult = error);
   }
