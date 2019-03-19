@@ -49,6 +49,13 @@ namespace DTS.API.Controllers
                 message
                 );
         }
+        private void LogWarning(string message, int status)
+        {
+            logger.LogWarning("status: {status} : {message}",
+                status,
+                message
+                );
+        }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -136,14 +143,17 @@ namespace DTS.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangeUserPersonalData([FromRoute] int id, [FromBody] UserDTO user)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Bad request", 400);
                 return BadRequest(ModelState);
             }
 
             if (!VerifyIfUserIdEqualsTokenClaimName(id) && !IsUserAdmin())
             {
-                return BadRequest();
+                LogWarning($"User id: {GetUserIdFromToken()} role: {GetUserTypeFromToken()}, Unauthorized attempt of changing user data", 403);
+                return Forbid();
             }
 
             var command = new ChangeUserPersonalDataCommand(
@@ -156,14 +166,18 @@ namespace DTS.API.Controllers
             try
             {
                 await userService.ChangeUserPersonalDataCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 204);
                 return NoContent();
             }
             catch (DbUpdateConcurrencyException)
             {
-                return StatusCode(503, "Server overload try again later");
+                string errorMessage = "Server overload try again later";
+                LogWarning(errorMessage, 503);
+                return StatusCode(503, errorMessage);
             }
             catch (KeyNotFoundException e)
             {
+                LogEndOfRequest(e.Message, 404);
                 return NotFound(e.Message);
             }
         }
