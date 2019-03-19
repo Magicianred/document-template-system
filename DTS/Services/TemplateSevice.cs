@@ -14,7 +14,9 @@ namespace DTS.API.Services
         private ICommandHandlerAsync<AddTemplateCommand> _addTemplateCommand;
         private ICommandHandlerAsync<AddTemplateVersionCommand> _addTemplateVersionCommand;
         private ICommandHandlerAsync<DeactivateTemplateCommand> _deactivateTemplateCommand;
+        private ICommandHandlerAsync<DeactivateTemplateVersionCommand> _deactivateTemplateVersionCommand;
         private ICommandHandlerAsync<SetTemplateOwnerCommand> _setTemplateOwnerCommand;
+        private ICommandHandlerAsync<UpdateTemplateDataCommand> _updateTemplateDataCommand;
         private IQueryHandlerAsync<GetTemplateByIdQuery, TemplateDTO> _getTemplateByIdQuery;
         private IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>> _getTemplatesByUserQuery;
         private IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> _getTemplatesQuery;
@@ -94,6 +96,19 @@ namespace DTS.API.Services
         }
 
 
+        public ICommandHandlerAsync<DeactivateTemplateVersionCommand> DeactivateTemplateVersionCommand
+        {
+            get
+            {
+                if (_deactivateTemplateVersionCommand == null)
+                {
+                    _deactivateTemplateVersionCommand = new DeactivateTemplateVersionCommandHandler(repository);
+                }
+                return _deactivateTemplateVersionCommand;
+            }
+        }
+
+
         public ICommandHandlerAsync<SetTemplateOwnerCommand> SetTemplateOwnerCommand
         {
             get
@@ -103,6 +118,19 @@ namespace DTS.API.Services
                     _setTemplateOwnerCommand = new SetTemplateOwnerCommandHandler(repository);
                 }
                 return _setTemplateOwnerCommand;
+            }
+        }
+
+
+        public ICommandHandlerAsync<UpdateTemplateDataCommand> UpdateTemplateDataCommand
+        {
+            get
+            {
+                if (_updateTemplateDataCommand == null)
+                {
+                    _updateTemplateDataCommand = new UpdateTemplateDataCommandHandler(repository);
+                }
+                return _updateTemplateDataCommand;
             }
         }
 

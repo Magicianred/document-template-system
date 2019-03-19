@@ -21,7 +21,8 @@ namespace DTS.API.Services
     }
 
 
-    public sealed class AddTemplateVersionCommandHandler : ICommandHandlerAsync<AddTemplateVersionCommand>
+    public sealed class AddTemplateVersionCommandHandler 
+        : ICommandHandlerAsync<AddTemplateVersionCommand>
     {
         private readonly IRepositoryWrapper repository;
         private readonly string _inactiveTemplateState = "Inactive";

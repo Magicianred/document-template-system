@@ -51,6 +51,7 @@ namespace DTS
             });
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddDbContext<DAL.Models.DTSLocalDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

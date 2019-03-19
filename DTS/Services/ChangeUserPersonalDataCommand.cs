@@ -34,25 +34,20 @@ namespace DTS.API.Services
         {
             User user = await repository.Users.FindUserByIDAsync(command.Id);
 
-            if (!NullOrEmpty(command.Name))
+            if (!string.IsNullOrWhiteSpace(command.Name))
             {
                 user.Name = command.Name;
             }
-            if (!NullOrEmpty(command.Surname))
+            if (!string.IsNullOrWhiteSpace(command.Surname))
             {
                 user.Surname = command.Surname;
             }
-            if (!NullOrEmpty(command.Email))
+            if (!string.IsNullOrWhiteSpace(command.Email))
             {
                 user.Email = command.Email;
             }
 
             await repository.Users.UpdateAsync(user);
-        }
-
-        private bool NullOrEmpty(string s)
-        {
-            return s == null || s.Equals("");
         }
     }
 }

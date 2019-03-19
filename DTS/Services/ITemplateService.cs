@@ -13,7 +13,9 @@ namespace DTS.API.Services
         ICommandHandlerAsync<AddTemplateCommand> AddTemplateCommand { get; }
         ICommandHandlerAsync<AddTemplateVersionCommand> AddTemplateVersionCommand { get; }
         ICommandHandlerAsync<DeactivateTemplateCommand> DeactivateTemplateCommand { get; }
+        ICommandHandlerAsync<DeactivateTemplateVersionCommand> DeactivateTemplateVersionCommand { get; }
         ICommandHandlerAsync<SetTemplateOwnerCommand> SetTemplateOwnerCommand { get; }
+        ICommandHandlerAsync<UpdateTemplateDataCommand> UpdateTemplateDataCommand { get; }
         IQueryHandlerAsync<GetTemplateByIdQuery, TemplateDTO> GetTemplateByIdQuery { get; }
         IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>> GetTemplatesByUserQuery { get; }
         IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> GetTemplatesQuery { get; }

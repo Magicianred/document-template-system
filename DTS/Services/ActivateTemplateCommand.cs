@@ -16,7 +16,8 @@ namespace DTS.API.Services
         }
     }
 
-    public sealed class ActivateTemplateCommandHandler : ICommandHandlerAsync<ActivateTemplateCommand>
+    public sealed class ActivateTemplateCommandHandler 
+        : ICommandHandlerAsync<ActivateTemplateCommand>
     {
 
         private readonly IRepositoryWrapper repository;
