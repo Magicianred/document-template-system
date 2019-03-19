@@ -107,10 +107,10 @@ namespace DTS.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!VerifyIfUserIdEqualsTokenClaimName(id))
-            {
-                return BadRequest();
-            }
+            //if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            //{
+            //    return BadRequest();
+            //}
 
             var command = new ChangeUserPersonalDataCommand(
                 id,
