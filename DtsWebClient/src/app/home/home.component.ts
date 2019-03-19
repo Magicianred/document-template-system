@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionStorageService } from 'angular-web-storage';
-import { AuthenticationService } from '../_services/authService';
 import { User } from '../_models/user';
 
 @Component({
@@ -13,7 +12,6 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private session: SessionStorageService,
-    private authenticationService: AuthenticationService
   ) {
     this.loggedUser = session.get("userData")
   }
