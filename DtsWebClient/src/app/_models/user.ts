@@ -16,6 +16,7 @@ export class UserData {
 }
 
 export class UserChangingData {
+  id: string;
   name: string;
   surname: string;
   email: string;
