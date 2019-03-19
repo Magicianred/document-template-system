@@ -33,7 +33,6 @@
     <None Remove="src\app\_guards\admin.guard.ts" />
     <None Remove="src\app\_guards\auth.guard.ts" />
     <None Remove="src\app\_guards\editor.guard.ts" />
-    <None Remove="src\app\_guards\user.guard.ts" />
     <None Remove="src\app\_helpers\error.interceptor.ts" />
     <None Remove="src\app\_helpers\jwt.interceptor.ts" />
     <None Remove="src\app\_models\loginData.ts" />
@@ -51,7 +50,6 @@
     <TypeScriptCompile Include="src\app\_guards\admin.guard.ts" />
     <TypeScriptCompile Include="src\app\_guards\auth.guard.ts" />
     <TypeScriptCompile Include="src\app\_guards\editor.guard.ts" />
-    <TypeScriptCompile Include="src\app\_guards\user.guard.ts" />
     <TypeScriptCompile Include="src\app\_helpers\error.interceptor.ts" />
     <TypeScriptCompile Include="src\app\_helpers\jwt.interceptor.ts" />
     <TypeScriptCompile Include="src\app\_models\loginData.ts" />
