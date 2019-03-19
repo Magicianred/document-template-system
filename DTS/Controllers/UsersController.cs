@@ -77,7 +77,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
             LogBeginOfRequest();
@@ -203,19 +203,23 @@ namespace DTS.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserType(int id, string type)
         {
+            LogBeginOfRequest();
             var command = new ChangeUserTypeCommand(id, type);
 
             if (!VerifyIfUserIdEqualsTokenClaimName(id))
             {
+                LogEndOfRequest("Bad request", 400);
                 return BadRequest();
             }
 
             try
             {
                 await userService.ChangeUserTypeCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 204);
                 return NoContent();
             } catch (KeyNotFoundException e)
             {
+                LogEndOfRequest(e.Message, 404);
                 return NotFound(e.Message);
             }
         }
