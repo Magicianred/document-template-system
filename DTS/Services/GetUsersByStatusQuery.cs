@@ -34,7 +34,7 @@ namespace DTS.API.Services
             var users = await repository.Users
                 .FindUserByCondition(u => u.Status.Name.ToUpper().Equals(query.Status.ToUpper()));
 
-            return UserDTO.ParseUsersDTO(users);
+            return ExtendedUserDTO.ParseUsersDTO(users);
         }   
     }
 }

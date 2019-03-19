@@ -27,7 +27,7 @@ namespace DTS.API.Services
         {
             var users = await repository.Users.FindAllUsersAsync();
 
-            return UserDTO.ParseUsersDTO(users);
+            return ExtendedUserDTO.ParseUsersDTO(users);
         }
     }
 }

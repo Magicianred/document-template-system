@@ -15,7 +15,7 @@ namespace DTS.API.Models.DTOs
         public string Status { get; set; }
         public string Type { get; set; }
 
-        public static ExtendedUserDTO ParseUser(User user)
+        public static ExtendedUserDTO ParseUserDTO(User user)
         {
             return new ExtendedUserDTO
             {
@@ -26,6 +26,19 @@ namespace DTS.API.Models.DTOs
                 Status = user.Status.Name,
                 Type = user.Type.Name
             };
+        }
+
+
+        public static List<ExtendedUserDTO> ParseUsersDTO(IEnumerable<User> users)
+        {
+            var usersDTO = new List<ExtendedUserDTO>();
+
+            foreach (var user in users)
+            {
+                usersDTO.Add(ParseUserDTO(user));
+            }
+
+            return usersDTO;
         }
     }
 }

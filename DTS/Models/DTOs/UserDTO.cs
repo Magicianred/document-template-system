@@ -23,19 +23,6 @@ namespace DTS.API.Models.DTOs
                 Email = user.Email
             };
         }
-
-
-        public static List<ExtendedUserDTO> ParseUsersDTO(IEnumerable<User> users)
-        {
-            var usersDTO = new List<ExtendedUserDTO>();
-
-            foreach (var user in users)
-            {
-                usersDTO.Add(ExtendedUserDTO.ParseUser(user));
-            }
-
-            return usersDTO;
-        }
     }
 
 }
