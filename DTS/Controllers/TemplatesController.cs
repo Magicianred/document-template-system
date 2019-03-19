@@ -289,20 +289,25 @@ namespace DTS.API.Controllers
         
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var command = new DeactivateTemplateCommand(id);
                 await templateService.DeactivateTemplateCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
 
             } catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"Failed template with id {id} not found", 404);
                 return NotFound();
             }
         }
