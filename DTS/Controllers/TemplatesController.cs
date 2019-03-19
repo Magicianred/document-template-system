@@ -225,16 +225,19 @@ namespace DTS.API.Controllers
         }
 
         [HttpPut("template/{id}/version")]
+        [Authorize]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
             var command = new AddTemplateVersionCommand(id, templateInput);
             await templateService.AddTemplateVersionCommand.HandleAsync(command);
-
+            LogEndOfRequest("Success", 204);
             return NoContent();
         }
 
