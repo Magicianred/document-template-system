@@ -12,6 +12,8 @@ using DTS.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using DTS.APi.Models;
 using DTS.API.Services;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace DTS.API.Controllers
 {
@@ -21,15 +23,39 @@ namespace DTS.API.Controllers
     public class TemplatesController : ControllerBase
     {
         private readonly ITemplateService templateService;
+        private readonly ILogger logger;
         private readonly IRepositoryWrapper repository;
 
-        public TemplatesController(IRepositoryWrapper repository, ITemplateService templateService)
+        public TemplatesController(IRepositoryWrapper repository, ITemplateService templateService, ILogger<TemplatesController> logger)
         {
             this.repository = repository;
             this.templateService = templateService;
+            this.logger = logger;
         }
 
-        // GET: api/Templates
+        private void LogBeginOfRequest()
+        {
+            logger.LogInformation("User id: {userId} type: {userType}, start request handling.",
+                GetUserIdFromToken(),
+                GetUserTypeFromToken()
+                );
+        }
+
+        private void LogEndOfRequest(string message, int status)
+        {
+            logger.LogInformation("status: {status} : {message}",
+                status,
+                message
+                );
+        }
+        private void LogWarning(string message, int status)
+        {
+            logger.LogWarning("status: {status} : {message}",
+                status,
+                message
+                );
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetTemplates()
         {
@@ -47,7 +73,6 @@ namespace DTS.API.Controllers
         }
 
 
-        // GET: api/Templates/5
         [HttpGet("{id}")]
         //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetTemplate([FromRoute] int id)
@@ -69,7 +94,6 @@ namespace DTS.API.Controllers
         }
 
 
-        // GET: api/Templates/form/5
         [HttpGet("form/{id}")]
         public async Task<IActionResult> GetTemplateForm([FromRoute] int id)
         {
@@ -91,7 +115,6 @@ namespace DTS.API.Controllers
         }
 
 
-        // GET: api/templates/editor/5
         [HttpGet("editor/{id}")]
         public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
@@ -112,8 +135,6 @@ namespace DTS.API.Controllers
 
         }
 
-
-        // PUT: api/Templates/2
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput newTemplateData)
         {
@@ -146,7 +167,6 @@ namespace DTS.API.Controllers
             return NoContent();
         }
 
-        // PUT: api/Templates/2/1
         [HttpPut("{tempId}/{verId}")]
         public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId)
         {
@@ -179,7 +199,6 @@ namespace DTS.API.Controllers
 
         }
 
-        // PUT: api/Templates/versions/2/
         [HttpPut("template/{id}/version")]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
         {
@@ -194,7 +213,6 @@ namespace DTS.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Templates
         [HttpPost]
         public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
         {
@@ -215,7 +233,6 @@ namespace DTS.API.Controllers
             }
         }
 
-        // POST: api/Templates/form/1
         [HttpPost("form/{id}")]
         public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
         {
@@ -234,7 +251,6 @@ namespace DTS.API.Controllers
 
         
 
-        // DELETE: api/Templates/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
         {
@@ -273,5 +289,28 @@ namespace DTS.API.Controllers
             }
         }
 
+        private int GetUserIdFromToken()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var idString = claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
+            if (idString != null)
+            {
+                return int.Parse(idString);
+            }
+            return 0;
+        }
+
+        private string GetUserTypeFromToken()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var type = claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value;
+            if (type != null)
+            {
+                return type;
+            }
+            return null;
+        }
     }
 }
