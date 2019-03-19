@@ -57,7 +57,7 @@ export class TemplateDataComponent implements OnInit {
   }
 
   filterVersions(searchText: string) {
-    this.sortedVersions = this.template.versions.filter(version =>
+    this.sortedVersions = this.template.templateVersions.filter(version =>
       version.creationTime.indexOf(searchText) !== -1
       || version.creator.surname.indexOf(searchText) !== -1
       || version.creator.email.indexOf(searchText) !== -1
@@ -67,7 +67,7 @@ export class TemplateDataComponent implements OnInit {
   showVersion(event: any) {
     this.templateChosen = true;
     let versionIndex = event.path[1].rowIndex - 1;
-    let templateContent = this.template.versions[versionIndex].templateVersion;
+    let templateContent = this.template.templateVersions[versionIndex].content;
     let editorArea = document.getElementsByClassName("ngx-editor-textarea")[0];
     editorArea.innerHTML = templateContent;
   }
@@ -76,7 +76,7 @@ export class TemplateDataComponent implements OnInit {
     this.templateChosen = false;
     this.apiClient.get<TemplateVersions>(queries.templatesPath + this.tempId).subscribe(result => {
       this.template = result;
-      this.sortedVersions = result.versions;
+      this.sortedVersions = result.templateVersions;
     }, error => console.error(error));
   }
 

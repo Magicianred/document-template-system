@@ -6,6 +6,7 @@ import { Sort } from '@angular/material';
 import { UserData } from 'src/app/_models/user';
 import { template } from '@angular/core/src/render3';
 import { SessionStorageService } from 'angular-web-storage';
+import { TemplateVersions } from 'src/app/_models/templateVersion';
 
 @Component({
   selector: 'app-editors-templates',
@@ -15,8 +16,8 @@ import { SessionStorageService } from 'angular-web-storage';
 export class EditorsTemplatesComponent implements OnInit {
 
   headElements = ['Name', 'Template State', 'Version Count'];
-  templates: Template[];
-  sortedTemplates: Template[];
+  templates: TemplateVersions[];
+  sortedTemplates: TemplateVersions[];
   editors: UserData[];
   selectedEditor: UserData;
 
@@ -38,7 +39,7 @@ export class EditorsTemplatesComponent implements OnInit {
   }
   
   getTemplates() {
-    this.apiClient.get<Template[]>(queries.editorTemplates + this.editorId).subscribe(result => {
+    this.apiClient.get<TemplateVersions[]>(queries.editorTemplates + this.editorId).subscribe(result => {
       this.templates = result;
       this.sortedTemplates = result;
     }, error => console.error(error));
@@ -79,7 +80,7 @@ export class EditorsTemplatesComponent implements OnInit {
       switch (sort.active) {
         case 'Name': return this.compare(a.name, b.name, isAsc);
         case 'Template State': return this.compare(a.templateState, b.templateState, isAsc);
-        case 'Version Count': return this.compare(a.versionCount, b.versionCount, isAsc);
+        case 'Version Count': return this.compare(a.templateVersions.length, b.templateVersions.length, isAsc);
         default: return 0;
       }
     });

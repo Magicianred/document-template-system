@@ -19,7 +19,7 @@
       <tr *ngFor="let template of sortedTemplates">
         <td align="center" (click)="loadTemplate(template.id)" class="clickable" id="{{template.id}}">{{ template.name }}</td>
         <td align="center">{{ template.templateState }}</td>
-        <td align="center">{{ template.versionCount }}</td>
+        <td align="center">{{ template.templateVersions.length }}</td>
         <td align="center">
           <div ngbDropdown class="d-inline-block">
             <button class="btn btn-secondary" id="typeChanger" ngbDropdownToggle>{{selectedEditor.name}} {{selectedEditor.surname}}</button>
