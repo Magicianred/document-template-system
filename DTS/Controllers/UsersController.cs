@@ -107,11 +107,6 @@ namespace DTS.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            //if (!VerifyIfUserIdEqualsTokenClaimName(id))
-            //{
-            //    return BadRequest();
-            //}
-
             var command = new ChangeUserPersonalDataCommand(
                 id,
                 user.Name,
@@ -158,11 +153,17 @@ namespace DTS.API.Controllers
         }
 
 
-[HttpPut("{id}/type/{type}")]
+        [HttpPut("{id}/type/{type}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserType(int id, string type)
         {
             var command = new ChangeUserTypeCommand(id, type);
+
+            if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            {
+                return BadRequest();
+            }
+
             try
             {
                 await userService.ChangeUserTypeCommand.HandleAsync(command);
@@ -201,6 +202,12 @@ namespace DTS.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            {
+                return BadRequest();
+            }
+
             try
             {
                 var command = new BlockUserCommand(id);
