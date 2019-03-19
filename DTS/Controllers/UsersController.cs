@@ -97,15 +97,19 @@ namespace DTS.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsersByStatus(string status)
         {
+            LogBeginOfRequest();
             try
             {
                 var query = new GetUsersByStatusQuery(status);
                 var users = await userService.GetUsersByStatusQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {users.Count} elements found", 200);
                 return Ok(users);
             }
             catch (InvalidOperationException)
             {
-                return NotFound($"No users with {status} status or is invalid");
+                string errorMessage = $"No users with {status} status or is invalid";
+                LogEndOfRequest(errorMessage, 404);
+                return NotFound(errorMessage);
             }
         }
 
