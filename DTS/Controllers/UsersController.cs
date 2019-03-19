@@ -117,15 +117,19 @@ namespace DTS.API.Controllers
         [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> GetUsersByType(string type)
         {
+            LogBeginOfRequest();
             try
             {
                 var query = new GetUsersByTypeQuery(type);
                 var users = await userService.GetUsersByTypeQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {users.Count} elements found", 200);
                 return Ok(users);
             }
             catch (InvalidOperationException)
             {
-                return NotFound($"No users with {type} type or is invalid");
+                string errorMessage = $"No users with {type} type or is invalid";
+                LogEndOfRequest(errorMessage, 404);
+                return NotFound(errorMessage);
             }
         }
 
