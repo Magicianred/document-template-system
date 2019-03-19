@@ -15,6 +15,7 @@ namespace DTS.Auth.Controllers
     {
         private readonly IAuthServiceWrapper services;
         private readonly ITokenHelper tokenHelper;
+        private readonly IHashPassword hashHandler;
         private readonly IRequestMonitor requestMonitor;
         private readonly ICredentialsRestrictionValidation credentialsRestriction;
 
@@ -23,6 +24,7 @@ namespace DTS.Auth.Controllers
             this.services = services;
             var tokenSettings = tokenSettingsSection.Get<TokenConfig>();
             this.tokenHelper = new TokenHelper(tokenSettings.Secret, tokenSettings.ExpirationTime);
+            this.hashHandler = new BCryptHash();
             this.requestMonitor = monitor;
             this.credentialsRestriction = new DefaultRestriction();
         }
@@ -76,6 +78,7 @@ namespace DTS.Auth.Controllers
                 var user = await services.Login.HandleAsync(new LoginQuery(
                     credentials.Login,
                     credentials.Password,
+                    hashHandler,
                     requestMonitor
                     ));
 

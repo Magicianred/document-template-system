@@ -13,12 +13,14 @@ namespace DTS.Auth.Services
     {
         public string Login { get; }
         public string Password { get; }
+        public IHashPassword HashHandler { get; }
         public IRequestMonitor RequestMonitor { get; }
 
-        public LoginQuery(string login, string password, IRequestMonitor requestMonitor)
+        public LoginQuery(string login, string password, IHashPassword hashHandler, IRequestMonitor requestMonitor)
         {
             Login = login;
             Password = password;
+            HashHandler = hashHandler;
             RequestMonitor = requestMonitor;
         }
     }
@@ -44,7 +46,7 @@ namespace DTS.Auth.Services
                     throw new KeyNotFoundException(errorMessage);
                 }
 
-                if (validatePassword(user, query.Password))
+                if (validatePassword(user, query))
                 {
                     query.RequestMonitor.ResetLoginAttempts(query.Login);
                     if (!user.Status.Name.Equals("Active"))
@@ -61,10 +63,9 @@ namespace DTS.Auth.Services
             }
         }
 
-        private bool validatePassword(User user, string password)
+        private bool validatePassword(User user, LoginQuery query)
         {
-            IHashPassword hashHandler = new BCryptHash();
-            return hashHandler.Verify(password, user.Password);
+            return query.HashHandler.Verify(query.Password, user.Password);
         }
     }
 }
