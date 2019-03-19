@@ -43,14 +43,14 @@ namespace DTS.API.Controllers
 
         private void LogEndOfRequest(string message, int status)
         {
-            logger.LogInformation("status: {status} : {message}",
+            logger.LogInformation("status: {status} : {message}.",
                 status,
                 message
                 );
         }
         private void LogWarning(string message, int status)
         {
-            logger.LogWarning("status: {status} : {message}",
+            logger.LogWarning("status: {status} : {message}.",
                 status,
                 message
                 );
@@ -77,21 +77,25 @@ namespace DTS.API.Controllers
 
 
         [HttpGet("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> GetTemplate([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var query = new GetTemplateByIdQuery(id);
                 var template = await templateService.GetTemplateByIdQuery.HandleAsync(query);
+                LogEndOfRequest($"Success return {template}", 200);
                 return Ok(template);
             }
             catch (KeyNotFoundException e)
             {
+                LogEndOfRequest($"Failed template with id {id} not found", 404);
                 return NotFound(e.Message);
             }
         }
@@ -119,21 +123,27 @@ namespace DTS.API.Controllers
 
 
         [HttpGet("editor/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var query = new GetTemplatesByUserQuery(id);
                 var editorTemplates = await templateService.GetTemplatesByUserQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {editorTemplates.Count} elements found", 200);
                 return Ok(editorTemplates);
             }
             catch (KeyNotFoundException)
-            { 
-                return NotFound($"User not found or not an editor.");
+            {
+                string errorMessage = $"User not found or not an editor.";
+                LogEndOfRequest("Failed" + errorMessage, 404);
+                return NotFound(errorMessage);
             }
 
         }
