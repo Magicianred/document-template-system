@@ -149,10 +149,13 @@ namespace DTS.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput newTemplateData)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -160,31 +163,37 @@ namespace DTS.API.Controllers
             {
                 var command = new UpdateTemplateDataCommand(id, newTemplateData);
                 await templateService.UpdateTemplateDataCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 204);
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"Failed template with id {id} not found", 404);
                 return NotFound();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!await repository.Templates.Exists(id))
                 {
+                    LogEndOfRequest($"Failed template with id {id} not found", 404);
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    LogWarning("Database concurency exception", 500);
+                    return StatusCode(500);
                 }
             }
-
-            return NoContent();
         }
 
         [HttpPut("{tempId}/{verId}")]
+        [Authorize]
         public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -192,24 +201,27 @@ namespace DTS.API.Controllers
             {
                 var command = new ActivateTemplateVersionCommand(verId, tempId);
                 await templateService.ActivateTemplateVersionCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
             }
             catch (InvalidOperationException)
             {
+                LogEndOfRequest($"Failed template id {tempId} or version id {verId} not found", 404);
                 return NotFound();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!await repository.Templates.Exists(tempId))
                 {
+                    LogEndOfRequest($"Failed template with id {tempId} not found", 404);
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    LogWarning("Database concurency exception", 500);
+                    return StatusCode(500);
                 }
             }
-
         }
 
         [HttpPut("template/{id}/version")]
