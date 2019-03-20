@@ -87,10 +87,13 @@ export class TemplateDataComponent implements OnInit {
   saveNewTemplateVersion() {
     let templateData = {
       authorId: this.editorId,
-      template: this.htmlContent
+      template: this.htmlContent,
+      templateName: this.template.name
     }
 
-    this.apiClient.put(queries.templatesPath + this.tempId +"/version", templateData).subscribe(result => {
+    let query = `${queries.templatesPath}template/${this.tempId}/version`;
+
+    this.apiClient.put(query, templateData).subscribe(result => {
       this.templateChosen = false;
       this.getTemplate();
     }, error => console.error(error));
