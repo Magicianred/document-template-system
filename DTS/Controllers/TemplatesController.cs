@@ -148,6 +148,26 @@ namespace DTS.API.Controllers
 
         }
 
+        [HttpGet("states")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUserTypes()
+        {
+            LogBeginOfRequest();
+            try
+            {
+                var query = new GetTemplateStatesQuery();
+                var states = await templateService.GetTemplateStatesQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {states.Count} elements found", 200);
+                return Ok(states);
+            }
+            catch (KeyNotFoundException)
+            {
+                LogEndOfRequest("Failed state list is empty", 404);
+                return NotFound();
+            }
+        }
+
+
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput newTemplateData)
