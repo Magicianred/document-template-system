@@ -13,6 +13,12 @@ namespace DAL.Repositories
         {
         }
 
+        public async Task<IEnumerable<UserStatus>> FindAll()
+        {
+            var statuses = await FindAllAsync();
+            return statuses.DefaultIfEmpty() ?? throw new KeyNotFoundException();
+        }
+
         public async Task<UserStatus> FindStatusById(int id)
         {
             var status = await FindByConditionAsync(u => u.Id == id);
