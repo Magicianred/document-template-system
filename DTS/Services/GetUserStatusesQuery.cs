@@ -11,7 +11,7 @@ namespace DTS.API.Services
     }
 
     public sealed class GetUserStatusesQueryHandler :
-    IQueryHandlerAsync<GetUserStatusesQuery, IEnumerable<string>>
+    IQueryHandlerAsync<GetUserStatusesQuery, IList<string>>
     {
         private IRepositoryWrapper repository;
 
@@ -20,7 +20,7 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<string>> HandleAsync(GetUserStatusesQuery query)
+        public async Task<IList<string>> HandleAsync(GetUserStatusesQuery query)
         {
             var statuses = await repository.UserStatus.FindAll();
             IList<string> statusesNames = new List<string>();

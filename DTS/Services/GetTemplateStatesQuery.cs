@@ -11,7 +11,7 @@ namespace DTS.API.Services
     }
 
     public sealed class GetTemplateStatesQueryHandler
-    : IQueryHandlerAsync<GetTemplateStatesQuery, IEnumerable<string>>
+    : IQueryHandlerAsync<GetTemplateStatesQuery, IList<string>>
     {
         private readonly IRepositoryWrapper repository;
 
@@ -21,7 +21,7 @@ namespace DTS.API.Services
         }
 
 
-        public async Task<IEnumerable<string>> HandleAsync(GetTemplateStatesQuery query)
+        public async Task<IList<string>> HandleAsync(GetTemplateStatesQuery query)
         {
             var states = await repository.TemplateState.FindAllTemplatesAsync();
             var statesNames = new List<string>();

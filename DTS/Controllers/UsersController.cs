@@ -140,6 +140,43 @@ namespace DTS.API.Controllers
             }
         }
 
+        [HttpGet("types")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUserTypes()
+        {
+            LogBeginOfRequest();
+            try 
+            {
+                var query = new GetUserTypesQuery();
+                var types = await userService.GetUserTypesQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {types.Count} elements found", 200);
+                return Ok(types);
+            } catch (KeyNotFoundException)
+            {
+                LogEndOfRequest("Failed types list is empty", 404);
+                return NotFound();
+            }
+        }
+
+        [HttpGet("statuses")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUserStatuses()
+        {
+            LogBeginOfRequest();
+            try
+            {
+                var query = new GetUserStatusesQuery();
+                var statuses = await userService.GetUserStatusesQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {statuses.Count} elements found", 200);
+                return Ok(statuses);
+            }
+            catch (KeyNotFoundException)
+            {
+                LogEndOfRequest("Failed status list is empty", 404);
+                return NotFound();
+            }
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> ChangeUserPersonalData([FromRoute] int id, [FromBody] UserDTO user)
         {

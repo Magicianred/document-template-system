@@ -11,7 +11,7 @@ namespace DTS.API.Services
     }
 
     public sealed class GetUserTypesQueryHandler :
-        IQueryHandlerAsync<GetUserTypesQuery, IEnumerable<string>>
+        IQueryHandlerAsync<GetUserTypesQuery, IList<string>>
     {
         private IRepositoryWrapper repository;
 
@@ -20,7 +20,7 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<string>> HandleAsync(GetUserTypesQuery query)
+        public async Task<IList<string>> HandleAsync(GetUserTypesQuery query)
         {
             var types = await repository.UserType.FindAll();
             IList<string> typesNames = new List<string>();
