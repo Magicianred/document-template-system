@@ -12,6 +12,8 @@ using DTS.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using DTS.APi.Models;
 using DTS.API.Services;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace DTS.API.Controllers
 {
@@ -21,55 +23,84 @@ namespace DTS.API.Controllers
     public class TemplatesController : ControllerBase
     {
         private readonly ITemplateService templateService;
+        private readonly ILogger logger;
         private readonly IRepositoryWrapper repository;
 
-        public TemplatesController(IRepositoryWrapper repository, ITemplateService templateService)
+        public TemplatesController(IRepositoryWrapper repository, ITemplateService templateService, ILogger<TemplatesController> logger)
         {
             this.repository = repository;
             this.templateService = templateService;
+            this.logger = logger;
         }
 
-        // GET: api/Templates
+        private void LogBeginOfRequest()
+        {
+            logger.LogInformation("User id: {userId} type: {userType}, start request handling.",
+                GetUserIdFromToken(),
+                GetUserTypeFromToken()
+                );
+        }
+
+        private void LogEndOfRequest(string message, int status)
+        {
+            logger.LogInformation("status: {status} : {message}.",
+                status,
+                message
+                );
+        }
+        private void LogWarning(string message, int status)
+        {
+            logger.LogWarning("status: {status} : {message}.",
+                status,
+                message
+                );
+        }
+
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetTemplates()
         {
+            LogBeginOfRequest();
             try
             {
                 var query = new GetTemplatesQuery();
                 var templates = await templateService.GetTemplatesQuery.HandleAsync(query);
-            
+                LogEndOfRequest($"Success {templates.Count} elements Found", 200);
                 return Ok(templates);
             }
             catch (InvalidOperationException)
             {
+                LogEndOfRequest("Failed templates list is empty", 404);
                 return NotFound();
             }            
         }
 
 
-        // GET: api/Templates/5
         [HttpGet("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> GetTemplate([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var query = new GetTemplateByIdQuery(id);
                 var template = await templateService.GetTemplateByIdQuery.HandleAsync(query);
+                LogEndOfRequest($"Success return {template}", 200);
                 return Ok(template);
             }
             catch (KeyNotFoundException e)
             {
+                LogEndOfRequest($"Failed template with id {id} not found", 404);
                 return NotFound(e.Message);
             }
         }
 
 
-        // GET: api/Templates/form/5
         [HttpGet("form/{id}")]
         public async Task<IActionResult> GetTemplateForm([FromRoute] int id)
         {
@@ -91,34 +122,40 @@ namespace DTS.API.Controllers
         }
 
 
-        // GET: api/templates/editor/5
         [HttpGet("editor/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var query = new GetTemplatesByUserQuery(id);
                 var editorTemplates = await templateService.GetTemplatesByUserQuery.HandleAsync(query);
+                LogEndOfRequest($"Success {editorTemplates.Count} elements found", 200);
                 return Ok(editorTemplates);
             }
             catch (KeyNotFoundException)
-            { 
-                return NotFound($"User not found or not an editor.");
+            {
+                string errorMessage = $"User not found or not an editor.";
+                LogEndOfRequest("Failed" + errorMessage, 404);
+                return NotFound(errorMessage);
             }
 
         }
 
-
-        // PUT: api/Templates/2
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput newTemplateData)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -126,32 +163,37 @@ namespace DTS.API.Controllers
             {
                 var command = new UpdateTemplateDataCommand(id, newTemplateData);
                 await templateService.UpdateTemplateDataCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 204);
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"Failed template with id {id} not found", 404);
                 return NotFound();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!await repository.Templates.Exists(id))
                 {
+                    LogEndOfRequest($"Failed template with id {id} not found", 404);
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    LogWarning("Database concurency exception", 500);
+                    return StatusCode(500);
                 }
             }
-
-            return NoContent();
         }
 
-        // PUT: api/Templates/2/1
         [HttpPut("{tempId}/{verId}")]
+        [Authorize]
         public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
@@ -159,97 +201,113 @@ namespace DTS.API.Controllers
             {
                 var command = new ActivateTemplateVersionCommand(verId, tempId);
                 await templateService.ActivateTemplateVersionCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
             }
             catch (InvalidOperationException)
             {
+                LogEndOfRequest($"Failed template id {tempId} or version id {verId} not found", 404);
                 return NotFound();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!await repository.Templates.Exists(tempId))
                 {
+                    LogEndOfRequest($"Failed template with id {tempId} not found", 404);
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    LogWarning("Database concurency exception", 500);
+                    return StatusCode(500);
                 }
             }
-
         }
 
-        // PUT: api/Templates/versions/2/
         [HttpPut("template/{id}/version")]
+        [Authorize]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
 
             var command = new AddTemplateVersionCommand(id, templateInput);
             await templateService.AddTemplateVersionCommand.HandleAsync(command);
-
+            LogEndOfRequest("Success", 204);
             return NoContent();
         }
 
-        // POST: api/Templates
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
         {
+            LogBeginOfRequest();
             try
             {
                 if (!ModelState.IsValid)
                 {
+                    LogEndOfRequest("Failed Bad Request", 400);
                     return BadRequest(ModelState);
                 }
 
                 var command = new AddTemplateCommand(templateInput);
                 await templateService.AddTemplateCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
             }
             catch (Exception)
             {
+                LogEndOfRequest($"Failed user with id {templateInput.AuthorId} not found", 404);
                 return NotFound();
             }
         }
 
-        // POST: api/Templates/form/1
         [HttpPost("form/{id}")]
+        [Authorize]
         public async Task<IActionResult> PostUserFilledFields([FromRoute] int id, [FromBody] object data)
         {
+            LogBeginOfRequest();
             try
             {
                 var query = new FillInTemplateQuery(id, data);
                 var filledDocument = await templateService.FillInTemplateQuery.HandleAsync(query);
-
+                LogEndOfRequest("Success", 200);
                 return Ok(filledDocument);
             }
             catch (Exception)
             {
-                return BadRequest("Template does not exist or is inactive");
+                string errorMessage = "Template does not exist or is inactive";
+                LogEndOfRequest("Failed " + errorMessage, 404);
+                return BadRequest(errorMessage);
             }
         }
 
         
 
-        // DELETE: api/Templates/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var command = new DeactivateTemplateCommand(id);
                 await templateService.DeactivateTemplateCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
                 return Ok();
 
             } catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"Failed template with id {id} not found", 404);
                 return NotFound();
             }
         }
@@ -257,21 +315,47 @@ namespace DTS.API.Controllers
         [HttpDelete("version/{id}")]
         public async Task<IActionResult> DeleteTemplateVersion([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
+                LogEndOfRequest("Failed Bad Request", 400);
                 return BadRequest(ModelState);
             }
             try
             {
                 var command = new DeactivateTemplateVersionCommand(id);
                 await templateService.DeactivateTemplateVersionCommand.HandleAsync(command);
-
+                LogEndOfRequest("Success", 200);
                 return Ok();
             } catch (KeyNotFoundException)
             {
+                LogEndOfRequest($"Failed template version with id {id} not found", 404);
                 return NotFound();
             }
         }
 
+        private int GetUserIdFromToken()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var idString = claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
+            if (idString != null)
+            {
+                return int.Parse(idString);
+            }
+            return 0;
+        }
+
+        private string GetUserTypeFromToken()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var type = claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value;
+            if (type != null)
+            {
+                return type;
+            }
+            return null;
+        }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using DAL.Data;
 using DAL.Models;
+using NLog.Web;
 
 namespace DTS
 {
@@ -12,8 +13,8 @@ namespace DTS
     {
         public static void Main(string[] args)
         {
-        
-        
+
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
             var host = CreateWebHostBuilder(args).Build();
     
             using (var scope = host.Services.CreateScope())
@@ -26,8 +27,7 @@ namespace DTS
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while seeding the database.");
+                    logger.Error(ex, "An error occurred while seeding the database.");
                 }
             }
     
@@ -37,6 +37,12 @@ namespace DTS
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
+                .UseNLog();
     }
 }
