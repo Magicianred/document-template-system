@@ -32,10 +32,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_activateUserCommand == null)
-                {
-                    _activateUserCommand = new ActivateUserCommandHandler(repository);
-                }
+                _activateUserCommand = _activateUserCommand ?? new ActivateUserCommandHandler(repository);
+
                 return _activateUserCommand;
             }
         }
@@ -45,10 +43,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_blockUserCommand == null)
-                {
-                    _blockUserCommand = new BlockUserCommandHandler(repository);
-                }
+                _blockUserCommand = _blockUserCommand ?? new BlockUserCommandHandler(repository);
+
                 return _blockUserCommand;
             }
         }
@@ -58,10 +54,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_changeUserPersonalDataCommand == null)
-                {
-                    _changeUserPersonalDataCommand = new ChangeUserPersonalDataCommandHandler(repository);
-                }
+                _changeUserPersonalDataCommand = _changeUserPersonalDataCommand ?? new ChangeUserPersonalDataCommandHandler(repository);
+
                 return _changeUserPersonalDataCommand;
             }
         }
@@ -71,10 +65,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_changeUserTypeCommand == null)
-                {
-                    _changeUserTypeCommand = new ChangeUserTypeCommandHandler(repository);
-                }
+                _changeUserTypeCommand = _changeUserTypeCommand ?? new ChangeUserTypeCommandHandler(repository);
+
                 return _changeUserTypeCommand;
             }
         }
@@ -84,10 +76,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getUsersByStatusQuery == null)
-                {
-                    _getUsersByStatusQuery = new GetUsersByStatusQueryHandler(repository);
-                }
+                _getUsersByStatusQuery = _getUsersByStatusQuery ?? new GetUsersByStatusQueryHandler(repository);
+
                 return _getUsersByStatusQuery;
             }
         }
@@ -97,10 +87,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getUsersByTypeQuery == null)
-                {
-                    _getUsersByTypeQuery = new GetUsersByTypeQueryHandler(repository);
-                }
+                _getUsersByTypeQuery = _getUsersByTypeQuery ?? new GetUsersByTypeQueryHandler(repository);
+
                 return _getUsersByTypeQuery;
             }
         }
@@ -110,10 +98,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getUsersQuery == null)
-                {
-                    _getUsersQuery = new GetUsersQueryHandler(repository);
-                }
+                _getUsersQuery = _getUsersQuery ?? new GetUsersQueryHandler(repository);
+
                 return _getUsersQuery;
             }
         }
@@ -123,10 +109,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getUserByIdQuery == null)
-                {
-                    _getUserByIdQuery = new GetUserByIdQueryHandler(repository);
-                }
+                _getUserByIdQuery = _getUserByIdQuery ?? new GetUserByIdQueryHandler(repository);
+
                 return _getUserByIdQuery;
             }
         }
@@ -135,10 +119,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getUserTypesQuery == null)
-                {
-                    _getUserTypesQuery = new GetUserTypesQueryHandler(repository);
-                }
+                _getUserTypesQuery = _getUserTypesQuery ?? new GetUserTypesQueryHandler(repository);
+
                 return _getUserTypesQuery;
             }
         }
@@ -147,10 +129,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getUserStatusesQuery == null)
-                {
-                    _getUserStatusesQuery = new GetUserStatusesQueryHandler(repository);
-                }
+                _getUserStatusesQuery = _getUserStatusesQuery ?? new GetUserStatusesQueryHandler(repository);
+
                 return _getUserStatusesQuery;
             }
         }

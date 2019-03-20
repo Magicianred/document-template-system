@@ -36,10 +36,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_activateTemplateCommand == null)
-                {
-                    _activateTemplateCommand = new ActivateTemplateCommandHandler(repository);
-                }
+                _activateTemplateCommand = _activateTemplateCommand ?? new ActivateTemplateCommandHandler(repository);
+
                 return _activateTemplateCommand;
             }
         }
@@ -49,10 +47,9 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_activateTemplateVersionCommand == null)
-                {
-                    _activateTemplateVersionCommand = new ActivateTemplateVersionCommandHandler(repository);
-                }
+
+                _activateTemplateVersionCommand = _activateTemplateVersionCommand ?? new ActivateTemplateVersionCommandHandler(repository);
+
                 return _activateTemplateVersionCommand;
             }
         }
@@ -62,10 +59,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_addTemplateCommand == null)
-                {
-                    _addTemplateCommand = new AddTemplateCommandHandler(repository);
-                }
+                    _addTemplateCommand = _addTemplateCommand ?? new AddTemplateCommandHandler(repository);
+   
                 return _addTemplateCommand;
             }
         }
@@ -75,10 +70,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_addTemplateVersionCommand == null)
-                {
-                    _addTemplateVersionCommand = new AddTemplateVersionCommandHandler(repository);
-                }
+                _addTemplateVersionCommand = _addTemplateVersionCommand ?? new AddTemplateVersionCommandHandler(repository);
+
                 return _addTemplateVersionCommand;
             }
         }
@@ -88,10 +81,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_deactivateTemplateCommand == null)
-                {
-                    _deactivateTemplateCommand = new DeactivateTemplateCommandHandler(repository);
-                }
+                _deactivateTemplateCommand = _deactivateTemplateCommand ?? new DeactivateTemplateCommandHandler(repository);
+
                 return _deactivateTemplateCommand;
             }
         }
@@ -101,10 +92,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_deactivateTemplateVersionCommand == null)
-                {
-                    _deactivateTemplateVersionCommand = new DeactivateTemplateVersionCommandHandler(repository);
-                }
+               _deactivateTemplateVersionCommand = _deactivateTemplateVersionCommand ?? new DeactivateTemplateVersionCommandHandler(repository);
+
                 return _deactivateTemplateVersionCommand;
             }
         }
@@ -114,10 +103,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_setTemplateOwnerCommand == null)
-                {
-                    _setTemplateOwnerCommand = new SetTemplateOwnerCommandHandler(repository);
-                }
+                _setTemplateOwnerCommand = _setTemplateOwnerCommand ?? new SetTemplateOwnerCommandHandler(repository);
+
                 return _setTemplateOwnerCommand;
             }
         }
@@ -127,10 +114,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_updateTemplateDataCommand == null)
-                {
-                    _updateTemplateDataCommand = new UpdateTemplateDataCommandHandler(repository);
-                }
+                _updateTemplateDataCommand = _updateTemplateDataCommand ?? new UpdateTemplateDataCommandHandler(repository);
+
                 return _updateTemplateDataCommand;
             }
         }
@@ -140,10 +125,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getTemplateByIdQuery == null)
-                {
-                    _getTemplateByIdQuery = new GetTemplateByIdQueryHandler(repository);
-                }
+                _getTemplateByIdQuery = _getTemplateByIdQuery ?? new GetTemplateByIdQueryHandler(repository);
+
                 return _getTemplateByIdQuery;
             }
         }
@@ -153,10 +136,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getTemplatesByUserQuery == null)
-                {
-                    _getTemplatesByUserQuery = new GetTemplatesByUserQueryHandler(repository);
-                }
+                _getTemplatesByUserQuery = _getTemplatesByUserQuery ?? new GetTemplatesByUserQueryHandler(repository);
+
                 return _getTemplatesByUserQuery;
             }
         }
@@ -166,10 +147,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getTemplatesQuery == null)
-                {
-                    _getTemplatesQuery = new GetTemplatesQueryHandler(repository);
-                }
+                _getTemplatesQuery = _getTemplatesQuery ?? new GetTemplatesQueryHandler(repository);
+
                 return _getTemplatesQuery;
             }
         }
@@ -179,10 +158,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_fillInTemplateQuery == null)
-                {
-                    _fillInTemplateQuery = new FillInTemplateQueryHandler(repository);
-                }
+                _fillInTemplateQuery = _fillInTemplateQuery ?? new FillInTemplateQueryHandler(repository);
+
                 return _fillInTemplateQuery;
             }
         }
@@ -192,10 +169,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getTemplateFormQuery == null)
-                {
-                    _getTemplateFormQuery = new GetTemplateFormQueryHandler(repository);
-                }
+                _getTemplateFormQuery = _getTemplateFormQuery ?? new GetTemplateFormQueryHandler(repository);
+
                 return _getTemplateFormQuery;
             }
         }
