@@ -206,7 +206,7 @@ namespace DTS.API.Controllers
             LogBeginOfRequest();
             var command = new ChangeUserTypeCommand(id, type);
 
-            if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            if (VerifyIfUserIdEqualsTokenClaimName(id))
             {
                 LogEndOfRequest("Failed Bad request", 400);
                 return BadRequest();
@@ -257,7 +257,7 @@ namespace DTS.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!VerifyIfUserIdEqualsTokenClaimName(id))
+            if (VerifyIfUserIdEqualsTokenClaimName(id))
             {
                 LogEndOfRequest($"User id {GetUserTypeFromToken()} {GetUserTypeFromToken()}, Trying to block himself", 400);
                 return BadRequest();
