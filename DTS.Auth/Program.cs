@@ -20,7 +20,7 @@ namespace DTS.Auth
         {
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
-            var host = CreateWebHostBuilder(args).Build();
+            var host = CreateWebHostBuilder(args).UseUrls("http://localhost:55019").Build();
 
             using (var scope = host.Services.CreateScope())
             {
@@ -35,7 +35,7 @@ namespace DTS.Auth
                     logger.Error(ex, "An error occurred while seeding the database.");
                 }
             }
-
+            
             host.Run();
         }
 
