@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace DTS.API.Models.DTOs
 {
-    public class UserPersonalData
+    public class UserPersonalDataDTO
     {
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
 
-        public static UserPersonalData ParseUserPersonalData(User user)
+        public static UserPersonalDataDTO ParseUserPersonalDataDTO(User user)
         {
-            return new UserPersonalData
+            return new UserPersonalDataDTO
             {
                 Name = user.Name,
                 Surname = user.Surname,
