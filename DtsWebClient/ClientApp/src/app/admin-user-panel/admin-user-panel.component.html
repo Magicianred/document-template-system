@@ -9,7 +9,7 @@
     <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange) = "sortUsers($event)">
       <thead class="thead-dark">
         <tr>
-          <th></th>
+          <th id="saveButton"></th>
           <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
         </tr>
       </thead>

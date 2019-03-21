@@ -7,9 +7,12 @@
 }
 
 _:-ms-lang(x), _:-webkit-full-screen, #typeChanger {
-  width: 8em;
+  width: 7em;
 }
 
+_:-ms-lang(x), _:-webkit-full-screen, #saveButton {
+  width: 5em;
+}
 
 .btn {
   width: 100%;
