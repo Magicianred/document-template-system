@@ -74,9 +74,8 @@ namespace DAL.Repositories
             await SaveAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(User user)
         {
-            var user = await FindUserByIDAsync(id);
             Delete(user);
             await SaveAsync();
         }
