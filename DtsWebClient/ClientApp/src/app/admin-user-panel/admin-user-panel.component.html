@@ -1,15 +1,16 @@
 <div class="row">
   <div class="col-md-12 mx-auto">
     <div class="md-form">
-      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" placeholder="Search" mdbInput (keyup) ="filterUsers($event.target.value)">
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" mdbInput (keyup) ="filterUsers($event.target.value)">
+      <label for="search">Search</label>
     </div>
   </div>
 </div>
-<div>
+<div *ngIf="!userChosen">
     <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange) = "sortUsers($event)">
       <thead class="thead-dark">
         <tr>
-          <th id="saveButton"></th>
+          <th> Save changes</th>
           <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
         </tr>
       </thead>
@@ -18,35 +19,36 @@
           <td align="center">
             <div class="row">
               <div class="col">
-                <button class="btn btn-success" (click)="changeUserData(name.value ,surname.value, email.value, user, $event)">
-                  Save
-                </button>
+                <button class="btn btn-danger" (click)="changeUserData(name.value ,surname.value, email.value, user.id, $event)">X</button>
               </div>
             </div>
           </td>
           <td><input type="text" #name class="form-control input-sm" placeholder="{{user.name}}" /></td>
           <td><input type="text" #surname class="form-control input-sm" placeholder="{{user.surname}}" /></td>
           <td><input type="text" #email class="form-control input-sm" placeholder="{{user.email}}" /></td>
-          <td align="center" id="typeChanger">
+          <td align="center">
             <div class="row">
-              <div ngbDropdown class="d-inline-block col">
-                <button class="btn btn-primary"  *ngIf="!user.newType" ngbDropdownToggle>{{user.type}}</button>
-                <button class="btn btn-primary"  *ngIf="user.newType" ngbDropdownToggle>{{user.newType}}</button>
-                <div ngbDropdownMenu aria-labelledby="typeChanger">
-                  <button *ngFor="let type of types" (click)="changeUserType(user, type)" ngbDropdownItem>{{type}}</button>
+              <div class="col">
+                <div ngbDropdown class="d-inline-block">
+                  <button class="btn btn-secondary" id="typeChanger" ngbDropdownToggle>{{user.type}}</button>
+                  <div ngbDropdownMenu aria-labelledby="typeChanger">
+                    <button ngbDropdownItem (click)="switchUserType('Editor', user.type, user.id)">Editor</button>
+                    <button ngbDropdownItem (click)="switchUserType('Admin', user.type, user.id)">Admin</button>
+                    <button ngbDropdownItem (click)="switchUserType('User', user.type, user.id)">User</button>
+                  </div>
                 </div>
               </div>
-              
             </div>
           </td>
 
           <td align="center">
             <div class="row">
               <div class="col">
-                <button class="btn btn-primary" (click)="changeUserState(user, $event)">{{user.status}}</button>
+                <button class="btn btn-danger" (click)="changeUserState(user.id, user.status)">{{user.status}}</button>
               </div>
             </div>
           </td>
+
         </tr>
       </tbody>
     </table>
