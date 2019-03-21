@@ -57,6 +57,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetTemplates()
         {
             LogBeginOfRequest();
@@ -93,6 +94,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> GetTemplate([FromRoute] int id)
         {
             LogBeginOfRequest();
@@ -138,6 +140,7 @@ namespace DTS.API.Controllers
 
 
         [HttpGet("editor/{id}")]
+        [Authorize(Roles = "Editor")]
         public async Task<IActionResult> GetEditorsTemplates([FromRoute] int id)
         {
             LogBeginOfRequest();
@@ -183,6 +186,7 @@ namespace DTS.API.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> UpdateTemplateData([FromRoute] int id, [FromBody] TemplateUpdateInput newTemplateData)
         {
             LogBeginOfRequest();
@@ -220,6 +224,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpPut("{tempId}/{verId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SetActiveVersion([FromRoute] int verId, [FromRoute] int tempId)
         {
             LogBeginOfRequest();
@@ -257,6 +262,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpPut("template/{id}/version")]
+        [Authorize(Roles = "Editor")]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
         {
             LogBeginOfRequest();
@@ -273,6 +279,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Editor")]
         public async Task<IActionResult> PostTemplate([FromBody] TemplateVersionInput templateInput)
         {
             LogBeginOfRequest();
@@ -318,6 +325,7 @@ namespace DTS.API.Controllers
         
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTemplate([FromRoute] int id)
         {
             LogBeginOfRequest();
@@ -341,6 +349,7 @@ namespace DTS.API.Controllers
         }
 
         [HttpDelete("version/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTemplateVersion([FromRoute] int id)
         {
             LogBeginOfRequest();
