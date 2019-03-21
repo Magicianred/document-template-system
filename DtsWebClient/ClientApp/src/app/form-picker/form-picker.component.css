@@ -1,3 +1,7 @@
 .clickable:hover {
   cursor: pointer;
 }
+
+.btn{
+  margin-bottom: 10px;
+}

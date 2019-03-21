@@ -15,13 +15,14 @@
     </thead>
     <tbody>
       <tr *ngFor="let template of sortedTemplates">
-        <td (click)="showVersion(template.id)" id="{{template.id}}" class="clickable">{{ template.name }}</td>
-        <td (click)="showVersion(template.id)" class="clickable">{{ template.owner.name }}  {{template.owner.surname}} {{template.owner.email}}</td>
+        <td align="center" (click)="showVersion(template.id)" id="{{template.id}}"><button class="btn btn-primary">{{ template.name }}</button> </td>
+        <td>{{ template.owner.name }}  {{template.owner.surname}} {{template.owner.email}}</td>
       </tr>
     </tbody>
   </table>
 </div>
 <form id="userInput" *ngIf="gotForm" #templateForm="ngForm" (ngSubmit)="postData(templateForm.value, content)">
+  <button class="btn btn-primary" (click)="gotForm = !gotForm">Back to templates</button>
   <h3>Required Input</h3>
   <fieldset>
     <div *ngFor="let item of formBase | keyvalue" class="form-group">
@@ -29,7 +30,6 @@
     </div>
   </fieldset>
   <button type="submit" class="btn btn-primary">Submit</button>
-  <button class="btn btn-primary" (click)="gotForm = !gotForm">Back to templates</button>
 </form>
 
 <ng-template #content let-modal id="content">
