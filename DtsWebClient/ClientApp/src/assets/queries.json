@@ -8,5 +8,6 @@
   "editorTemplates": "https://localhost:44346/api/templates/editor/",
   "formPath": "https://localhost:44346/api/templates/form/",
   "userTypesPath": "https://localhost:44346/api/users/types",
-  "userDataPath": "https://localhost:44346/api/users/personal/"
+  "userDataPath": "https://localhost:44346/api/users/personal/",
+  "activeTemplatesPath": "https://localhost:44346/api/templates/active"
 }
