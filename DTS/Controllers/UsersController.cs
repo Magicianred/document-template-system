@@ -76,6 +76,29 @@ namespace DTS.API.Controllers
             }
         }
 
+        [HttpGet("personal/{id}")]
+        public async Task<IActionResult> GetUserPersonalData([FromRoute] int id)
+        {
+            LogBeginOfRequest();
+            if (!ModelState.IsValid)
+            {
+                LogEndOfRequest("Bad request", 400);
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var query = new GetUserPersonalDataQuery(id);
+                var user = await userService.GetUserPersonalDataQuery.HandleAsync(query);
+                LogEndOfRequest($"Success return {user}", 200);
+                return Ok(user);
+            }
+            catch (KeyNotFoundException e)
+            {
+                LogEndOfRequest($"Failed user with id {id} not found", 404);
+                return NotFound(e.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
@@ -288,6 +311,7 @@ namespace DTS.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> BlockUser([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
                 LogEndOfRequest("Failed Bad request", 400);
@@ -307,6 +331,36 @@ namespace DTS.API.Controllers
                 LogEndOfRequest("Success", 200);
                 return Ok();
             } catch (KeyNotFoundException)
+            {
+                LogEndOfRequest($"Failed User with id {id} not found", 404);
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id}/perm")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            LogBeginOfRequest();
+            if (!ModelState.IsValid)
+            {
+                LogEndOfRequest("Failed Bad request", 400);
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var command = new DeleteUserCommand(id);
+                await userService.DeleteUserCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
+                return Ok();
+            }
+            catch (InvalidOperationException)
+            {
+                LogEndOfRequest($"Failed can't delete user if status is different than 'Suspended'", 400);
+                return BadRequest();
+            }
+            catch (KeyNotFoundException)
             {
                 LogEndOfRequest($"Failed User with id {id} not found", 404);
                 return NotFound();

@@ -23,6 +23,7 @@ namespace DTS.API.Services
         private IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> _fillInTemplateQuery;
         private IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> _getTemplateFormQuery;
         private IQueryHandlerAsync<GetTemplateStatesQuery, IList<string>> _getTemplateStatesQuery;
+        private IQueryHandlerAsync<GetActiveTemplatesQuery, IList<TemplateDTO>> _getActiveTemplatesQuery;
         private readonly IRepositoryWrapper repository;
 
 
@@ -184,6 +185,18 @@ namespace DTS.API.Services
                     _getTemplateStatesQuery = new GetTemplateStatesQueryHandler(repository);
                 }
                 return _getTemplateStatesQuery;
+            }
+        }
+
+        public IQueryHandlerAsync<GetActiveTemplatesQuery, IList<TemplateDTO>> GetActiveTemplatesQuery
+        {
+            get
+            {
+                if (_getActiveTemplatesQuery == null)
+                {
+                    _getActiveTemplatesQuery = new GetActiveTemplatesQueryHandler(repository);
+                }
+                return _getActiveTemplatesQuery;
             }
         }
     }

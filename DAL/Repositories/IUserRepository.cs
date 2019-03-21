@@ -16,6 +16,7 @@ namespace DAL.Repositories
         Task<bool> Exists(int id);
         Task<bool> IsExistByLogin(string login);
         Task CreateAsync(User user);
-        Task UpdateAsync(User oldUser);
+        Task UpdateAsync(User User);
+        Task DeleteAsync(User user);
     }
 }

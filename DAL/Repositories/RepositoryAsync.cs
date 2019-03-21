@@ -42,5 +42,10 @@ namespace DAL
         {
             this.DTSContext.Set<T>().Update(entity);
         }
+
+        public void Delete(T entity)
+        {
+            this.DTSContext.Set<T>().Remove(entity);
+        }
     }
 }
