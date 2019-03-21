@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\_models\userType.ts" />
     <None Remove="src\app\templateContent.ts" />
     <None Remove="src\app\_guards\admin.guard.ts" />
     <None Remove="src\app\_guards\auth.guard.ts" />
@@ -47,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\_models\userType.ts" />
     <TypeScriptCompile Include="src\app\_guards\admin.guard.ts" />
     <TypeScriptCompile Include="src\app\_guards\auth.guard.ts" />
     <TypeScriptCompile Include="src\app\_guards\editor.guard.ts" />
