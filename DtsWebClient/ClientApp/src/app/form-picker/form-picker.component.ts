@@ -37,7 +37,7 @@ export class FormPickerComponent implements OnInit {
   }
 
   getTemplates() {
-    this.apiClient.get<Template[]>(queries.templatesPath).subscribe(result => {
+    this.apiClient.get<Template[]>(queries.activeTemplatesPath).subscribe(result => {
       this.templates = result;
       this.sortedTemplates = result;
     }, error => console.error(error));

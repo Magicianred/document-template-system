@@ -29,7 +29,7 @@ export class AuthenticationService {
 
       
       this.session.set("loggedUser", user);
-      this.apiClient.get(queries.userPath + user.id).subscribe(result => {
+      this.apiClient.get(queries.userDataPath + user.id).subscribe(result => {
         const userData = result;
         this.session.set("userData", userData)
         location.reload(true);
