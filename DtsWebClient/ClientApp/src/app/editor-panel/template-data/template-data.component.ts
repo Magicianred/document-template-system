@@ -66,7 +66,8 @@ export class TemplateDataComponent implements OnInit {
 
   showVersion(event: any) {
     this.templateChosen = true;
-    let versionIndex = event.path[1].rowIndex - 1;
+    console.log(event.path[2].rowIndex -1);
+    let versionIndex = event.path[2].rowIndex - 1;
     let templateContent = this.template.templateVersions[versionIndex].content;
     let editorArea = document.getElementsByClassName("ngx-editor-textarea")[0];
     editorArea.innerHTML = templateContent;

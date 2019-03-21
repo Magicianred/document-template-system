@@ -150,7 +150,6 @@ export class AdminTemplatePanelComponent implements OnInit {
     this.apiClient.get<TemplateVersions>(queries.templatesPath + id).subscribe(result => {
       this.pickedTemplate = result;
       this.sortedVersions = result.templateVersions;
-      console.log(this.pickedTemplate)
     }, error => console.error(error));
   }
 
@@ -161,15 +160,15 @@ export class AdminTemplatePanelComponent implements OnInit {
       }, error => console.error(error));
     }
     else {
-      this.apiClient.put(queries.templatesPath + this.pickedTemplate.id + "/" + id, "Empty Body").subscribe(result => {
+      let query = `${queries.templatesPath}${this.pickedTemplate.id}/${id}`;
+      this.apiClient.put(query, "Empty Body").subscribe(result => {
         this.loadTemplateVersions(this.pickedTemplate.id.toString());
       }, error => console.error(error));
     }
   }
-
   showVersion(event: any, content) {
     this.templateChosen = true;
-    let versionIndex = event.path[1].rowIndex - 1;
+    let versionIndex = event.path[2].rowIndex - 1;
     let version = this.pickedTemplate.templateVersions[versionIndex].content;
     this.templateContent = document.createElement("DIV");
     this.templateContent.innerHTML = version;

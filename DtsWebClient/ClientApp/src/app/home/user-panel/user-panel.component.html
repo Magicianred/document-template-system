@@ -1,4 +1,4 @@
-<div class="container bootstrap snippet">
+<div class="container bootstrap snippet" *ngIf="!loading">
   <div class="row">
     <div class="col-sm-6 mt-2">
       <div class="row justify-space mb-2 mx-0">
@@ -13,10 +13,7 @@
               <label for="first_name"><h4>{{loggedUser.email}}</h4></label>
             </div>
             <div class="col-xs-6">
-              <label for="last_name"><h4>{{loggedUser.status}}</h4></label>
-            </div>
-            <div class="col-xs-6">
-              <label for="user_type"><h4>{{loggedUser.type}}</h4></label>
+              <label for="user_type"><h4>{{userType}}</h4></label>
             </div>
           </div>
         </div>
@@ -34,13 +31,13 @@
       </div>
       <div class="row">
         <div class="col">
-          <button class="btn btn-danger" (click)="changeUserData(name.value ,surname.value, email.value, $event)">Save Changes</button>
+          <button class="btn btn-success" (click)="changeUserData(name.value ,surname.value, email.value, $event)">Save Changes</button>
         </div>
       </div>
     </div>
 
     <div class="col-sm-6 mt-2">
-      <form form [formGroup]="changeCredentialsForm" (ngSubmit)="changeCredentials()" *ngIf="!loaded">
+      <form form [formGroup]="changeCredentialsForm" (ngSubmit)="changeCredentials()" *ngIf="!loading">
         <div class="form-group">
           <label for="Login">Old Login</label>
           <input type="text" class="form-control" formControlName="Login" placeholder="Enter old login" [ngClass]="{ 'is-invalid': submitted && FormControls.Login.errors}">
@@ -76,13 +73,15 @@
             Passwords do not match
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-success">Submit</button>
       </form>
-      <div *ngIf="loaded">
-        Account Data changed correctly
-      </div>
     </div>
   </div>
 </div>
 
 
+<div class="d-flex justify-content-center align-items-center" *ngIf="loading">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
