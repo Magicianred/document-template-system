@@ -79,7 +79,24 @@ namespace DTS.API.Controllers
         [HttpGet("personal/{id}")]
         public async Task<IActionResult> GetUserPersonalData([FromRoute] int id)
         {
-            return StatusCode(501);
+            LogBeginOfRequest();
+            if (!ModelState.IsValid)
+            {
+                LogEndOfRequest("Bad request", 400);
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var query = new GetUserPersonalDataQuery(id);
+                var user = await userService.GetUserPersonalDataQuery.HandleAsync(query);
+                LogEndOfRequest($"Success return {user}", 200);
+                return Ok(user);
+            }
+            catch (KeyNotFoundException e)
+            {
+                LogEndOfRequest($"Failed user with id {id} not found", 404);
+                return NotFound(e.Message);
+            }
         }
 
         [HttpGet("{id}")]
