@@ -1,7 +1,8 @@
 <div class="row" *ngIf="!templateChosen">
   <div class="col-md-12 mx-auto">
     <div class="md-form">
-      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" placeholder="Search" mdbInput (keyup)="filterTemplates($event.target.value)">
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" mdbInput (keyup)="filterVersions($event.target.value)">
+      <label for="search">Search</label>
     </div>
   </div>
 </div>
@@ -9,21 +10,18 @@
 <div *ngIf="!templateChosen">
   <h2>{{template.name}}</h2>
   <h3>{{template.owner.name}} {{template.owner.surname}}</h3>
-  <button type="submit" class="btn btn-primary outer" (click)="goBackToTemplates()">Back to templates</button>
   <div class="table-wrapper-scroll-y">
     <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange)="sortVersions($event)">
       <thead class="thead-dark">
         <tr>
-          <th></th>
           <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let version of sortedVersions">
-          <td><button class="btn btn-success" (click)="showVersion($event)"> New Version</button></td>
-          <td>{{ version.creationTime }}</td>
-          <td>{{ version.creator.name}} {{ version.creator.surname }} {{version.creator.email}}</td>
-          <td>{{ version.versionState }}</td>
+        <tr *ngFor="let version of sortedVersions" class="clickable">
+          <td (click)="showVersion($event)">{{ version.creationTime }}</td>
+          <td (click)="showVersion($event)">{{ version.creator.name}} {{ version.creator.surname }} {{version.creator.email}}</td>
+          <td (click)="showVersion($event)">{{ version.versionState }}</td>
         </tr>
       </tbody>
     </table>
@@ -32,6 +30,10 @@
 
 <div [hidden]="!templateChosen">
   <app-ngx-editor [placeholder]="' '" [spellcheck]="true" [(ngModel)]="htmlContent"></app-ngx-editor>
-  <button type="submit" class="btn btn-primary outer" (click)="saveNewTemplateVersion()">Submit new Version</button>
-  <button type="submit" class="btn btn-primary outer" (click)="showVersions()">Back to version</button>
+  <button type="submit" class="btn btn-primary" (click)="saveNewTemplateVersion()">Submit new Version</button>
+  <button type="submit" class="btn btn-primary" (click)="showVersions()">Back to version</button>
+</div>
+
+<div>
+  <button type="submit" class="btn btn-primary" (click)="goBackToTemplates()">Back to templates</button>
 </div>

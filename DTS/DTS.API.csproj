@@ -26,9 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="C:\Users\bartl\.nuget\packages\nlog.config\4.5.11\contentFiles\any\any\NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="C:\Users\piotr\.nuget\packages\nlog.config\4.5.11\contentFiles\any\any\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

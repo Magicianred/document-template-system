@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { UserData, UserChangingData } from '../_models/user';
-import { UserType } from '../_models/userType';
 import queries from '../../assets/queries.json';
 import { HttpClient } from '@angular/common/http';
 import { Sort } from '@angular/material';
@@ -13,7 +12,7 @@ import { Sort } from '@angular/material';
 export class AdminUserPanelComponent implements OnInit {
   closeResult: string;
   users: UserData[];
-  types: UserType[];
+  userChosen: boolean;
   chosenUser: UserData;
   sortedUsers: UserData[];
   searchText: string = '';
@@ -25,20 +24,7 @@ export class AdminUserPanelComponent implements OnInit {
 
   ngOnInit() {
     this.getUsers();
-    this.getUserTypes();
-  }
-
-  getUsers() {
-    this.apiClient.get<UserData[]>(queries.userPath).subscribe(result => {
-      this.users = result;
-      this.sortedUsers = result;
-    }, error => console.error(error));
-  }
-
-  getUserTypes() {
-    this.apiClient.get<UserType[]>(queries.userTypesPath).subscribe(result => {
-      this.types = result;
-    })
+    this.userChosen = false;
   }
 
   sortUsers(sort: Sort) {
@@ -66,6 +52,13 @@ export class AdminUserPanelComponent implements OnInit {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
+  getUsers() {
+    this.apiClient.get<UserData[]>(queries.userPath).subscribe(result => {
+      this.users = result;
+      this.sortedUsers = result;
+    }, error => console.error(error));
+  }
+
   filterUsers(searchText: string) {
     this.sortedUsers = this.users.filter(user =>
       user.name.indexOf(searchText.charAt(0).toUpperCase() + searchText.slice(1)) !== -1
@@ -79,85 +72,49 @@ export class AdminUserPanelComponent implements OnInit {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  changeUserState(user: UserData, event: any ) {
-    let button = event.path[0];
-    this.swapButtonContentWithSpinner(button);
-
-    if (user.status == "Active") {
-      this.apiClient.delete(queries.userPath + user.id).subscribe(result => {
-        this.swapSpinnerWithTick(button);
+  changeUserState(id: string, status: string) {
+    if (status == "Active") {
+      this.apiClient.delete(queries.userPath + id).subscribe(result => {
         this.getUsers();
-      }, error => {
-        console.error(error);
-        this.swapSpinnerWithTick(button);
-      });
+      }, error => console.error(error));
     }
     else {
-      this.apiClient.put(queries.userPath + user.id + "/activate", user.id).subscribe(result => {
-        this.swapSpinnerWithTick(button);
+      this.apiClient.put(queries.userPath + id + "/activate", id).subscribe(result => {
         this.getUsers();
-      }, error => {
-        console.error(error);
-        this.swapSpinnerWithTick(button);
-      });
+      }, error => console.error(error));
     }
   }
 
-  changeUserType(user: UserData, type: string) {
-    if (type == user.type) {
-      user.newType = type;
+  switchUserType(type: string, currentType: string, id: string) {
+    if (type == currentType) {
       return
     }
-    user.newType = type;
+    let query = `${queries.userPath}${id}/type/${type}`
+
+    this.apiClient.put(query, "EmptyBody").subscribe(result => {
+      this.getUsers();
+    }, error => console.error(error));
   } 
 
-  changeUserData(name: any, surname: any, email: any, user: UserData, event: any) {
-    
-    this.chosenUser = user;
-    let button = event.path[0];
-    this.swapButtonContentWithSpinner(button);
-    if (this.changeInUserData(name, surname, email, user)) {
-      this.swapSpinnerWithTick(button);
+  changeUserData(name: any, surname: any, email: any, id: string, event: any) {
+    let userIndex = event.path[4].rowIndex - 1;
+    this.chosenUser = this.users[userIndex];
+    let newData = new UserChangingData();
+
+    if (name == "" && surname == "" && email == "") {
       return
     }
-
-    let newData = new UserChangingData();
     newData.id = String(this.chosenUser.id);
     newData.name = name == "" ? this.chosenUser.name : name;
     newData.surname = surname == "" ? this.chosenUser.surname : surname;
     newData.email = email == "" ? this.chosenUser.email : email;
 
-    let dataQuery = `${queries.userPath}${this.chosenUser.id}`
-    this.apiClient.put(dataQuery, newData).subscribe(result => {
-      if (user.newType || user.newType == user.type) {
-        let typeQuery = `${queries.userPath}${user.id}/type/${user.newType}`
-        this.apiClient.put(typeQuery, "EmptyBody").subscribe(result => {
-          this.getUsers();
-          this.swapSpinnerWithTick(button);
-        })
-      } else {
-        this.getUsers();
-        this.swapSpinnerWithTick(button);
-      };
-      
-    }, error => {
-      console.error(error);
-      this.swapSpinnerWithTick(button);
-    });
-  }
+    console.log(newData)
 
-  changeInUserData(name: string, surname: string, email: string, user: UserData) {
-    return (name == "" && surname == "" && email == "" && (user.newType == user.type || user.newType == null))
+    let query = `${queries.userPath}${this.chosenUser.id}`
+    this.apiClient.put(query, newData).subscribe(result => {
+      this.getUsers();
+    }, error => console.error(error));
   }
-
-  swapButtonContentWithSpinner(button: any) {
-    button.disabled = 'disabled';
-    button.innerHTML = '<div class="spinner-border" role = "status"> <span class="sr-only" > Loading...</span></div>'
-  }
-
-  swapSpinnerWithTick(button: any) {
-    button.disabled = '';
-    button.innerHTML = 'Save';
-  }
-
+  
 }
