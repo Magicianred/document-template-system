@@ -27,12 +27,12 @@
           <td><input type="text" #name class="form-control input-sm" placeholder="{{user.name}}" /></td>
           <td><input type="text" #surname class="form-control input-sm" placeholder="{{user.surname}}" /></td>
           <td><input type="text" #email class="form-control input-sm" placeholder="{{user.email}}" /></td>
-          <td align="center">
+          <td align="center" id="typeChanger">
             <div class="row">
               <div class="col">
                 <div ngbDropdown class="d-inline-block">
-                  <button class="btn btn-primary" id="typeChanger" *ngIf="!user.newType" ngbDropdownToggle>{{user.type}}</button>
-                  <button class="btn btn-primary" id="typeChanger" *ngIf="user.newType" ngbDropdownToggle>{{user.newType}}</button>
+                  <button class="btn btn-primary"  *ngIf="!user.newType" ngbDropdownToggle>{{user.type}}</button>
+                  <button class="btn btn-primary"  *ngIf="user.newType" ngbDropdownToggle>{{user.newType}}</button>
                   <div ngbDropdownMenu aria-labelledby="typeChanger">
                     <button *ngFor="let type of types" (click)="changeUserType(user, type)" ngbDropdownItem>{{type}}</button>
                   </div>
