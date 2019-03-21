@@ -353,3 +353,4 @@ healthchecksdb
 # End of https://www.gitignore.io/api/visualstudio
 /DTS/logs
 /DTS.Auth/logs
+/DTS/logs2019-03-21_logfile.txt
