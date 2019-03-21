@@ -40,7 +40,7 @@ namespace DAL.Repositories
             var users = await FindAllUsersAsync();
             var user = users
                 .Where(u => u.Login.Equals(login));
-            return user.FirstOrDefault() ?? throw new KeyNotFoundException("User not dound");
+            return user.FirstOrDefault() ?? throw new KeyNotFoundException("User not found");
         }
 
         public async Task<User> FindUserByIDAsync(int id)
@@ -48,7 +48,7 @@ namespace DAL.Repositories
             var users = await FindAllUsersAsync();
             var user = users
                 .Where(u => u.Id == id);
-            return user.FirstOrDefault() ?? throw new KeyNotFoundException("User not dound");
+            return user.FirstOrDefault() ?? throw new KeyNotFoundException("User not found");
         }
 
         public async Task<bool> Exists(int id)
@@ -71,6 +71,12 @@ namespace DAL.Repositories
         public async Task UpdateAsync(User user)
         {
             Update(user);
+            await SaveAsync();
+        }
+
+        public async Task DeleteAsync(User user)
+        {
+            Delete(user);
             await SaveAsync();
         }
     }

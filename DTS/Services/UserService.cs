@@ -13,12 +13,14 @@ namespace DTS.API.Services
         private ICommandHandlerAsync<BlockUserCommand> _blockUserCommand;
         private ICommandHandlerAsync<ChangeUserPersonalDataCommand> _changeUserPersonalDataCommand;
         private ICommandHandlerAsync<ChangeUserTypeCommand> _changeUserTypeCommand;
+        private ICommandHandlerAsync<DeleteUserCommand> _deleteUserCommand;
         private IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> _getUsersByStatusQuery;
         private IQueryHandlerAsync<GetUsersByTypeQuery, List<ExtendedUserDTO>> _getUsersByTypeQuery;
         private IQueryHandlerAsync<GetUsersQuery, List<ExtendedUserDTO>> _getUsersQuery;
         private IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> _getUserByIdQuery;
         private IQueryHandlerAsync<GetUserTypesQuery, IList<string>> _getUserTypesQuery;
         private IQueryHandlerAsync<GetUserStatusesQuery, IList<string>> _getUserStatusesQuery;
+        private IQueryHandlerAsync<GetUserPersonalDataQuery, UserPersonalData> _getUserPersonalDataQuery;
         private IRepositoryWrapper repository;
 
 
@@ -71,6 +73,15 @@ namespace DTS.API.Services
             }
         }
 
+        public ICommandHandlerAsync<DeleteUserCommand> DeleteUserCommand
+        {
+            get
+            {
+                _deleteUserCommand = _deleteUserCommand ?? new DeleteUserCommandHandler(repository);
+
+                return _deleteUserCommand;
+            }
+        }
 
         public IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> GetUsersByStatusQuery
         {
@@ -132,6 +143,16 @@ namespace DTS.API.Services
                 _getUserStatusesQuery = _getUserStatusesQuery ?? new GetUserStatusesQueryHandler(repository);
 
                 return _getUserStatusesQuery;
+            }
+        }
+
+        public IQueryHandlerAsync<GetUserPersonalDataQuery, UserPersonalData> GetUserPersonalDataQuery
+        {
+            get
+            {
+                _getUserPersonalDataQuery = _getUserPersonalDataQuery ?? new GetUserPersonalDataQueryHandler(repository);
+
+                return _getUserPersonalDataQuery;
             }
         }
     }
