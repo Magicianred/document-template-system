@@ -114,7 +114,6 @@ export class AdminUserPanelComponent implements OnInit {
   changeUserData(name: any, surname: any, email: any, user: UserData, event: any) {
     
     this.chosenUser = user;
-   
     let button = event.path[0];
     this.swapButtonContentWithSpinner(button);
     if (this.changeInUserData(name, surname, email, user)) {
@@ -130,12 +129,16 @@ export class AdminUserPanelComponent implements OnInit {
 
     let dataQuery = `${queries.userPath}${this.chosenUser.id}`
     this.apiClient.put(dataQuery, newData).subscribe(result => {
-
-      let typeQuery = `${queries.userPath}${user.id}/type/${user.newType}`
-      this.apiClient.put(typeQuery, "EmptyBody").subscribe(result => {
+      if (user.newType || user.newType == user.type) {
+        let typeQuery = `${queries.userPath}${user.id}/type/${user.newType}`
+        this.apiClient.put(typeQuery, "EmptyBody").subscribe(result => {
+          this.getUsers();
+          this.swapSpinnerWithTick(button);
+        })
+      } else {
         this.getUsers();
         this.swapSpinnerWithTick(button);
-      });
+      };
       
     }, error => {
       console.error(error);
@@ -154,7 +157,7 @@ export class AdminUserPanelComponent implements OnInit {
 
   swapSpinnerWithTick(button: any) {
     button.disabled = '';
-    button.innerHTML = '&#x2713';
+    button.innerHTML = 'Save';
   }
 
 }
