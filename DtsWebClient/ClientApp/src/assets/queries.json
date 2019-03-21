@@ -7,5 +7,6 @@
   "templateVersions": "https://localhost:44346/api/templates/version/",
   "editorTemplates": "https://localhost:44346/api/templates/editor/",
   "formPath": "https://localhost:44346/api/templates/form/",
-  "userTypesPath": "https://localhost:44346/api/users/types"
+  "userTypesPath": "https://localhost:44346/api/users/types",
+  "userDataPath": "https://localhost:44346/api/users/personal/"
 }
