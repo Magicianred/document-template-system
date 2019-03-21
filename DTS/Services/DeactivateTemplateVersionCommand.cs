@@ -1,4 +1,5 @@
-﻿using DAL.Repositories;
+﻿using DAL.Models;
+using DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,12 +34,15 @@ namespace DTS.API.Services
         {
             var templateVersion = await repository.TemplatesVersions
                 .FindTemplateVersionByIdAsync(command.TemplateVersionId);
-            
+
             var inactiveState = await repository.TemplateState.FindStateByName(_inactiveTemplateVersionState);
 
             templateVersion.State = inactiveState;
             await repository.TemplatesVersions.UpdateTemplateVersionAsync(templateVersion);
-         
-        }
+
+            var template = templateVersion.Template;
+            template.State = inactiveState;
+            await repository.Templates.UpdateTemplateAsync(template);
+        }    
     }
 }
