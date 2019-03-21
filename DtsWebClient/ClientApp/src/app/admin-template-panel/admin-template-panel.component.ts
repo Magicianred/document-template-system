@@ -157,6 +157,7 @@ export class AdminTemplatePanelComponent implements OnInit {
     if (versionState == "Active") {
       this.apiClient.delete(queries.templateVersions + id).subscribe(result => {
         this.loadTemplateVersions(this.pickedTemplate.id.toString());
+        this.getTemplates();
       }, error => console.error(error));
     }
     else {
