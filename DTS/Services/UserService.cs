@@ -19,6 +19,7 @@ namespace DTS.API.Services
         private IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> _getUserByIdQuery;
         private IQueryHandlerAsync<GetUserTypesQuery, IList<string>> _getUserTypesQuery;
         private IQueryHandlerAsync<GetUserStatusesQuery, IList<string>> _getUserStatusesQuery;
+        private IQueryHandlerAsync<GetUserPersonalDataQuery, UserPersonalData> _getUserPersonalDataQuery;
         private IRepositoryWrapper repository;
 
 
@@ -132,6 +133,16 @@ namespace DTS.API.Services
                 _getUserStatusesQuery = _getUserStatusesQuery ?? new GetUserStatusesQueryHandler(repository);
 
                 return _getUserStatusesQuery;
+            }
+        }
+
+        public IQueryHandlerAsync<GetUserPersonalDataQuery, UserPersonalData> GetUserPersonalDataQuery
+        {
+            get
+            {
+                _getUserPersonalDataQuery = _getUserPersonalDataQuery ?? new GetUserPersonalDataQueryHandler(repository);
+
+                return _getUserPersonalDataQuery;
             }
         }
     }

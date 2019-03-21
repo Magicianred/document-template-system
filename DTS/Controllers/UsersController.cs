@@ -76,6 +76,12 @@ namespace DTS.API.Controllers
             }
         }
 
+        [HttpGet("personal/{id}")]
+        public async Task<IActionResult> GetUserPersonalData([FromRoute] int id)
+        {
+            return StatusCode(501);
+        }
+
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin, Editor")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
