@@ -9,3 +9,9 @@
 _:-ms-lang(x), _:-webkit-full-screen, #typeChanger {
   width: 8em;
 }
+
+
+.btn {
+  width: 100%;
+  height: 100%;
+}
