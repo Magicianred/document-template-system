@@ -351,3 +351,5 @@ ASALocalRun/
 healthchecksdb
 
 # End of https://www.gitignore.io/api/visualstudio
+/DTS/logs
+/DTS.Auth/logs
