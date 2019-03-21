@@ -22,7 +22,7 @@
           <td class="data">{{ template.templateVersions.length }}</td>
           <td>
             <div ngbDropdown>
-              <button class="btn btn-primary" id="typeChanger" ngbDropdownToggle>{{template.owner.name}} {{template.owner.surname}}</button>
+              <button class="btn btn-primary" id="typeChanger" ngbDropdownToggle> {{template.owner.surname}} {{template.owner.name}}</button>
               <div ngbDropdownMenu aria-labelledby="typeChanger">
                 <button *ngFor="let editor of editors" (click)="changeTemplateOwner(editor, template.id, template.name)" ngbDropdownItem>{{editor.name}} {{editor.surname}}</button>
               </div>
@@ -38,8 +38,7 @@
 <div class="row" *ngIf="templateChosen">
   <div class="col-md-12 mx-auto">
     <div class="md-form">
-      <input type="search" [(ngModel)]="searchVersions" class="form-control" id="search" mdbInput (keyup)="filterVersions($event.target.value)">
-      <label for="search">Search</label>
+      <input type="search" [(ngModel)]="searchVersions" placeholder="Search" class="form-control" id="search" mdbInput (keyup)="filterVersions($event.target.value)">
     </div>
   </div>
 </div>
@@ -60,7 +59,7 @@
         <tr *ngFor="let version of sortedVersions">
           <td align="center"><button class="btn btn-success" (click)="showVersion($event, content)">Show versions</button></td>
           <td>{{ version.creationTime }}</td>
-          <td>{{ version.creator.name}} {{ version.creator.surname }}</td>
+          <td> {{ version.creator.surname }} {{ version.creator.name}}</td>
           <td><button type="submit" class="btn btn-primary" (click)="switchVersionState(version.id, version.versionState, version.creator.id)">{{ version.versionState }}</button></td>
         </tr>
       </tbody>
