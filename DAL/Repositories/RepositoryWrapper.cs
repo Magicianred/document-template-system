@@ -21,10 +21,8 @@ namespace DAL.Repositories
         {
             get
             {
-                if (_users == null)
-                {
-                    _users = new UserRepository(_context);
-                }
+                 _users = _users ?? new UserRepository(_context);
+
                 return _users;
             }
         }
@@ -33,10 +31,8 @@ namespace DAL.Repositories
         {
             get
             {
-                if (_templates == null)
-                {
-                    _templates = new TemplateRepository(_context);
-                }
+                _templates = _templates ?? new TemplateRepository(_context);
+
                 return _templates;
             }
         }
@@ -45,10 +41,8 @@ namespace DAL.Repositories
         {
             get
             {
-                if (_templatesVersions == null)
-                {
-                    _templatesVersions = new TemplateVersionRepository(_context);
-                }
+                _templatesVersions = _templatesVersions ?? new TemplateVersionRepository(_context);
+
                 return _templatesVersions;
             }
         }
@@ -57,10 +51,8 @@ namespace DAL.Repositories
         {
             get
             {
-                if (_userStatus == null)
-                {
-                    _userStatus = new UserStatusRepository(_context);
-                }
+                 _userStatus = _userStatus ?? new UserStatusRepository(_context);
+
                 return _userStatus;
             }
         }
@@ -69,10 +61,8 @@ namespace DAL.Repositories
         {
             get
             {
-                if (_userType == null)
-                {
-                    _userType = new UserTypeRepository(_context);
-                }
+                _userType = _userType ?? new UserTypeRepository(_context);
+
                 return _userType;
             }
         }
@@ -81,10 +71,8 @@ namespace DAL.Repositories
         {
             get
             {
-                if (_templateState == null)
-                {
-                    _templateState = new TemplateStateRepository(_context);
-                }
+                 _templateState = _templateState ?? new TemplateStateRepository(_context);
+
                 return _templateState;
             }
         }

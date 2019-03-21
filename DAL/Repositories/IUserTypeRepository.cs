@@ -8,8 +8,8 @@ namespace DAL.Repositories
 {
     public interface IUserTypeRepository
     {
-        Task<IEnumerable<UserType>> FindAll();
-        Task<UserType> FindTypeById(int id);
-        Task<UserType> FindTypeByName(string name);
+        Task<IEnumerable<UserType>> FindAllUserTypes();
+        Task<UserType> FindUserTypeById(int id);
+        Task<UserType> FindUserTypeByName(string name);
     }
 }

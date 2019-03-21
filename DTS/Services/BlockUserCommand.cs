@@ -28,7 +28,7 @@ namespace DTS.API.Services
         {
             User user = await repository.Users.FindUserByIDAsync(command.Id);
             UserStatus activeStatus = await repository.UserStatus
-                .FindStatusByName(_blockUserStatus);
+                .FindUserStatusByName(_blockUserStatus);
 
             user.Status = activeStatus;
             await repository.Users.UpdateAsync(user);

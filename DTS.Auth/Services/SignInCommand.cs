@@ -56,8 +56,8 @@ namespace DTS.Auth.Services
             {
                 throw new InvalidOperationException(errorMessage);
             }
-            UserStatus status = await repository.UserStatus.FindStatusById(suspendedStatusId);
-            UserType type = await repository.UserType.FindTypeById(defoultUserTypeId); 
+            UserStatus status = await repository.UserStatus.FindUserStatusById(suspendedStatusId);
+            UserType type = await repository.UserType.FindUserTypeById(defoultUserTypeId); 
             User user = createUser(command, status, type);
             await repository.Users.CreateAsync(user);
         }

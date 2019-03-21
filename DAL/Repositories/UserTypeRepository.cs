@@ -13,19 +13,19 @@ namespace DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<UserType>> FindAll()
+        public async Task<IEnumerable<UserType>> FindAllUserTypes()
         {
             var roles = await FindAllAsync();
             return roles.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
-        public async Task<UserType> FindTypeById(int id)
+        public async Task<UserType> FindUserTypeById(int id)
         {
             var type = await FindByConditionAsync(t => t.Id == id);
             return type.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
 
-        public async Task<UserType> FindTypeByName(string name)
+        public async Task<UserType> FindUserTypeByName(string name)
         {
             var type = await FindByConditionAsync(t => t.Name.Equals(name));
             return type.FirstOrDefault() ?? throw new KeyNotFoundException();

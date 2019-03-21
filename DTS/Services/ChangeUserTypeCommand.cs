@@ -31,7 +31,7 @@ namespace DTS.API.Services
 
         public async Task HandleAsync(ChangeUserTypeCommand command)
         {
-            UserType userType = await repository.UserType.FindTypeByName(command.Type);
+            UserType userType = await repository.UserType.FindUserTypeByName(command.Type);
             User user = await repository.Users.FindUserByIDAsync(command.Id);
 
             user.Type = userType;
