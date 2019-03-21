@@ -17,7 +17,7 @@ namespace DTS.API.Services
         }
     }
 
-    public sealed class GetTemplateFormQueryHandler : IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>>
+    public sealed class GetTemplateFormQueryHandler : IQueryHandlerAsync<GetTemplateFormQuery, IDictionary<string, string>>
     {
         private readonly IRepositoryWrapper repository;
         private readonly string _activeTemplateState = "Active";
@@ -28,9 +28,9 @@ namespace DTS.API.Services
         }
 
 
-        public async Task<Dictionary<string, string>> HandleAsync(GetTemplateFormQuery query)
+        public async Task<IDictionary<string, string>> HandleAsync(GetTemplateFormQuery query)
         {
-            var activeState = await repository.TemplateState.FindStateByName(_activeTemplateState);
+            var activeState = await repository.TemplateState.FindTemplateStateByName(_activeTemplateState);
             var templates = await repository.TemplatesVersions
                     .FindTemplatesVersionsByConditionAsync(tempVer => tempVer.TemplateId == query.TemplateId && tempVer.State.Equals(activeState));
 

@@ -30,7 +30,7 @@ namespace DTS.API.Services
 
         public async Task HandleAsync(AddTemplateCommand command)
         {
-            var inactiveTemplateState = await repository.TemplateState.FindStateByName(_inactiveTemplateState);
+            var inactiveTemplateState = await repository.TemplateState.FindTemplateStateByName(_inactiveTemplateState);
 
             var newTemplate = new Template
             {

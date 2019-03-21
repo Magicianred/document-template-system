@@ -14,19 +14,19 @@ namespace DAL.Repositories
         {
         }
 
-        public async Task<IEnumerable<TemplateState>> FindAllTemplatesAsync()
+        public async Task<IEnumerable<TemplateState>> FindAllTemplateStatesAsync()
         {
             var states = await FindAllAsync();
             return states.DefaultIfEmpty() ?? throw new KeyNotFoundException();
         }
 
-        public async Task<TemplateState> FindStateByIdAsync(int id)
+        public async Task<TemplateState> FindTemplateStateByIdAsync(int id)
         {
             var states = await FindByConditionAsync(s => s.Id == id);
             return states.FirstOrDefault() ?? throw new KeyNotFoundException();
         }
 
-        public async Task<TemplateState> FindStateByName(string name)
+        public async Task<TemplateState> FindTemplateStateByName(string name)
         {
             var states = await FindByConditionAsync(s => s.State.Equals(name));
             return states.FirstOrDefault() ?? throw new KeyNotFoundException();

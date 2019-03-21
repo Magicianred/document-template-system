@@ -1,4 +1,6 @@
-﻿using DAL.Repositories;
+﻿using DAL.Models;
+using DAL.Repositories;
+using DTS.API.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace DTS.API.Services
     }
 
     public sealed class GetTemplateStatesQueryHandler
-    : IQueryHandlerAsync<GetTemplateStatesQuery, IList<string>>
+    : IQueryHandlerAsync<GetTemplateStatesQuery, IList<TemplateStateDTO>>
     {
         private readonly IRepositoryWrapper repository;
 
@@ -21,13 +23,15 @@ namespace DTS.API.Services
         }
 
 
-        public async Task<IList<string>> HandleAsync(GetTemplateStatesQuery query)
+        public async Task<IList<TemplateStateDTO>> HandleAsync(GetTemplateStatesQuery query)
         {
-            var states = await repository.TemplateState.FindAllTemplatesAsync();
-            var statesNames = new List<string>();
+            var states = await repository.TemplateState.FindAllTemplateStatesAsync();
+
+            var statesNames = new List<TemplateStateDTO>();
+
             foreach (var state in states)
             {
-                statesNames.Add(state.State);
+                statesNames.Add(TemplateStateDTO.ParseTemplateStateDTO(state));
             }
             return statesNames;
         }

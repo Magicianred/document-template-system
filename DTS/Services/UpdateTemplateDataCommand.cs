@@ -40,7 +40,7 @@ namespace DTS.API.Services
                 template.Name = command.TemplateUpdate.Name;
             }
            
-            template.State = await repository.TemplateState.FindStateByIdAsync(command.TemplateUpdate.StateId);
+            template.State = await repository.TemplateState.FindTemplateStateByIdAsync(command.TemplateUpdate.StateId);
             template.Owner = await repository.Users.FindUserByIDAsync(command.TemplateUpdate.OwnerID);
 
             await repository.Templates.UpdateTemplateAsync(template);

@@ -37,7 +37,7 @@ namespace DTS.API.Services
 
         public async Task<TemplateContentDTO> HandleAsync(FillInTemplateQuery query)
         {
-            var activeState = await repository.TemplateState.FindStateByName(_activeTemplateState);
+            var activeState = await repository.TemplateState.FindTemplateStateByName(_activeTemplateState);
 
             var templateVersion = await repository.TemplatesVersions
                     .FindTemplatesVersionsByConditionAsync(tempVer => tempVer.TemplateId == query.TemplateId && tempVer.State.Equals(activeState));
