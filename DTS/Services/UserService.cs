@@ -13,6 +13,7 @@ namespace DTS.API.Services
         private ICommandHandlerAsync<BlockUserCommand> _blockUserCommand;
         private ICommandHandlerAsync<ChangeUserPersonalDataCommand> _changeUserPersonalDataCommand;
         private ICommandHandlerAsync<ChangeUserTypeCommand> _changeUserTypeCommand;
+        private ICommandHandlerAsync<DeleteUserCommand> _deleteUserCommand;
         private IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> _getUsersByStatusQuery;
         private IQueryHandlerAsync<GetUsersByTypeQuery, List<ExtendedUserDTO>> _getUsersByTypeQuery;
         private IQueryHandlerAsync<GetUsersQuery, List<ExtendedUserDTO>> _getUsersQuery;
@@ -72,6 +73,15 @@ namespace DTS.API.Services
             }
         }
 
+        public ICommandHandlerAsync<DeleteUserCommand> DeleteUserCommand
+        {
+            get
+            {
+                _deleteUserCommand = _deleteUserCommand ?? new DeleteUserCommandHandler(repository);
+
+                return _deleteUserCommand;
+            }
+        }
 
         public IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> GetUsersByStatusQuery
         {

@@ -311,6 +311,7 @@ namespace DTS.API.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> BlockUser([FromRoute] int id)
         {
+            LogBeginOfRequest();
             if (!ModelState.IsValid)
             {
                 LogEndOfRequest("Failed Bad request", 400);
@@ -330,6 +331,36 @@ namespace DTS.API.Controllers
                 LogEndOfRequest("Success", 200);
                 return Ok();
             } catch (KeyNotFoundException)
+            {
+                LogEndOfRequest($"Failed User with id {id} not found", 404);
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{id}/perm")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            LogBeginOfRequest();
+            if (!ModelState.IsValid)
+            {
+                LogEndOfRequest("Failed Bad request", 400);
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var command = new DeleteUserCommand(id);
+                await userService.DeleteUserCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
+                return Ok();
+            }
+            catch (InvalidOperationException)
+            {
+                LogEndOfRequest($"Failed can't delete user if status is different than 'Suspended'", 400);
+                return BadRequest();
+            }
+            catch (KeyNotFoundException)
             {
                 LogEndOfRequest($"Failed User with id {id} not found", 404);
                 return NotFound();

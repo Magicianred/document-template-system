@@ -12,6 +12,7 @@ namespace DTS.API.Services
         ICommandHandlerAsync<BlockUserCommand> BlockUserCommand { get; }
         ICommandHandlerAsync<ChangeUserPersonalDataCommand> ChangeUserPersonalDataCommand { get; }
         ICommandHandlerAsync<ChangeUserTypeCommand> ChangeUserTypeCommand { get; }
+        ICommandHandlerAsync<DeleteUserCommand> DeleteUserCommand { get; }
         IQueryHandlerAsync<GetUsersByStatusQuery, List<ExtendedUserDTO>> GetUsersByStatusQuery { get; }
         IQueryHandlerAsync<GetUsersByTypeQuery, List<ExtendedUserDTO>> GetUsersByTypeQuery { get; }
         IQueryHandlerAsync<GetUsersQuery, List<ExtendedUserDTO>> GetUsersQuery { get; }
