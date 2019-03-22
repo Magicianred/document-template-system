@@ -20,7 +20,7 @@ namespace DTS.Auth
         {
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
-            var host = CreateWebHostBuilder(args).UseUrls("http://localhost:55019").Build();
+            var host = CreateWebHostBuilder(args).UseUrls("https://localhost:44381").Build();
 
             using (var scope = host.Services.CreateScope())
             {

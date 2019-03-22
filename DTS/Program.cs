@@ -15,8 +15,8 @@ namespace DTS
         {
 
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
-            var host = CreateWebHostBuilder(args).Build();
-    
+            var host = CreateWebHostBuilder(args).UseUrls("https://localhost:44346").Build();
+
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
