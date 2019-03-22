@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Models;
 using DAL.Repositories;
 using DTS.API.Models.DTOs;
 
@@ -18,11 +19,11 @@ namespace DTS.API.Services
         private ICommandHandlerAsync<SetTemplateOwnerCommand> _setTemplateOwnerCommand;
         private ICommandHandlerAsync<UpdateTemplateDataCommand> _updateTemplateDataCommand;
         private IQueryHandlerAsync<GetTemplateByIdQuery, TemplateDTO> _getTemplateByIdQuery;
-        private IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>> _getTemplatesByUserQuery;
-        private IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> _getTemplatesQuery;
+        private IQueryHandlerAsync<GetTemplatesByUserQuery, IList<TemplateDTO>> _getTemplatesByUserQuery;
+        private IQueryHandlerAsync<GetTemplatesQuery, IList<TemplateDTO>> _getTemplatesQuery;
         private IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> _fillInTemplateQuery;
-        private IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> _getTemplateFormQuery;
-        private IQueryHandlerAsync<GetTemplateStatesQuery, IList<string>> _getTemplateStatesQuery;
+        private IQueryHandlerAsync<GetTemplateFormQuery, IDictionary<string, string>> _getTemplateFormQuery;
+        private IQueryHandlerAsync<GetTemplateStatesQuery, IList<TemplateStateDTO>> _getTemplateStatesQuery;
         private IQueryHandlerAsync<GetActiveTemplatesQuery, IList<TemplateDTO>> _getActiveTemplatesQuery;
         private readonly IRepositoryWrapper repository;
 
@@ -133,7 +134,7 @@ namespace DTS.API.Services
         }
 
 
-        public IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>> GetTemplatesByUserQuery
+        public IQueryHandlerAsync<GetTemplatesByUserQuery, IList<TemplateDTO>> GetTemplatesByUserQuery
         {
             get
             {
@@ -144,7 +145,7 @@ namespace DTS.API.Services
         }
 
 
-        public IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> GetTemplatesQuery
+        public IQueryHandlerAsync<GetTemplatesQuery, IList<TemplateDTO>> GetTemplatesQuery
         {
             get
             {
@@ -166,7 +167,7 @@ namespace DTS.API.Services
         }
 
 
-        public IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> GetTemplateFormQuery
+        public IQueryHandlerAsync<GetTemplateFormQuery, IDictionary<string, string>> GetTemplateFormQuery
         {
             get
             {
@@ -176,14 +177,12 @@ namespace DTS.API.Services
             }
         }
 
-        public IQueryHandlerAsync<GetTemplateStatesQuery, IList<string>> GetTemplateStatesQuery
+        public IQueryHandlerAsync<GetTemplateStatesQuery, IList<TemplateStateDTO>> GetTemplateStatesQuery
         {
             get
             {
-                if (_getTemplateStatesQuery == null)
-                {
-                    _getTemplateStatesQuery = new GetTemplateStatesQueryHandler(repository);
-                }
+                _getTemplateStatesQuery = _getTemplateStatesQuery ?? new GetTemplateStatesQueryHandler(repository);
+
                 return _getTemplateStatesQuery;
             }
         }
@@ -192,10 +191,8 @@ namespace DTS.API.Services
         {
             get
             {
-                if (_getActiveTemplatesQuery == null)
-                {
-                    _getActiveTemplatesQuery = new GetActiveTemplatesQueryHandler(repository);
-                }
+                _getActiveTemplatesQuery = _getActiveTemplatesQuery ?? new GetActiveTemplatesQueryHandler(repository);
+
                 return _getActiveTemplatesQuery;
             }
         }

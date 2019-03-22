@@ -22,7 +22,7 @@ namespace DTS.API.Services
 
         public async Task<IList<string>> HandleAsync(GetUserStatusesQuery query)
         {
-            var statuses = await repository.UserStatus.FindAll();
+            var statuses = await repository.UserStatus.FindAllUserStatuses();
             IList<string> statusesNames = new List<string>();
             foreach (var type in statuses)
             {

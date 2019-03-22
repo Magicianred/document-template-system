@@ -31,9 +31,15 @@ namespace DTS.API.Services
         public async Task HandleAsync(ActivateTemplateCommand command)
         {
             var template = await repository.Templates.FindTemplateByIdAsync(command.Id);
-            var activeTemplate = await repository.TemplateState.FindStateByName(_activeTemplateState);
+            var activeState = await repository.TemplateState.FindTemplateStateByName(_activeTemplateState);
 
-            template.State = activeTemplate;
+            var isActiveTemplateVersion = !(template.TemplateVersion.Where(tv => tv.State.Equals(activeState)).ToList().Count == 0);
+
+            if (isActiveTemplateVersion)
+            {
+                template.State = activeState;
+            }
+            
             await repository.Templates.UpdateTemplateAsync(template);
         }
     }

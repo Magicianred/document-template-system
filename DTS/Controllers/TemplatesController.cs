@@ -167,7 +167,7 @@ namespace DTS.API.Controllers
 
         [HttpGet("states")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetUserTypes()
+        public async Task<IActionResult> GetTemplateStates()
         {
             LogBeginOfRequest();
             try

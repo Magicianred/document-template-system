@@ -18,7 +18,7 @@ namespace DTS.API.Services
     }
 
     public sealed class GetUserPersonalDataQueryHandler
-        : IQueryHandlerAsync<GetUserPersonalDataQuery, UserPersonalData>
+        : IQueryHandlerAsync<GetUserPersonalDataQuery, UserPersonalDataDTO>
     {
         private readonly IRepositoryWrapper repository;
 
@@ -27,10 +27,10 @@ namespace DTS.API.Services
             this.repository = repository;
         }
 
-        public async Task<UserPersonalData> HandleAsync(GetUserPersonalDataQuery query)
+        public async Task<UserPersonalDataDTO> HandleAsync(GetUserPersonalDataQuery query)
         {
             var user = await repository.Users.FindUserByIDAsync(query.Id);
-            var userDTO = UserPersonalData.ParseUserPersonalData(user);
+            var userDTO = UserPersonalDataDTO.ParseUserPersonalDataDTO(user);
             return userDTO;
         }
     }

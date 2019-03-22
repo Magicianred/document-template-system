@@ -1,12 +1,12 @@
-<h3>Login</h3>
+<h3>Log in</h3>
 <form  #loginForm="ngForm" (ngSubmit)="logUserIn()">
   <div class="form-group">
     <label for="inputLogin">Login</label>
-    <input type="email" class="form-control" name="Login" [(ngModel)] ="login" placeholder="Enter email">
+    <input type="email" class="form-control" name="Login" [(ngModel)] ="login" placeholder="Enter login">
   </div>
   <div class="form-group">
     <label for="inputPassword">Password</label>
-    <input type="password" class="form-control" name="Password" [(ngModel)] ="password" placeholder="Password">
+    <input type="password" class="form-control" name="Password" [(ngModel)] ="password" placeholder="Enter password">
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

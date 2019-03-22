@@ -39,8 +39,8 @@ namespace DTS.API.Services
             var allTemplateVersions = await repository.TemplatesVersions
                 .FindAllTemplateVersionsByTemplateIdAsync(command.TemplateId);
 
-            var activeState = await repository.TemplateState.FindStateByName(_activeTemplateVersionState);
-            var inactiveState = await repository.TemplateState.FindStateByName(_inactiveTemplateVersionState);
+            var activeState = await repository.TemplateState.FindTemplateStateByName(_activeTemplateVersionState);
+            var inactiveState = await repository.TemplateState.FindTemplateStateByName(_inactiveTemplateVersionState);
 
             foreach (var tempVersion in allTemplateVersions)
             {

@@ -41,7 +41,7 @@ namespace DTS.API.Services
                 TemplateId = command.TemplateId,
                 CreatorId = command.NewTemplateVersionInput.AuthorId,
                 State = await repository.TemplateState
-                .FindStateByName(_inactiveTemplateState)
+                .FindTemplateStateByName(_inactiveTemplateState)
             };
 
             await repository.TemplatesVersions

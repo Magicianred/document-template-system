@@ -18,7 +18,7 @@ namespace DTS.API.Services
     }
 
     public sealed class GetTemplatesByUserQueryHandler
-        : IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>>
+        : IQueryHandlerAsync<GetTemplatesByUserQuery, IList<TemplateDTO>>
     {
         private readonly IRepositoryWrapper repository;
 
@@ -28,7 +28,7 @@ namespace DTS.API.Services
         }
 
 
-        public async Task<List<TemplateDTO>> HandleAsync(GetTemplatesByUserQuery query)
+        public async Task<IList<TemplateDTO>> HandleAsync(GetTemplatesByUserQuery query)
         {
             var userTemplates = await repository
                 .Templates.FindTemplatesByOwnerIdAsync(query.UserId);

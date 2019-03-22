@@ -17,11 +17,11 @@ namespace DTS.API.Services
         ICommandHandlerAsync<SetTemplateOwnerCommand> SetTemplateOwnerCommand { get; }
         ICommandHandlerAsync<UpdateTemplateDataCommand> UpdateTemplateDataCommand { get; }
         IQueryHandlerAsync<GetTemplateByIdQuery, TemplateDTO> GetTemplateByIdQuery { get; }
-        IQueryHandlerAsync<GetTemplatesByUserQuery, List<TemplateDTO>> GetTemplatesByUserQuery { get; }
-        IQueryHandlerAsync<GetTemplatesQuery, List<TemplateDTO>> GetTemplatesQuery { get; }
+        IQueryHandlerAsync<GetTemplatesByUserQuery, IList<TemplateDTO>> GetTemplatesByUserQuery { get; }
+        IQueryHandlerAsync<GetTemplatesQuery, IList<TemplateDTO>> GetTemplatesQuery { get; }
         IQueryHandlerAsync<FillInTemplateQuery, TemplateContentDTO> FillInTemplateQuery { get; }
-        IQueryHandlerAsync<GetTemplateFormQuery, Dictionary<string, string>> GetTemplateFormQuery { get; }
-        IQueryHandlerAsync<GetTemplateStatesQuery, IList<string>> GetTemplateStatesQuery { get; }
+        IQueryHandlerAsync<GetTemplateFormQuery, IDictionary<string, string>> GetTemplateFormQuery { get; }
+        IQueryHandlerAsync<GetTemplateStatesQuery, IList<TemplateStateDTO>> GetTemplateStatesQuery { get; }
         IQueryHandlerAsync<GetActiveTemplatesQuery, IList<TemplateDTO>> GetActiveTemplatesQuery { get; }
     }
 }

@@ -1,5 +1,5 @@
 <h3>
-  Sign In
+  Sign in
 </h3>
 
 <form form [formGroup]="signInForm" (ngSubmit)="signIn()" *ngIf="!loaded">
@@ -12,7 +12,7 @@
   </div>
   <div class="form-group">
     <label for="surname">Surname</label>
-    <input type="text" class="form-control" formControlName="surname" placeholder="Enter second name" [ngClass]="{ 'is-invalid': submitted && FormControls.surname.errors}">
+    <input type="text" class="form-control" formControlName="surname" placeholder="Enter surname" [ngClass]="{ 'is-invalid': submitted && FormControls.surname.errors}">
     <div *ngIf="submitted && FormControls.surname.errors" class="invalid-feedback">
       <div *ngIf="FormControls.surname.errors.required">Last Name is required</div>
     </div>
@@ -26,7 +26,7 @@
   </div>
   <div class="form-group">
     <label for="EmailInput">Email address</label>
-    <input type="email" class="form-control" formControlName="email" aria-describedby="emailHelp" placeholder="Enter email"[ngClass]="{ 'is-invalid': submitted && FormControls.email.errors}">
+    <input type="email" class="form-control" formControlName="email" aria-describedby="emailHelp" placeholder="Enter email address"[ngClass]="{ 'is-invalid': submitted && FormControls.email.errors}">
     <div *ngIf="submitted && FormControls.email.errors" class="invalid-feedback">
       <div *ngIf="FormControls.email.errors.email">Proper email is required</div>
     </div>
@@ -34,14 +34,14 @@
   </div>
   <div class="form-group">
     <label for="PasswordInput">Password</label>
-    <input type="password" class="form-control" formControlName="password" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && FormControls.password.errors}">
+    <input type="password" class="form-control" formControlName="password" placeholder="Enter password" [ngClass]="{ 'is-invalid': submitted && FormControls.password.errors}">
     <div *ngIf="submitted && FormControls.password.errors" class="invalid-feedback">
       <div *ngIf="FormControls.password.errors.required">Password is required</div>
     </div>
   </div>
   <div class="form-group">
-    <label for="passwordConfirmation">Confirm Password</label>
-    <input type="password" class="form-control"  formControlName="passwordConfirm" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && signInForm.hasError('notSame')}">
+    <label for="passwordConfirmation">Confirm password</label>
+    <input type="password" class="form-control"  formControlName="passwordConfirm" placeholder="Confirm password" [ngClass]="{ 'is-invalid': submitted && signInForm.hasError('notSame')}">
     <div *ngIf="submitted && signInForm.hasError('notSame')" class="invalid-feedback" >
         Passwords do not match
     </div>
