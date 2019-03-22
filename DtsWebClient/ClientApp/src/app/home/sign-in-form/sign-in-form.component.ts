@@ -51,8 +51,9 @@ export class SignInFormComponent implements OnInit {
     }
     this.loading.emit(true);
     this.apiClient.post(queries.signInPath, this.signInForm.value).subscribe(result => {
-      this.submitResult = "Account created properly, please wait for activation"
-    }, error => this.submitResult = error);
+      alert("Account created properly, please wait for activation")
+      location.reload(true);
+    });
   }
 
   checkPasswords(signInForm: FormGroup) {
