@@ -31,6 +31,11 @@
 </div>
 
 <div [hidden]="!templateChosen">
+  <h4>Template editor</h4>
+  <p>Use <@fields_name> to create fields based on user input. The tag <@fields_name> have to be one word without spaces. To create more readable fields, in users form, you can use underscores.</p>
+  <p>Examples: Create a template with text: My favourite colour is <@favourite_colour>.</p>
+  <p>When user enters "red", template will look like: My favourite colour is red.</p>
+  <p>This editor keeps text formating.</p>
   <app-ngx-editor [placeholder]="' '" [spellcheck]="true" [(ngModel)]="htmlContent"></app-ngx-editor>
   <button type="submit" class="btn btn-primary outer" (click)="saveNewTemplateVersion()">Submit new Version</button>
   <button type="submit" class="btn btn-primary outer" (click)="showVersions()">Back to version</button>
