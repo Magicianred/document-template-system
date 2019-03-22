@@ -16,9 +16,10 @@ export class UserPanelComponent implements OnInit {
   private loggedUser: UserData;
   changeCredentialsForm: FormGroup;
   returnUrl: string;
-  loaded = false;
+  loading = false;
   submitted = false;
   submitResult: string;
+  userType: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,6 +29,8 @@ export class UserPanelComponent implements OnInit {
     private auth: AuthenticationService,
   ) {
     this.loggedUser = session.get("userData");
+    this.userType = session.get("loggedUser").role;
+    this.loggedUser.id = session.get("loggedUser").id
   } 
 
   ngOnInit() {
@@ -38,8 +41,6 @@ export class UserPanelComponent implements OnInit {
       NewPassword : ['', Validators.required],
       passwordConfirm: [''],
     }, { validator: this.checkPasswords });
-    this.loaded = false;
-    // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
@@ -56,18 +57,19 @@ export class UserPanelComponent implements OnInit {
 
   changeCredentials() {
     this.submitted = true;
-
+    this.loading = true;
 
     if (this.changeCredentialsForm.invalid) {
       return;
     }
     console.log(this.changeCredentialsForm.value);
     this.apiClient.put(queries.loginAPIPath, this.changeCredentialsForm.value).subscribe(result => {
-      this.loaded = true;
+      this.submitted = false;
     }, error => this.submitResult = error);
   }
 
   changeUserData(name: any, surname: any, email: any) {
+    this.loading = true;
     let newData = new UserChangingData();
 
     if (name == "" && surname == "" && email == "") {
@@ -80,7 +82,6 @@ export class UserPanelComponent implements OnInit {
     let mailRegex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm;
 
     if (!newData.email.match(mailRegex) && email != "") {
-      console.log("debil")
       return;
     }
 

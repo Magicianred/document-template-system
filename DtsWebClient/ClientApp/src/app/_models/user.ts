@@ -13,6 +13,7 @@ export class UserData {
   email: string;
   status: string;
   type: string;
+  newType: string;
 }
 
 export class UserChangingData {

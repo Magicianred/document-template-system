@@ -18,7 +18,7 @@ export class NavComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loggedUser = this.session.get("userData");
+    this.loggedUser = this.session.get("loggedUser");
   }
 
   logout() {

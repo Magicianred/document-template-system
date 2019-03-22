@@ -1,8 +1,7 @@
 <div class="row">
   <div class="col-md-12 mx-auto">
     <div class="md-form">
-      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" mdbInput (keyup)="filterTemplates($event.target.value)">
-      <label for="search">Search</label>
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" placeholder="Search" mdbInput (keyup)="filterTemplates($event.target.value)">
     </div>
   </div>
 </div>
@@ -11,13 +10,16 @@
   <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange)="sortTemplates($event)">
     <thead class="thead-dark">
       <tr>
+        <th></th>
         <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
         <th> Cede Ownership</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let template of sortedTemplates">
-        <td align="center" (click)="loadTemplate(template.id)" class="clickable" id="{{template.id}}">{{ template.name }}</td>
+        <td><button class="btn btn-success" (click)="loadTemplate(template.id)"> Show Versions</button></td>
+        <td align="center" >{{ template.name }}</td>
         <td align="center">{{ template.templateState }}</td>
         <td align="center">{{ template.templateVersions.length }}</td>
         <td align="center">
@@ -27,7 +29,10 @@
               <button *ngFor="let editor of editors" (click)="switchSelectedEditor(editor)" ngbDropdownItem>{{editor.name}} {{editor.surname}}</button>
             </div>
           </div>
-          <button class="btn btn-danger" (click)="changeTemplateOwner(template.id, template.name)">Confirm</button>
+         
+        </td>
+        <td>
+          <button class="btn btn-success" (click)="changeTemplateOwner(template.id, template.name)">Confirm</button>
         </td>
       </tr>
     </tbody>
