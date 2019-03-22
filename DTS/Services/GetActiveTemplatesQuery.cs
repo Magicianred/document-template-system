@@ -15,6 +15,7 @@ namespace DTS.API.Services
         : IQueryHandlerAsync<GetActiveTemplatesQuery, IList<TemplateDTO>>
     {
         private readonly IRepositoryWrapper repository;
+        private readonly string _activeState = "Active";
 
         public GetActiveTemplatesQueryHandler(IRepositoryWrapper repository)
         {
@@ -23,9 +24,9 @@ namespace DTS.API.Services
 
         public async Task<IList<TemplateDTO>> HandleAsync(GetActiveTemplatesQuery query)
         {
-            string activeState = "Active";
+            var activeState = await repository.TemplateState.FindTemplateStateByName(_activeState);
             var templates = await repository.Templates.FindAllTemplatesAsync();
-            var activeTemplates = templates.Where(t => t.State.State.Equals(activeState)).ToList();
+            var activeTemplates = templates.Where(t => t.State.Equals(activeState) && t.TemplateVersion.Any(tv => tv.State.Equals(activeState))).ToList();
             return TemplateDTO.ParseTemplatesDTO(activeTemplates);
         }
     }
