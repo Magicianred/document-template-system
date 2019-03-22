@@ -18,6 +18,7 @@ namespace DTS.API.Services
         IQueryHandlerAsync<GetUserByIdQuery, ExtendedUserDTO> GetUserByIdQuery { get; }
         IQueryHandlerAsync<GetUserTypesQuery, IList<string>> GetUserTypesQuery { get; }
         IQueryHandlerAsync<GetUserStatusesQuery, IList<string>> GetUserStatusesQuery { get; }
+
         IQueryHandlerAsync<GetUserPersonalDataQuery, UserPersonalDataDTO> GetUserPersonalDataQuery { get; }
     }
 }
