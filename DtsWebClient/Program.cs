@@ -14,7 +14,7 @@ namespace AngularTutorial
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).UseUrls($"http://localhost:{args[0]}/").Build();
+            var host = CreateWebHostBuilder(args).UseUrls($"http://localhost:8080/").Build();
 
             host.Run();
         }

@@ -1,7 +1,7 @@
 <div class="row" *ngIf="!gotForm">
   <div class="col-md-12 mx-auto">
     <div class="md-form">
-      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" placeholder="Search" mdbInput (keyup)="filterUsers($event.target.value)">
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" placeholder="Search" mdbInput (keyup)="filterTemplates($event.target.value)">
     </div>
   </div>
 </div>

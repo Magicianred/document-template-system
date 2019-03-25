@@ -12,7 +12,7 @@ export class AdminGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = this.sessin.get('loggedUser');
-    if (currentUser.role == "Admin") {
+    if (currentUser && currentUser.role == "Admin") {
       
       return true;
     }

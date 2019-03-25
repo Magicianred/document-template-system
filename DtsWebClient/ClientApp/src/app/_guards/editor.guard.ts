@@ -12,7 +12,7 @@ export class EditorGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = this.sessin.get('loggedUser');
-    if (currentUser.role == "Editor") {
+    if (currentUser && currentUser.role == "Editor") {
 
       return true;
     }

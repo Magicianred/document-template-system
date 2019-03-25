@@ -42,7 +42,7 @@ namespace DTS
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200/"
+                    builder.WithOrigins("https://dtsapi20190325092026.azurewebsites.net/"
                                         )
                                         .AllowAnyHeader()
                                         .AllowAnyMethod()
