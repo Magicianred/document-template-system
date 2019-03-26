@@ -81,24 +81,25 @@ export class AdminUserPanelComponent implements OnInit {
 
   changeUserState(user: UserData, event: any ) {
     let button = event.path[0];
+    let buttonContent = event.path[0].innerText; 
     this.swapButtonContentWithSpinner(button);
 
     if (user.status == "Active") {
       this.apiClient.delete(queries.userPath + user.id).subscribe(result => {
-        this.swapSpinnerWithTick(button);
+        this.swapSpinnerWithTick(button, buttonContent);
         this.getUsers();
       }, error => {
         console.error(error);
-        this.swapSpinnerWithTick(button);
+        this.swapSpinnerWithTick(button, buttonContent);
       });
     }
     else {
       this.apiClient.put(queries.userPath + user.id + "/activate", user.id).subscribe(result => {
-        this.swapSpinnerWithTick(button);
+        this.swapSpinnerWithTick(button, buttonContent);
         this.getUsers();
       }, error => {
         console.error(error);
-        this.swapSpinnerWithTick(button);
+        this.swapSpinnerWithTick(button, buttonContent);
       });
     }
   }
@@ -115,9 +116,10 @@ export class AdminUserPanelComponent implements OnInit {
     
     this.chosenUser = user;
     let button = event.path[0];
+    let buttonContent = event.path[0].innerText;
     this.swapButtonContentWithSpinner(button);
     if (this.changeInUserData(name, surname, email, user)) {
-      this.swapSpinnerWithTick(button);
+      this.swapSpinnerWithTick(button, buttonContent);
       return
     }
 
@@ -133,16 +135,16 @@ export class AdminUserPanelComponent implements OnInit {
         let typeQuery = `${queries.userPath}${user.id}/type/${user.newType}`
         this.apiClient.put(typeQuery, "EmptyBody").subscribe(result => {
           this.getUsers();
-          this.swapSpinnerWithTick(button);
+          this.swapSpinnerWithTick(button, buttonContent);
         })
       } else {
         this.getUsers();
-        this.swapSpinnerWithTick(button);
+        this.swapSpinnerWithTick(button, buttonContent);
       };
       
     }, error => {
       console.error(error);
-      this.swapSpinnerWithTick(button);
+      this.swapSpinnerWithTick(button, buttonContent);
     });
   }
 
@@ -155,9 +157,9 @@ export class AdminUserPanelComponent implements OnInit {
     button.innerHTML = '<div class="spinner-border" role = "status"> <span class="sr-only" > Loading...</span></div>'
   }
 
-  swapSpinnerWithTick(button: any) {
+  swapSpinnerWithTick(button: any, buttonContent: string) {
     button.disabled = '';
-    button.innerHTML = 'Save';
+    button.innerHTML = buttonContent;
   }
 
 }
