@@ -81,25 +81,25 @@ export class AdminUserPanelComponent implements OnInit {
 
   changeUserState(user: UserData, event: any ) {
     let button = event.path[0];
-    let buttonContent = event.path[0].innerText; 
+    
     this.swapButtonContentWithSpinner(button);
 
     if (user.status == "Active") {
       this.apiClient.delete(queries.userPath + user.id).subscribe(result => {
-        this.swapSpinnerWithTick(button, buttonContent);
+        this.swapSpinnerWithTick(button, "Active");
         this.getUsers();
       }, error => {
         console.error(error);
-        this.swapSpinnerWithTick(button, buttonContent);
+        this.swapSpinnerWithTick(button, "Inactive");
       });
     }
     else {
       this.apiClient.put(queries.userPath + user.id + "/activate", user.id).subscribe(result => {
-        this.swapSpinnerWithTick(button, buttonContent);
+        this.swapSpinnerWithTick(button, "Active");
         this.getUsers();
       }, error => {
         console.error(error);
-        this.swapSpinnerWithTick(button, buttonContent);
+        this.swapSpinnerWithTick(button, "Inactive");
       });
     }
   }
