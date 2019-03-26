@@ -44,7 +44,7 @@ export class AuthenticationService {
   }
 
   updateUserData(userId: string) {
-    this.apiClient.get(queries.userPath + userId).subscribe(result => {
+     this.apiClient.get(queries.userDataPath + userId).subscribe(result => {
       const userData = result;
       this.session.set("userData", userData)
       location.reload(true);

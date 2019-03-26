@@ -62,10 +62,11 @@ export class UserPanelComponent implements OnInit {
     if (this.changeCredentialsForm.invalid) {
       return;
     }
-    console.log(this.changeCredentialsForm.value);
+
     this.apiClient.put(queries.loginAPIPath, this.changeCredentialsForm.value).subscribe(result => {
       this.submitted = false;
-    }, error => this.submitResult = error);
+      this.loading = false;
+    }, error => alert(error.message));
   }
 
   changeUserData(name: any, surname: any, email: any) {
