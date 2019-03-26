@@ -117,12 +117,8 @@ export class AdminTemplatePanelComponent implements OnInit {
   switchState(id: string, state: string, name:string, ownerId: string) {
 
     if (state == "Inactive") {
-      let updateData = new TemplateDataUpdate();
-      updateData.name = name;
-      updateData.ownerId = +ownerId;
-      updateData.stateId = 1;
-      console.log(updateData);
-      this.apiClient.put(queries.templatesPath + id, updateData).subscribe(result => {
+      let query = `${queries.templatesPath}${id}/activate`
+      this.apiClient.put(query, "EmptyBody").subscribe(result => {
         this.getTemplates();
       }, error => console.error(error));
     }

@@ -38,9 +38,12 @@ namespace DTS.API.Services
             if (isActiveTemplateVersion)
             {
                 template.State = activeState;
+                await repository.Templates.UpdateTemplateAsync(template);
             }
-            
-            await repository.Templates.UpdateTemplateAsync(template);
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }

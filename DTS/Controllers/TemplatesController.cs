@@ -261,6 +261,36 @@ namespace DTS.API.Controllers
             }
         }
 
+        [HttpPut("{tempId}/activate")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActivateTemplate([FromRoute] int tempId)
+        {
+            LogBeginOfRequest();
+            if (!ModelState.IsValid)
+            {
+                LogEndOfRequest("Failed Bad Request", 400);
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var command = new ActivateTemplateCommand(tempId);
+                await templateService.ActivateTemplateCommand.HandleAsync(command);
+                LogEndOfRequest("Success", 200);
+                return Ok();
+            }
+            catch (InvalidOperationException)
+            {
+                LogEndOfRequest($"Failed activating template id {tempId}", 404);
+                return NotFound();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+               LogWarning("Database concurency exception", 500);
+               return StatusCode(500);
+            }
+        }
+
         [HttpPut("template/{id}/version")]
         [Authorize(Roles = "Editor")]
         public async Task<IActionResult> AddNewVersion([FromRoute] int id, [FromBody] TemplateVersionInput templateInput)
