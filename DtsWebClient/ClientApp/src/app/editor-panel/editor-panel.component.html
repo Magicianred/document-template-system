@@ -1,0 +1,16 @@
+
+<div *ngIf="!openData && !createNew">
+  <div >
+    <button type="submit" class="btn btn-primary" (click)="createNew = !createNew">Add New Template</button>
+  </div>
+
+  <div class="template-list-container" >
+    <app-editors-templates [editorId]="editorId" (sendChosenId)="loadTemplate($event)"></app-editors-templates>
+  </div>
+
+</div>
+
+
+<app-template-data *ngIf="openData" [tempId]="tempId" [editorId]="editorId" (back)="showTemplates()"></app-template-data>
+
+<app-template-adder *ngIf="createNew" [editorId] ="editorId" (closeEditor)="createNew = !createNew"></app-template-adder>

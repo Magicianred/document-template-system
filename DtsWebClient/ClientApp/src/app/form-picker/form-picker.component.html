@@ -1,0 +1,50 @@
+<div class="row" *ngIf="!gotForm">
+  <div class="col-md-12 mx-auto">
+    <div class="md-form">
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" placeholder="Search" mdbInput (keyup)="filterTemplates($event.target.value)">
+    </div>
+  </div>
+</div>
+  <div *ngIf="!gotForm" class="table-wrapper-scroll-y">
+    <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange)="sortTemplates($event)">
+      <thead class="thead-dark">
+        <tr>
+          <th></th>
+          <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let template of sortedTemplates">
+          <td align="center"> <button (click)="showVersion(template.id)" class="btn btn-success"> Load Template </button></td>
+          <td >{{ template.name }}</td>
+          <td>{{ template.owner.name }}  {{template.owner.surname}} {{template.owner.email}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <form id="userInput" *ngIf="gotForm" #templateForm="ngForm" (ngSubmit)="postData(templateForm.value, content)">
+    <button class="btn btn-primary" (click)="gotForm = !gotForm">Back to templates</button>
+    <h3>Required Input</h3>
+    <fieldset>
+      <div *ngFor="let item of formBase | keyvalue" class="form-group">
+        <input type="text" class="form-control" name="{{item.key}}" ngModel placeholder="{{item.value}}"><br />
+      </div>
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <ng-template #content let-modal id="content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Version Data</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" id="version-container">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="print()">PDF</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+    </div>
+  </ng-template>
+

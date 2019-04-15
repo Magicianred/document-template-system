@@ -1,0 +1,42 @@
+<div class="row" *ngIf="!templateChosen">
+  <div class="col-md-12 mx-auto">
+    <div class="md-form">
+      <input type="search" [(ngModel)]="searchText" class="form-control" id="search" placeholder="Search" mdbInput (keyup)="filterTemplates($event.target.value)">
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!templateChosen">
+  <h2>{{template.name}}</h2>
+  <h3>{{template.owner.name}} {{template.owner.surname}}</h3>
+  <button type="submit" class="btn btn-primary outer" (click)="goBackToTemplates()">Back to templates</button>
+  <div class="table-wrapper-scroll-y">
+    <table class="table table-striped table-bordered table-sm" cellspacing="0" matSort (matSortChange)="sortVersions($event)">
+      <thead class="thead-dark">
+        <tr>
+          <th></th>
+          <th *ngFor="let head of headElements" scope="col" mat-sort-header={{head}}>{{head}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let version of sortedVersions">
+          <td><button class="btn btn-success" (click)="showVersion($event)"> New Version</button></td>
+          <td>{{ version.creationTime }}</td>
+          <td>{{ version.creator.name}} {{ version.creator.surname }} {{version.creator.email}}</td>
+          <td>{{ version.versionState }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div [hidden]="!templateChosen">
+  <h4>Template editor</h4>
+  <p>Use <@fields_name> to create fields based on user input. The tag <@fields_name> have to be one word without spaces. To create more readable fields, in users form, you can use underscores.</p>
+  <p>Examples: Create a template with text: My favourite colour is <@favourite_colour>.</p>
+  <p>When user enters "red", template will look like: My favourite colour is red.</p>
+  <p>This editor keeps text formating.</p>
+  <app-ngx-editor [placeholder]="' '" [spellcheck]="true" [(ngModel)]="htmlContent"></app-ngx-editor>
+  <button type="submit" class="btn btn-primary outer" (click)="saveNewTemplateVersion()">Submit new Version</button>
+  <button type="submit" class="btn btn-primary outer" (click)="showVersions()">Back to version</button>
+</div>
